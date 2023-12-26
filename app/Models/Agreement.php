@@ -9,6 +9,8 @@ class Agreement extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'agreement_id';
+    public $incrementing = false;
     protected $fillable = [
         'agreement_id',
         'shop_id',
@@ -21,14 +23,12 @@ class Agreement extends Model
         'document_field',
     ];
 
-    // Define relationships if needed
-    public function shop()
+    public function shopRents()
     {
-        return $this->belongsTo(ShopRent::class);
+        return $this->hasMany(ShopRent::class, 'agreement_id', 'agreement_id');
     }
-
-    public function tenant()
+    public function bills()
     {
-        return $this->belongsTo(Tenant::class);
+        return $this->hasMany(Bill::class);
     }
 }

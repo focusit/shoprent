@@ -13,7 +13,6 @@
                     <div class="col-sm-6">
                         <h1>Invoice</h1>
                     </div>
-
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -23,8 +22,6 @@
                 <div class="row">
                     <div class="col-12">
 
-
-
                         <!-- Main content -->
                         <div class="invoice p-3 mb-3">
                             <!-- title row -->
@@ -32,7 +29,7 @@
                                 <div class="col-12">
                                     <h4>
                                         <i class="fas fa-globe"></i> AdminLTE, Inc.
-                                        <small class="float-right">{{ Date('Y/m/d') }}</small>
+                                        <small class="float-right">{{ date('Y/m/d') }}</small>
                                     </h4>
                                 </div>
                                 <!-- /.col -->
@@ -40,7 +37,7 @@
                             <!-- info row -->
                             <div class="row invoice-info">
                                 <div class="col-sm-4 invoice-col">
-                                    From
+                                    <strong>From</strong>
                                     <address>
                                         <strong>Admin, Inc.</strong><br>
                                         795 Folsom Ave, Suite 600<br>
@@ -51,7 +48,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
-                                    To
+                                    <strong>To</strong>
                                     <address>
                                         <strong>John Doe</strong><br>
                                         795 Folsom Ave, Suite 600<br>
@@ -63,9 +60,8 @@
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
                                     <b>Invoice #007612</b><br>
-                                    <br>
                                     <b>Order ID:</b> 4F3S8J<br>
-                                    <b>Payment Due:</b> <?php echo date('Y/m/d', strtotime('+22 days')); ?><br>
+                                    <b>Payment Due:</b> {{ date('Y/m/d', strtotime('+22 days')) }}<br>
                                     <b>Account:</b> 968-34567
                                 </div>
                                 <!-- /.col -->
@@ -73,35 +69,33 @@
                             <!-- /.row -->
 
                             <!-- Table row -->
-                            <div class="row align-center">
-                                <div class="col-10 table-responsive">
-                                    <table class="table table-striped">
+                            <div class="row">
+                                <div class="table-responsive mx-auto">
+                                    <!-- Add mx-auto and table-responsive classes here -->
+                                    <table class="table table-bordered border-dashed table-striped ">
                                         <thead>
                                             <tr>
-                                                <th>Qty</th>
-                                                <th>shop id</th>
-                                                <th>tenant id</th>
-                                                <th>amount</th>
+                                                <th>Sr No</th>
+                                                <th>Agreement id</th>
+                                                <th>Rent</th>
                                                 <th>Payment Date</th>
                                                 <th>Due Date</th>
                                                 <th>Previous Balance</th>
                                                 <th>Penalty</th>
                                                 <th>Discount</th>
-                                                <th>Subtotal</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>1</td>
-                                                <td>1</td>
-                                                <td>45</td>
-                                                <td>21500</td>
+                                                <td>{{ $bill->id }}</td>
+                                                <td>{{ $bill->agreement_id }}</td>
+                                                <td>{{ $bill->rent }}</td>
                                                 <td>{{ date('Y/m/d') }}</td>
-                                                <td><?php echo date('Y/m/d', strtotime('+22 days')); ?></td>
-                                                <td>100</td>
-                                                <td>12</td>
-                                                <td>50</td>
-                                                <td>20000</td>
+                                                <td>{{ $bill->due_date }}</td>
+                                                <td></td>
+                                                <td>{{ $bill->penalty }}</td>
+                                                <td>{{ $bill->discount }}</td>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -117,25 +111,31 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-6">
-                                    <p class="lead">Amount Due <?php echo date('Y/m/d', strtotime('+22 days')); ?></p>
+                                    <p class="lead">Amount Due {{ date('Y/m/d', strtotime('+22 days')) }}</p>
 
                                     <div class="table-responsive">
                                         <table class="table">
                                             <tr>
-                                                <th style="width:50%">Subtotal:</th>
-                                                <td></td>
+                                                @php
+                                                    $subtotal = $bill->subtotal = $bill->rent - $bill->discount + $bill->penalty;
+                                                    $tax = $subtotal * (9.3 / 100);
+                                                    $total = $subtotal + $tax;
+                                                @endphp
+                                                <th style="width:50%">Subtotal: </th>
+                                                <td>{{ $subtotal }}</td>
                                             </tr>
                                             <tr>
                                                 <th>Tax (9.3%)</th>
-                                                <td></td>
+                                                <td>{{ $tax }}</td>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <th>Shipping:</th>
                                                 <td></td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
                                                 <th>Total:</th>
-                                                <td></td>
+                                                <td>{{ $total }}</td>
+                                                <td>
                                             </tr>
                                         </table>
                                     </div>
@@ -143,12 +143,10 @@
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
-
-                            <!-- this row will not appear when printing -->
                             <!-- Modify this in your Blade template -->
                             <div class="row no-print">
-                                <a href="printed" rel="noopener" target="_blank" class="btn btn-default"
-                                    onclick="window.print();" class="noPrint"><i class="fas fa-print"></i> Print</a>
+                                <a rel="noopener" target="_blank" class="btn btn-default" onclick="window.print();"
+                                    class="noPrint"><i class="fas fa-print"></i> Print</a>
 
                                 <button type="button" class="btn btn-primary" id="downloadpdf" style="margin-right: 5px;">
                                     <i class="fas fa-download"></i> Generate PDF</button>
@@ -171,8 +169,9 @@
         document.getElementById('downloadpdf').addEventListener('click', function() {
             var printWindow = window.open('', '_blank');
             printWindow.document.write(
-                '<html><head><link rel="stylesheet" type="text/css" href="print.css"></head><body>');
-            printWindow.document.write(document.getElementById('content').innerHTML);
+                '<html><head><link rel="stylesheet" type="text/css" href="path/to/your/print.css"></head><body>'
+            );
+            printWindow.document.write(document.getElementById('pdf-content').innerHTML);
             printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.print();

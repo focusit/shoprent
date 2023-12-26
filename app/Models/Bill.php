@@ -2,36 +2,37 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 
 class Bill extends Model
 {
-    use HasFactory;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bills';
 
-    protected $fillable = [
-        'shop_id',
-        'tenant_id',
-        'bill_amount',
-        'due_date',
-        'status',
-        'paid_at',
-    ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['agreement_id', 'rent', 'payment_date', 'due_date', 'penalty', 'discount', 'status'];
 
-    protected $dates = [
-        'due_date',
-        'paid_at',
-    ];
-
-    public function shop()
+    /**
+     * Get billing settings from the JSON file.
+     *
+     * @return array
+     */
+    public static function getBillingSettings()
     {
-        return $this->belongsTo(ShopRent::class, 'shop_id');
-    }
+        $jsonFilePath = storage_path('app/billing_settings.json');
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
+        if (File::exists($jsonFilePath)) {
+            return json_decode(File::get($jsonFilePath), true);
+        }
+        return [];
     }
-
-    // Add more relationships or methods as needed
 }

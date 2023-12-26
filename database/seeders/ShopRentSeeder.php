@@ -18,7 +18,7 @@ class ShopRentSeeder extends Seeder
                 'pincode' => '10001',
                 'rent' => 1500,
                 'status' => 'vaccant',
-                'image' => 'shop_image' . $i . '.jpg',
+                'image' => '1703249535.jpg',
             ]);
         }
     }

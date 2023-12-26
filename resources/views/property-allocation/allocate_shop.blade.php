@@ -1,51 +1,52 @@
 <!-- allocate_shop.blade.php -->
 @extends('masterlist')
 @section('title', 'Allocate Shop')
+@section('body')
 
-<head>
-    <style>
-        .ui-autocomplete {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            height: 300px;
-            z-index: 1000;
-            float: left;
-            display: none;
-            min-width: 160px;
-            padding: 5px 0;
-            margin: 2px 0 0;
-            list-style: none;
-            font-size: 14px;
-            text-align: left;
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 4px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-            overflow-y: scroll
-        }
+    <head>
+        <style>
+            .ui-autocomplete {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                height: 300px;
+                z-index: 1000;
+                float: left;
+                display: none;
+                min-width: 160px;
+                padding: 5px 0;
+                margin: 2px 0 0;
+                list-style: none;
+                font-size: 14px;
+                text-align: left;
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border: 1px solid rgba(0, 0, 0, 0.15);
+                border-radius: 4px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+                overflow-y: scroll
+            }
 
-        .ui-autocomplete li {
-            padding: 8px;
-            cursor: pointer;
-        }
+            .ui-autocomplete li {
+                padding: 8px;
+                cursor: pointer;
+            }
 
-        .ui-autocomplete li:hover {
-            background-color: #f5f5f5;
-        }
+            .ui-autocomplete li:hover {
+                background-color: #f5f5f5;
+            }
 
-        .ui-autocomplete li.ui-no-results {
-            padding: 8px;
-            color: #9d3737;
-        }
+            .ui-autocomplete li.ui-no-results {
+                padding: 8px;
+                color: #9d3737;
+            }
 
-        .ui-autocomplete li.ui-state-focus {
-            background-color: #333;
-            color: #6a0808;
-        }
-    </style>
-</head>
+            .ui-autocomplete li.ui-state-focus {
+                background-color: #333;
+                color: #6a0808;
+            }
+        </style>
+    </head>
 @section('body')
     <div class="content-wrapper">
         <div class="row justify-content-center">
@@ -65,58 +66,98 @@
                                 {{ session('error') }}
                             </div>
                         @endif
-                        <form action="{{ route('allocate.shop.form') }}" method="post" enctype="multipart/form-data">
+                        <form
+                            action="{{ isset($agreement) ? route('agreements.update', $agreement->agreement_id) : route('allocate.shop.form') }}"
+                            method="POST" enctype="multipart/form-data">
                             @csrf
+                            @if (isset($agreement))
+                                @method('PUT')
+                            @endif
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="shop_search">Search for a vaccant shop:</label>
+                                        <label for="shop_search">Search for a vacant shop:</label>
                                         <input type="text" id="shop_search" name="shop_search" class="form-control"
-                                            placeholder="Search for a vacant shop... " required>
-                                        <input type="hidden" id="shop_id" name="shop_id">
+                                            value="{{ old('shop_search', isset($agreement) ? $agreement->shop_id : '') }}"
+                                            placeholder="Search for a vacant shop..." required>
+                                        <input type="hidden" id="shop_id" name="shop_id"
+                                            value="{{ old('shop_id', isset($agreement) ? $agreement->shop_id : '') }}">
                                     </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="tenant_search">Search for a tenant:</label>
                                         <input type="text" id="tenant_search" name="tenant_search" class="form-control"
+                                            value="{{ old('tenant_search', isset($agreement) ? $agreement->tenant_id : '') }}"
                                             placeholder="Search for a tenant..." required>
-                                        <input type="hidden" id="tenant_id" name="tenant_id">
+                                        <input type="hidden" id="tenant_id" name="tenant_id"
+                                            value="{{ old('tenant_id', isset($agreement) ? $agreement->tenant_id : '') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="agreement_id">Agreement ID:</label>
+                                        <input type="text" id="agreement_id" name="agreement_id" class="form-control"
+                                            value="{{ old('agreement_id', isset($agreement) ? $agreement->agreement_id : '') }}"
+                                            placeholder="Agreement ID" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="with_effect_from">With Effect From:</label>
+                                        <input type="date" id="with_effect_from" name="with_effect_from"
+                                            class="form-control"
+                                            value="{{ old('with_effect_from', isset($agreement) ? $agreement->with_effect_from : '') }}"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="valid_till">Valid Till:</label>
+                                        <input type="date" id="valid_till" name="valid_till" class="form-control"
+                                            value="{{ old('valid_till', isset($agreement) ? $agreement->valid_till : '') }}"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="rent">Rent:</label>
+                                        <input type="text" id="rent" name="rent" class="form-control"
+                                            placeholder="Rent"
+                                            value="{{ old('rent', isset($agreement) ? $agreement->rent : '') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">Status (Active/Inactive):</label>
+                                        <select id="status" name="status" class="form-control" required>
+                                            <option value="select" disabled>Please Select</option>
+                                            <option value="active"
+                                                {{ old('status', isset($agreement) && $agreement->status == 'active' ? 'selected' : '') }}>
+                                                Active</option>
+                                            <option value="inactive"
+                                                {{ old('status', isset($agreement) && $agreement->status == 'inactive' ? 'selected' : '') }}>
+                                                Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="remark">Remark:</label>
+                                        <textarea id="remark" name="remark" class="form-control" placeholder="Remark">{{ old('remark', isset($agreement) ? $agreement->remark : '') }}</textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="agreement_id">Agreement ID:</label>
-                                <input type="text" id="agreement_id" name="agreement_id" class="form-control"
-                                    placeholder="Agreement ID" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="with_effect_from">With Effect From:</label>
-                                <input type="date" id="with_effect_from" name="with_effect_from" class="form-control"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label for="valid_till">Valid Till:</label>
-                                <input type="date" id="valid_till" name="valid_till" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="rent">Rent:</label>
-                                <input type="text" id="rent" name="rent" class="form-control" placeholder="Rent"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status (Active/Inactive):</label>
-                                <select id="status" name="status" class="form-control" required>
-                                    <option value="select" disabled selected>Please Select</option>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="remark">Remark:</label>
-                                <textarea id="remark" name="remark" class="form-control" placeholder="Remark"></textarea>
-                            </div>
-                            <div class="form-group">
                                 <label for="document_field">Document Field (PDF-JPEG):</label>
                                 <input type="file" id="document_field" name="document_field" class="form-control"
+                                    value="{{ old('rent', isset($agreement) ? $agreement->document_field : '') }}"
                                     accept=".pdf, .jpeg, .jpg" required>
                             </div>
                             <button type="submit" class="btn btn-danger toastsDefaultDefault">Allocate</button>
@@ -126,6 +167,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>

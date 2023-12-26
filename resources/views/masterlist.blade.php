@@ -101,16 +101,14 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
-                                <p>
-                                    shop
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
+                                Shops
+                                <i class="fas fa-angle-left right"></i>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('shops.create') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p> add</p>
+                                        <p> Add Shops</p>
                                     </a>
                                 </li>
                                 <!-- <li class="nav-item">
@@ -122,7 +120,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('shops.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>list</p>
+                                        <p>View All Shops</p>
                                     </a>
                                 </li>
                             </ul>
@@ -132,16 +130,14 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
-                                <p>
-                                    Tenants
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
+                                Tenants
+                                <i class="fas fa-angle-left right"></i>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('tenants.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p> add</p>
+
+                                        <i class="fa fa-user-o" aria-hidden="true"> Add Tenants</i>
                                     </a>
                                 </li>
                                 <!-- <li class="nav-item">
@@ -153,7 +149,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('tenants.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>list</p>
+                                        <p>View All Tenants</p>
                                     </a>
                                 </li>
                             </ul>
@@ -172,21 +168,21 @@
                                 <li class="nav-item">
                                     <a href="{{ url('allocate-shop') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Allocate Property</p>
+                                        <p>Allocate Properties</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="{{ url('allocation-list') }}" class="nav-link">
+                                    <a href="{{ url('agreements') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Allocated Properties</p>
+                                        <p>Agreements</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
                         {{-- agreement --}}
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
@@ -202,7 +198,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
 
                         {{-- /// --}}
@@ -210,15 +206,21 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
-                                    bills
+                                    Bills
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('bills.generate') }}" class="nav-link">
+                                    <a href="{{ url('generate_bill') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>generate</p>
+                                        <p>Bill Format</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('bills') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Generate Bills</p>
                                     </a>
                                 </li>
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->string('tenant_id')->unique();
+            $table->string('tenant_id')->unique()->cascade('cascade');
             $table->string('govt_id');
             $table->string('image');
             $table->string('address');

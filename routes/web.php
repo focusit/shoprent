@@ -21,18 +21,7 @@ use App\Http\Controllers\TenantController;
 Route::get('/', function () {
     return view('/auth.login');
 });
-//bills
 
-Route::get('/bills/generate', [BillController::class, 'generate'])->name('bills.generate');
-Route::post('/bills/generate', [BillController::class, 'storeGeneratedBills'])->name('bills.generate.store');
-
-Route::get('/bills', [BillController::class, 'index'])->name('bills.index');
-Route::get('/bills/create', [BillController::class, 'create'])->name('bills.create');
-Route::post('/bills', [BillController::class, 'store'])->name('bills.store');
-Route::get('/bills/{bill}', [BillController::class, 'show'])->name('bills.show');
-Route::get('/bills/{bill}/edit', [BillController::class, 'edit'])->name('bills.edit');
-Route::put('/bills/{bill}', [BillController::class, 'update'])->name('bills.update');
-Route::delete('/bills/{bill}', [BillController::class, 'destroy'])->name('bills.destroy');
 
 
 // Show the login form
@@ -68,17 +57,32 @@ Route::group(['middleware' => 'admin_auth'], function () {
     Route::match(['get', 'post'], '/autocomplete-search', [ShopRentController::class, 'autocompleteSearch'])->name('autocomplete.search');
     Route::match(['get', 'post'], '/autocomplete-tenants', [TenantController::class, 'autocompleteSearch'])
         ->name('autocomplete.tenants');
+        
     //Property Allocation
-    Route::get('/allocate-shop', [ShopRentController::class, 'showAllocateShopForm'])->name('allocate.shop.form');
-    Route::post('/allocate-shop', [ShopRentController::class, 'allocateShop']);
-    Route::get('/allocation-list', [ShopRentController::class, 'allocationList'])->name('allocation.list');
+    Route::get('/allocate-shop', [AgreementController::class, 'showAllocateShopForm'])->name('allocate.shop.form');
+    Route::post('/allocate-shop', [AgreementController::class, 'allocateShop']);
+    Route::get('/allocation-list', [AgreementController::class, 'allocationList'])->name('allocation.list');
 
     // Agreement Routes
     Route::get('/agreements', [AgreementController::class, 'index'])->name('agreements.index');
     Route::get('/agreements/{agreement_id}', [AgreementController::class, 'show'])->name('agreements.show');
     Route::get('/agreements/{agreement_id}/edit', [AgreementController::class, 'edit'])->name('agreements.edit');
     Route::put('/agreements/{agreement_id}', [AgreementController::class, 'update'])->name('agreements.update');
-    Route::delete('/agreements/{agreement_id}', [AgreementController::class, 'destroy'])->name('tenants.destroy');
+    // Route::delete('/agreements/{agreement_id}', [AgreementController::class, 'destroy'])->name('tenants.destroy');
+
+    // View all bills
+    Route::get('/bills', [BillController::class, 'index'])->name('bills.index');
+    Route::get('/bills/{id}', [BillController::class, 'show'])->name('bills.show');
+    Route::get('/bills/create', [BillController::class, 'create'])->name('bills.create');
+    Route::post('/bills', [BillController::class, 'store'])->name('bills.store');
+    Route::get('/bills/{id}/edit', [BillController::class, 'edit'])->name('bills.edit');
+    Route::put('/bills/{id}', [BillController::class, 'update'])->name('bills.update');
+    Route::delete('/bills/{id}', [BillController::class, 'destroy'])->name('bills.destroy');
+    ///genrate bill
+    Route::post('/bills/generate', [BillController::class, 'generate'])->name('bills.generate');
+    Route::post('/bills/regenerate/{agreement_id}', [BillController::class, 'regenerate'])->name('bills.regenerate');
+    Route::get('/bills/print/{agreement_id}', [BillController::class, 'print'])->name('bills.print');
+
 
     // Bill Routes
     Route::get('/bill_list', [BillController::class, 'index'])->name('bill_list');
@@ -86,3 +90,18 @@ Route::group(['middleware' => 'admin_auth'], function () {
         return view('generate_bill');
     });
 });
+
+
+
+//bills
+
+// Route::get('/bills/generate', [BillController::class, 'generate'])->name('bills.generate');
+// Route::post('/bills/generate', [BillController::class, 'storeGeneratedBills'])->name('bills.generate.store');
+
+// Route::get('/bills', [BillController::class, 'index'])->name('bills.index');
+// Route::get('/bills/create', [BillController::class, 'create'])->name('bills.create');
+// Route::post('/bills', [BillController::class, 'store'])->name('bills.store');
+// Route::get('/bills/{bill}', [BillController::class, 'show'])->name('bills.show');
+// Route::get('/bills/{bill}/edit', [BillController::class, 'edit'])->name('bills.edit');
+// Route::put('/bills/{bill}', [BillController::class, 'update'])->name('bills.update');
+// Route::delete('/bills/{bill}', [BillController::class, 'destroy'])->name('bills.destroy');

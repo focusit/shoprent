@@ -31,20 +31,20 @@
                     <td>{{ $agreement->agreement_id }}</td>
                 </tr>
                 <tr>
-                    <th>Address</th>
-                    <td>{{ $agreement->address }}</td>
+                    <th>Shop Id</th>
+                    <td>{{ $agreement->shop_id }}</td>
                 </tr>
                 <tr>
-                    <th>Latitude</th>
-                    <td>{{ $agreement->latitude }}</td>
+                    <th>Tenant Id</th>
+                    <td>{{ $agreement->tenant_id }}</td>
                 </tr>
                 <tr>
-                    <th>Longitude</th>
-                    <td>{{ $agreement->longitude }}</td>
+                    <th>With Effect From</th>
+                    <td>{{ $agreement->with_effect_from }}</td>
                 </tr>
                 <tr>
-                    <th>Pincode</th>
-                    <td>{{ $agreement->pincode }}</td>
+                    <th>Valid Till</th>
+                    <td>{{ $agreement->valid_till }}</td>
                 </tr>
                 <tr>
                     <th>Rent</th>
@@ -53,6 +53,10 @@
                 <tr>
                     <th>Status</th>
                     <td>{{ $agreement->status }}</td>
+                </tr>
+                <tr>
+                    <th>remark</th>
+                    <td>{{ $agreement->remark }}</td>
                 </tr>
                 {{-- <tr>
                     <th>Tenant ID</th>

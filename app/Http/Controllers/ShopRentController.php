@@ -59,7 +59,7 @@ class ShopRentController extends Controller
     public function update(Request $request, $shop_id)
     {
         $request->validate([
-            'shop_id' => 'nullable|string',
+            'shop_id' => 'required|string|unique:shop_rents,shop_id',
             'latitude' => 'nullable|string',
             'longitude' => 'nullable|string',
             'address' => 'nullable|string',
@@ -197,8 +197,10 @@ class ShopRentController extends Controller
     public function allocationList()
     {
         $allocations = ShopRent::with('tenant')->where('status', 'occupied')->get();
-        return view('property-allocation.allocation_list', ['allocations' => $allocations]);
+        $allocations = ShopRent::with('agreements')->where('status', 'active')->get();
+        return redirect()->route('agreements.index')->with('allocations', $allocations);
     }
+
 
 
     public function autocompleteSearch(Request $request)

@@ -119,7 +119,6 @@ class TenantController extends Controller
         if (file_exists($filePath)) {
             unlink($filePath);
         }
-
         $tenant->delete();
 
         return redirect()->route('tenants.index')->with('success', 'Tenant deleted successfully.');

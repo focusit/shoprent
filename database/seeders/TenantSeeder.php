@@ -13,7 +13,7 @@ class TenantSeeder extends Seeder
             Tenant::create([
                 'tenant_id' => 'T' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'govt_id' => 'A' . str_pad($i, 5, '0', STR_PAD_LEFT),
-                'image' => 'tenant_image' . $i . '.jpg',
+                'image' => '1702127445.jpg',
                 'address' => '456 Oak St',
                 'pincode' => '20002',
                 'email' => 'tenant' . $i . '@example.com',

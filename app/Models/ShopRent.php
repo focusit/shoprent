@@ -11,6 +11,7 @@ class ShopRent extends Model
 
     protected $primaryKey = 'shop_id';
 
+    public $incrementing = false;
     protected $fillable = [
         'shop_id',
         'latitude',
@@ -26,6 +27,10 @@ class ShopRent extends Model
     public function tenant()
     {
         return $this->belongsTo(Tenant::class, 'tenant_id', 'tenant_id');
+    }
+    public function agreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id', 'agreement_id');
     }
     public function allocateToTenant($tenantId)
     {
