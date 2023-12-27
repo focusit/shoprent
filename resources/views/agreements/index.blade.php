@@ -55,7 +55,7 @@
                                             <!-- Table for All Shops -->
                                             <table id="example1" class="table table-bordered table-striped">
                                                 <thead>
-                                                    <tr class="text-center">
+                                                    <tr class="text-center bg-info">
                                                         <th>ID</th>
                                                         <th>Agreement ID</th>
                                                         <th>Shop ID</th>
@@ -127,7 +127,7 @@
                                         <div class="tab-pane fade" id="activeAgreements"> <!-- Table for Occupied Shops -->
                                             <table id="active-tab" class="table table-bordered table-striped">
                                                 <thead>
-                                                    <tr class="text-center">
+                                                    <tr class="text-center bg-info">
                                                         <th>ID</th>
                                                         <th>Agreement ID</th>
                                                         <th>Shop ID</th>
@@ -209,7 +209,7 @@
                                         <div class="tab-pane fade" id="inactiveAgreements">
                                             <table id="inactiveAgreementsTable" class="table table-bordered table-striped">
                                                 <thead>
-                                                    <tr class="text-center">
+                                                    <tr class="text-center bg-info">
                                                         <th>ID</th>
                                                         <th>Agreement ID</th>
                                                         <th>Shop ID</th>

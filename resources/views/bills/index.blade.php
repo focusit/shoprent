@@ -29,21 +29,17 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <!-- Add the Generate Bill form here -->
-                                <form action="{{ route('bills.generate') }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success">Generate Bills</button>
-                                </form>
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
-                                        <tr>
+                                        <tr class="bg-info">
                                             <th>ID</th>
                                             <th>Agreement ID</th>
                                             <th>Rent</th>
-                                            <th>Payment Date</th>
-                                            <th>Due Date</th>
+                                            <th>Bill Date</th>
                                             <th>Status</th>
+                                            {{-- <th>Due Date</th>
                                             <th>Penalty</th>
-                                            <th>Discount</th>
+                                            <th>Discount</th> --}}
                                             <th>Regenerate</th>
                                             <th>Action</th>
                                             <th>Print Bills</th>
@@ -58,10 +54,10 @@
                                                 </td>
                                                 <td>{{ $bill->rent }}</td>
                                                 <td>{{ $bill->payment_date }}</td>
-                                                <td>{{ $bill->due_date }}</td>
                                                 <td>{{ $bill->status }}</td>
+                                                {{-- <td>{{ $bill->due_date }}</td>
                                                 <td>{{ $bill->penalty }}</td>
-                                                <td>{{ $bill->discount }}</td>
+                                                <td>{{ $bill->discount }}</td> --}}
                                                 <td>
                                                     <form action="{{ route('bills.regenerate', $bill->agreement_id) }}"
                                                         method="post">
@@ -98,7 +94,12 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                                <form action="{{ route('bills.generate') }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success">Generate Bills</button>
+                                </form>
                             </div>
+
                             <!-- /.card-body -->
                         </div>
                         <!-- /.card -->

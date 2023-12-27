@@ -136,16 +136,16 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('tenants.create') }}" class="nav-link">
-
-                                        <i class="fa fa-user-o" aria-hidden="true"> Add Tenants</i>
+                                        <i class="far fa-circle nav-icon"></i>
+                                        Add Tenants
                                     </a>
                                 </li>
                                 <!-- <li class="nav-item">
-                  <a href="#" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>find</p>
-                  </a>
-              </li> -->
+                                <a href="#" class="nav-link">
+                                 <i class="far fa-circle nav-icon"></i>
+                                <p>find</p>
+                                 </a>
+                                </li> -->
                                 <li class="nav-item">
                                     <a href="{{ route('tenants.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>

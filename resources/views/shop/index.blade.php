@@ -49,7 +49,7 @@
                                     <div class="tab-pane active" id="allShops">
                                         <table id="example1" class="table table-bordered table-striped">
                                             <thead>
-                                                <tr>
+                                                <tr class="bg-info">
                                                     <th>ID</th>
                                                     <th>Shop ID</th>
                                                     <th>Address</th>
@@ -125,7 +125,7 @@
                                     <div class="tab-pane" id="occupiedShops">
                                         <table id="occupiedShopsTable" class="table table-bordered table-striped">
                                             <thead>
-                                                <tr>
+                                                <tr class="bg-info">
                                                     <th>ID</th>
                                                     <th>Shop ID</th>
                                                     <th>Address</th>
@@ -192,7 +192,7 @@
                                     <div class="tab-pane" id="vacantShops">
                                         <table id="vacantShopsTable" class="table table-bordered table-striped">
                                             <thead>
-                                                <tr>
+                                                <tr class="bg-info">
                                                     <th>ID</th>
                                                     <th>Shop ID</th>
                                                     <th>Address</th>

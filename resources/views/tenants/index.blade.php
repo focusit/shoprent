@@ -29,7 +29,7 @@
                             <div class=" card-body">
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
-                                        <tr>
+                                        <tr class="bg-info">
                                             <th>Tenants ID</th>
                                             <th>Govt ID</th>
                                             <th>ID Number</th>
@@ -62,7 +62,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('tenants.edit', $tenant->tenant_id) }}"
-                                                        class="btn btn-info"><i class="fas fa-edit" ></i></a>
+                                                        class="btn btn-info"><i class="fas fa-edit"></i></a>
                                                     <a href="{{ route('tenants.show', $tenant->tenant_id) }}"
                                                         class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i>
                                                     </a>

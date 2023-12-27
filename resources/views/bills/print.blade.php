@@ -111,8 +111,6 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-6">
-                                    <p class="lead">Amount Due {{ date('Y/m/d', strtotime('+22 days')) }}</p>
-
                                     <div class="table-responsive">
                                         <table class="table">
                                             <tr>

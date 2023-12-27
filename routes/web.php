@@ -35,6 +35,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::get('/dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
+
     // Shop Routes
     Route::get('/shops', [ShopRentController::class, 'index'])->name('shops.index');
     Route::get('/shops/create', [ShopRentController::class, 'create'])->name('shops.create');
@@ -57,7 +58,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     Route::match(['get', 'post'], '/autocomplete-search', [ShopRentController::class, 'autocompleteSearch'])->name('autocomplete.search');
     Route::match(['get', 'post'], '/autocomplete-tenants', [TenantController::class, 'autocompleteSearch'])
         ->name('autocomplete.tenants');
-        
+
     //Property Allocation
     Route::get('/allocate-shop', [AgreementController::class, 'showAllocateShopForm'])->name('allocate.shop.form');
     Route::post('/allocate-shop', [AgreementController::class, 'allocateShop']);

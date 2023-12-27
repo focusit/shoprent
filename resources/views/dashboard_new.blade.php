@@ -77,36 +77,8 @@
                 <!-- /Info boxes -->
 
                 <!-- Main row -->
-                <div class="row">
-                    <div class="content">
-                        <div class="container-fluid">
-                            <div class="row">
-                                @foreach ($cards as $card)
-                                    <div class="col-lg-4 mb-4">
-                                        <div class="d-flex h-100">
-                                            <div class="card card-warning w-100">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">{{ $card['title'] }}</h3>
-                                                    <div class="card-tools">
-                                                        <span class="badge badge-danger">{{ $card['badge'] }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body">
-                                                    {{ $card['body'] }}
-                                                </div>
-                                                <div class="card-footer bg-danger">
-                                                    <a href="{{ $card['linkCreate'] }}" class="card-link">
-                                                        {{ $card['linkTextCreate'] }}</a>
-                                                    <a href="{{ $card['linkView'] }}" class="card-link">
-                                                        {{ $card['linkTextView'] }}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div><!-- /.container-fluid -->
-                    </div>
+                <div class="row" id="dashboard-cards">
+
                 </div>
 
             </div>
@@ -114,5 +86,41 @@
     </div>
     <!-- /.content-wrapper. Contains page content -->
 
-
+    <script>
+      // Load JSON data from the file
+      fetch('./dashboard-cards.json')
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(cards => {
+              console.log('Successfully loaded JSON data:', cards);
+  
+              const dashboardCardsElement = document.getElementById('dashboard-cards');
+  
+              cards.forEach(card => {
+                  const cardHtml = `
+                      <div class="col-md-6">
+                          <div class="card">
+                              <div class="card-header">
+                                  <h3>${card.title}</h3>
+                              </div>
+                              <div class="card-body">
+                                  <p>${card.body}</p>
+                              </div>
+                              <div class="card-footer">
+                                  <a href="${card.linkCreate}">Add ${card.linkTextCreate}</a>
+                                  <a href="${card.linkView}">View ${card.linkTextView}</a>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+  
+                  dashboardCardsElement.innerHTML += cardHtml;
+              });
+          })
+          .catch(error => console.error('Error loading dashboard cards:', error));
+  </script>
 @endsection
