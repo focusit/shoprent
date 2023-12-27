@@ -73,7 +73,7 @@ class ShopRentController extends Controller
 
         $this->handleImage($request, $shop);
 
-        // Check if the status is changing from 'occupied' to 'vacant'
+        // Check if the status is changing from 'occupied' to 'vaccant'
         if ($shop->status === 'occupied' && $request->input('status') === 'vaccant') {
             // Set tenant_id to null
             $shop->tenant_id = null;

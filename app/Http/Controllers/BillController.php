@@ -21,10 +21,17 @@ class BillController extends Controller
         $bill = Bill::findOrFail($id);
         return view('bills.show', compact('bill'));
     }
-
     public function create()
     {
         return view('bills.create');
+    }
+    public function billsList()
+    {
+        $billsByMonth = Bill::orderBy('year')->orderBy('month')->get()->groupBy(function ($bill) {
+            return Carbon::createFromDate($bill->year, $bill->month, 1)->format('F Y');
+        });
+
+        return view('bills.bills_list', compact('billsByMonth'));
     }
 
     public function store(Request $request)
@@ -53,11 +60,11 @@ class BillController extends Controller
     public function generate()
     {
         $activeAgreements = Agreement::where('status', 'active')->get();
-    
+
         foreach ($activeAgreements as $agreement) {
             // Check if a bill already exists for the agreement
             $existingBill = Bill::where('agreement_id', $agreement->agreement_id)->first();
-    
+
             if (!$existingBill) {
                 // If no existing bill, generate and create a new one
                 $billData = $this->generateBillData($agreement->agreement_id);
@@ -68,17 +75,18 @@ class BillController extends Controller
                 $existingBill->update($newBillData);
             }
         }
-    
+
         return redirect()->route('bills.index')->with('success', 'Bills generated successfully.');
     }
-    
+
 
 
     private function generateBillData($agreement_id)
     {
-        $agreement = Agreement::where('agreement_id', $agreement_id)->first();
+        $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
         $billingSettings = Bill::getBillingSettings();
         $dueDate = $billingSettings['due_date'];
+
         if (Carbon::now() <= $dueDate) {
             $penalty = 0;
             $discount = $billingSettings['discount'];
@@ -86,20 +94,25 @@ class BillController extends Controller
             $penalty = $billingSettings['penalty'];
             $discount = 0;
         }
-
         // Prepare the data for the new bill
         $billData = [
             'agreement_id' => $agreement->agreement_id,
+            'shop_id' => $agreement->shop->shop_id,
+            'tenant_id' => $agreement->tenant->tenant_id,
+            'tenant_full_name' => $agreement->tenant->full_name,
+            'shop_address' => $agreement->shop->address,
             'rent' => $agreement->rent,
-            'payment_date' => Carbon::now(),
+            'bill_date' => Carbon::now(),
             'due_date' => $dueDate,
             'status' => 'unpaid',
             'penalty' => $penalty,
-            'discount' => $discount
+            'discount' => $discount,
         ];
-
+        // dd($billData);
         return $billData;
     }
+
+
 
     public function regenerate($agreement_id)
     {

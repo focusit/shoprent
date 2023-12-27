@@ -19,7 +19,19 @@ class Bill extends Model
      *
      * @var array
      */
-    protected $fillable = ['agreement_id', 'rent', 'payment_date', 'due_date', 'penalty', 'discount', 'status'];
+    protected $fillable = [
+        'agreement_id',
+        'shop_id',
+        'tenant_id',
+        'shop_address',
+        'tenant_full_name',
+        'rent',
+        'payment_date',
+        'due_date',
+        'penalty',
+        'discount',
+        'status'
+    ];
 
     /**
      * Get billing settings from the JSON file.
@@ -34,5 +46,14 @@ class Bill extends Model
             return json_decode(File::get($jsonFilePath), true);
         }
         return [];
+    }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(ShopRent::class, 'shop_id');
     }
 }

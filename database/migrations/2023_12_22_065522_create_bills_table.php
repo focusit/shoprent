@@ -11,8 +11,12 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->string('agreement_id');
+            $table->string('shop_id');
+            $table->string('tenant_id');
             $table->decimal('rent', 10, 2);
-            $table->date('payment_date');
+            $table->string('tenant_full_name');
+            $table->string('shop_address');
+            $table->date('bill_date')->default(now());
             $table->date('due_date');
             $table->string('status');
             $table->decimal('penalty', 10, 2);
@@ -23,6 +27,8 @@ class CreateBillsTable extends Migration
 
             // Foreign key constraint
             $table->foreign('agreement_id')->references('agreement_id')->on('agreements')->onDelete('cascade');
+            // $table->foreign('shop_id')->references('id')->on('shop_rents')->onDelete('cascade');
+            // $table->foreign('tenant_id')->references('tenant_id')->on('tenants')->onDelete('cascade');
         });
     }
 

@@ -2,41 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Agreement;
 use App\Models\Bill;
-use App\Services\BillingService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
-    protected $billingService;
-    public function __construct(BillingService $billingService)
-    {
-        $this->billingService = $billingService;
-    }
     public function index()
     {
+        $agreementsData = Agreement::select('agreement_id', 'rent', 'shop_id', 'tenant_id')->get();
+        $billingSettings = Bill::getBillingSettings();
         $bills = Bill::all();
-        return view('bills.index', compact('bills'));
+        return view('bills.index', compact('agreementsData', 'billingSettings', 'bills'));
     }
-    public function generate()
+    public function show($id)
     {
-        $shops = $this->billingService->getShopsToGenerateBills();
-        return view('bills.generate', compact('shops'));
-    }
-
-    public function storeGeneratedBills(Request $request)
-    {
-        $request->validate([
-            'shop_ids' => 'required|array',
-        ]);
-
-        $shopIds = $request->input('shop_ids', []);
-
-        foreach ($shopIds as $shopId) {
-            $this->billingService->generateBill($shopId);
-        }
-
-        return redirect()->route('bills.index')->with('success', 'Bills generated successfully!');
+        $bill = Bill::findOrFail($id);
+        return view('bills.show', compact('bill'));
     }
 
     public function create()
@@ -46,63 +29,98 @@ class BillController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'shop_id' => 'required|exists:shop_rents,id',
-            'tenant_id' => 'required|exists:tenants,id',
-            'bill_amount' => 'required|numeric',
-            'due_date' => 'required|date',
-            'status' => 'required|in:unpaid,partial,paid',
-            'paid_at' => $request->input('status') == 'paid' ? 'required|date' : '',
-        ]);
-
-        $bill = Bill::create([
-            'shop_id' => $request->input('shop_id'),
-            'tenant_id' => $request->input('tenant_id'),
-            'bill_amount' => $request->input('bill_amount'),
-            'due_date' => $request->input('due_date'),
-            'status' => $request->input('status'),
-            'paid_at' => $request->input('status') == 'paid' ? $request->input('paid_at') : null,
-        ]);
-
         return redirect()->route('bills.index')->with('success', 'Bill created successfully!');
     }
 
-    public function show(Bill $bill)
+    public function edit($id)
     {
-        return view('bills.show', compact('bill'));
-    }
-
-    public function edit(Bill $bill)
-    {
+        $bill = Bill::findOrFail($id);
         return view('bills.edit', compact('bill'));
     }
 
-    public function update(Request $request, Bill $bill)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'shop_id' => 'required|exists:shop_rents,id',
-            'tenant_id' => 'required|exists:tenants,id',
-            'bill_amount' => 'required|numeric',
-            'due_date' => 'required|date',
-            'status' => 'required|in:unpaid,partial,paid',
-            'paid_at' => $request->input('status') == 'paid' ? 'required|date' : '',
-        ]);
-
-        $bill->update([
-            'shop_id' => $request->input('shop_id'),
-            'tenant_id' => $request->input('tenant_id'),
-            'bill_amount' => $request->input('bill_amount'),
-            'due_date' => $request->input('due_date'),
-            'status' => $request->input('status'),
-            'paid_at' => $request->input('status') == 'paid' ? $request->input('paid_at') : null,
-        ]);
-
         return redirect()->route('bills.index')->with('success', 'Bill updated successfully!');
     }
 
-    public function destroy(Bill $bill)
+    public function destroy($id)
     {
+        $bill = Bill::findOrFail($id);
         $bill->delete();
+
         return redirect()->route('bills.index')->with('success', 'Bill deleted successfully!');
+    }
+    public function generate()
+    {
+        $activeAgreements = Agreement::where('status', 'active')->get();
+
+        foreach ($activeAgreements as $agreement) {
+            // Check if a bill already exists for the agreement
+            $existingBill = Bill::where('agreement_id', $agreement->agreement_id)->first();
+
+            if (!$existingBill) {
+                // If no existing bill, generate and create a new one
+                $billData = $this->generateBillData($agreement->agreement_id);
+                Bill::create($billData);
+            } else {
+                // If an existing bill is found, update it with new data
+                $newBillData = $this->generateBillData($agreement->agreement_id);
+                $existingBill->update($newBillData);
+            }
+        }
+
+        return redirect()->route('bills.index')->with('success', 'Bills generated successfully.');
+    }
+
+
+
+    private function generateBillData($agreement_id)
+    {
+        $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
+        $billingSettings = Bill::getBillingSettings();
+        $dueDate = $billingSettings['due_date'];
+
+        if (Carbon::now() <= $dueDate) {
+            $penalty = 0;
+            $discount = $billingSettings['discount'];
+        } else {
+            $penalty = $billingSettings['penalty'];
+            $discount = 0;
+        }
+        // Prepare the data for the new bill
+        $billData = [
+            'agreement_id' => $agreement->agreement_id,
+            'shop_id' => $agreement->shop_id,
+            'tenant_id' => $agreement->tenant_id,
+            'tenant_full_name' => $agreement->tenant->full_name,
+            'shop_address' => $agreement->shop->address,
+            'rent' => $agreement->rent,
+            'bill_date' => Carbon::now(),
+            'due_date' => $dueDate,
+            'status' => 'unpaid',
+            'penalty' => $penalty,
+            'discount' => $discount,
+        ];
+
+        return $billData;
+    }
+
+
+
+    public function regenerate($agreement_id)
+    {
+        $existingBill = Bill::where('agreement_id', $agreement_id)->first();
+        if ($existingBill) {
+            $newBillData = $this->generateBillData($agreement_id);
+            $existingBill->update($newBillData);
+            return redirect()->route('bills.index')->with('success', 'Bill regenerated successfully.');
+        } else {
+            return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement.');
+        }
+    }
+    public function print($agreement_id)
+    {
+        $bill = Bill::where('agreement_id', $agreement_id)->first();
+        return view('bills.print', compact('bill'));
     }
 }

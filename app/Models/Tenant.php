@@ -29,4 +29,8 @@ class Tenant extends Model
     {
         return $this->hasMany(ShopRent::class, 'tenant_id', 'tenant_id');
     }
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'tenant_id', 'tenant_id');
+    }
 }

@@ -47,4 +47,8 @@ class ShopRent extends Model
         // Save changes
         $this->save();
     }
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'shop_id', 'shop_id');
+    }
 }

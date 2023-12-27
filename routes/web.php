@@ -73,6 +73,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
 
     // View all bills
     Route::get('/bills', [BillController::class, 'index'])->name('bills.index');
+    Route::get('/bills/bills_list', [BillController::class, 'billsList'])->name('bills.bills_list');
     Route::get('/bills/{id}', [BillController::class, 'show'])->name('bills.show');
     Route::get('/bills/create', [BillController::class, 'create'])->name('bills.create');
     Route::post('/bills', [BillController::class, 'store'])->name('bills.store');
@@ -84,11 +85,14 @@ Route::group(['middleware' => 'admin_auth'], function () {
     Route::post('/bills/regenerate/{agreement_id}', [BillController::class, 'regenerate'])->name('bills.regenerate');
     Route::get('/bills/print/{agreement_id}', [BillController::class, 'print'])->name('bills.print');
 
-
     // Bill Routes
-    Route::get('/bill_list', [BillController::class, 'index'])->name('bill_list');
+    // Route::get('/bill_list', [BillController::class, 'index'])->name('bill_list');
+
     Route::get('/generate_bill', function () {
         return view('generate_bill');
+    });
+    Route::get('/payments', function () {
+        return view('payment');
     });
 });
 

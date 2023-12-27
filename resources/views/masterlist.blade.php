@@ -225,7 +225,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="bill_list" class="nav-link">
+                                    <a href="{{ url('bills/bills_list') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>view-latest bill</p>
                                     </a>
@@ -234,10 +234,10 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ url('payments') }}" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
-                                    payment
+                                    Payments
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>

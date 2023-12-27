@@ -31,4 +31,13 @@ class Agreement extends Model
     {
         return $this->hasMany(Bill::class);
     }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(ShopRent::class, 'shop_id');
+    }
 }
