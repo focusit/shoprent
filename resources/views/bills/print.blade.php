@@ -50,18 +50,17 @@
                                 <div class="col-sm-4 invoice-col">
                                     <strong>To</strong>
                                     <address>
-                                        <strong>John Doe</strong><br>
-                                        795 Folsom Ave, Suite 600<br>
-                                        San Francisco, CA 94107<br>
-                                        Phone: (555) 539-1037<br>
-                                        Email: john.doe@example.com
+                                        <strong>{{ $bill->tenant_full_name }}</strong><br>
+                                        {{ $bill->tenant->address }}<br>
+                                        <strong>Phone:</strong> {{ $bill->tenant->contact }}<br>
+                                        <strong>Email:</strong> {{ $bill->tenant->email }}<br>
                                     </address>
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
-                                    <b>Invoice #007612</b><br>
+                                    <b>Invoice #00{{ $bill->id }}</b><br>
                                     <b>Order ID:</b> 4F3S8J<br>
-                                    <b>Payment Due:</b> {{ date('Y/m/d', strtotime('+22 days')) }}<br>
+                                    <b>Payment Due:</b> {{ $bill->due_date }}<br>
                                     <b>Account:</b> 968-34567
                                 </div>
                                 <!-- /.col -->

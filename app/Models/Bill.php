@@ -56,4 +56,8 @@ class Bill extends Model
     {
         return $this->belongsTo(ShopRent::class, 'shop_id');
     }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'id');
+    }
 }

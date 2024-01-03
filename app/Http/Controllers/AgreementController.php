@@ -137,7 +137,7 @@ class AgreementController extends Controller
                 'rent' => 'required|numeric',
                 'status' => 'required|in:active,inactive',
                 'remark' => 'nullable|string',
-                'document_field' => 'nullable|file|mimes:pdf,jpeg,jpg',
+                'document_field' => 'sometimes|file|mimes:pdf,jpeg,jpg',
             ]);
 
             // Find the agreement by agreement_id
@@ -151,6 +151,7 @@ class AgreementController extends Controller
                 'valid_till' => $request->input('valid_till'),
                 'rent' => $request->input('rent'),
                 'status' => $request->input('status'),
+                'document_field' => 'sometimes|file|mimes:pdf,jpeg,jpg',
                 'remark' => $request->input('remark'),
             ]);
 
