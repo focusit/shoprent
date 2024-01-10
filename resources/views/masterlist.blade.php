@@ -101,8 +101,8 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
-                                Shops
-                                <i class="fas fa-angle-left right"></i>
+                                <p>Shops
+                                <i class="fas fa-angle-left right"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
@@ -112,11 +112,11 @@
                                     </a>
                                 </li>
                                 <!-- <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>find</p>
-                    </a>
-                </li> -->
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>find</p>
+                                    </a>
+                                </li> -->
                                 <li class="nav-item">
                                     <a href="{{ route('shops.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -130,8 +130,8 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
-                                Tenants
-                                <i class="fas fa-angle-left right"></i>
+                                <p>Tenants
+                                <i class="fas fa-angle-left right"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
