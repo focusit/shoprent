@@ -64,7 +64,7 @@
                                             <div class="form-group">
                                                 <label for="amount">Amount:</label>
                                                 <input type="text" id="amount" name="amount" class="form-control"
-                                                    value="{{ $bill->rent }}" required readonly>
+                                                    value="{{ $bill->rent }}" required>
 
                                             </div>
                                             <div id="cheque_fields" style="display: none;">

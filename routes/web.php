@@ -3,8 +3,8 @@
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\authController;
-use  App\Http\Controllers\indexController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\indexController;
 use App\Http\Controllers\ShopRentController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\TenantController;

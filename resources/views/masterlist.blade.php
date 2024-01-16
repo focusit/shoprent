@@ -48,9 +48,11 @@
                         <i class="far fa-user"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="{{ route('logout') }}" class="dropdown-item">
-                            Logout
-                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a href="#" class="dropdown-item"
+                                onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                        </form>
                     </div>
                 </li>
                 <li class="nav-item">
