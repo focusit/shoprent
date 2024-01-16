@@ -268,10 +268,10 @@
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a>
-                                                                    <a href="{{ route('agreements.destroy', $agreement->agreement_id) }}"
+                                                                    {{-- <a href="{{ route('agreements.destroy', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
-                                                                    </a>
+                                                                    </a> --}}
                                                                 </td>
                                                             </tr>
                                                         @endif

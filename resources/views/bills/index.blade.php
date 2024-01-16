@@ -41,6 +41,7 @@
                                             <th>Bill Date</th>
                                             <th>Action</th>
                                             <th>Print Bills</th>
+                                            <th>Pay Now</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -72,6 +73,19 @@
                                                         <i class="fas fa-print"></i> Print Bill
                                                     </a>
                                                 </td>
+                                                <td>
+                                                    @if ($bill->status !== 'paid')
+                                                        <button type="button" class="btn btn-warning btn-sm">
+                                                            <a href="{{ route('payments.create', $bill->id) }}">
+                                                                Pay Now
+                                                            </a>
+                                                        </button>
+                                                    @else
+                                                        <button type="button" class="btn btn-info btn-danger" disabled>
+                                                           Paid
+                                                        </button>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -98,7 +112,5 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <script>
-      
-    </script>
+    <script></script>
 @endsection
