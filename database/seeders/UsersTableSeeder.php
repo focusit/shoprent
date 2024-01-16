@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,10 +13,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory()->create([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => 'user_password',
+        DB::table('users')->insert([
+            'name' => 'Admin Hun',
+            'email' => 'admin@shoprent.com',
+            'password' => 'admin',
             'is_admin' => true,
         ]);
     }

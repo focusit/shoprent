@@ -68,7 +68,12 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="dashboard" class="brand-link">
-                <span class="brand-text font-weight-light">Welcome admin!!</span>
+                <span class="brand-text font-weight-light">@auth
+                        Welcome {{ auth()->user()->name }}
+                    @else
+                        Welcome Guest
+                    @endauth
+                </span>
             </a>
             <!--/ Brand Logo -->
 
@@ -104,7 +109,8 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>Shops
-                                <i class="fas fa-angle-left right"></i></p>
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
@@ -133,7 +139,8 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>Tenants
-                                <i class="fas fa-angle-left right"></i></p>
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">

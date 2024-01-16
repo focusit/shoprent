@@ -30,11 +30,11 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form
 // Handle the login form submission
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 // Logout the user
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'admin_auth'], function () {
     // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
 
     // Shop Routes
