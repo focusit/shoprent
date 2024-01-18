@@ -20,9 +20,9 @@
                     @endforeach
                 </div>
 
-                <table class="table table-bordered-striped " id="example1">
+                <table class="table table-bordered table-striped" id="example1">
                     <thead>
-                        <tr>
+                        <tr class="text-center bg-info">
                             <th>ID</th>
                             <th>Agreement ID</th>
                             <th>Shop ID</th>
@@ -103,7 +103,7 @@
                                             <td>{{ $bill->id }}</td>
                                             <td>
                                                 <a href="{{ route('agreements.show', $bill->agreement_id) }}">
-                                                     {{ $bill->agreement_id }}
+                                                    {{ $bill->agreement_id }}
                                                 </a>
                                             </td>
                                             <td>{{ $bill->shop_id }}</td>

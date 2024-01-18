@@ -272,20 +272,11 @@
 
     <script>
         $(document).ready(function() {
-            // Initialize DataTable for All Shops tab
-            $('#allShopsTable').DataTable({
-                // Your DataTable options for All Shops tab
-            });
+            $('#allShopsTable').DataTable({});
 
-            // Initialize DataTable for Occupied Shops tab
-            $('#occupiedShopsTable').DataTable({
-                // Your DataTable options for Occupied Shops tab
-            });
+            $('#occupiedShopsTable').DataTable({});
 
-            // Initialize DataTable for Vacant Shops tab
-            $('#vacantShopsTable').DataTable({
-                // Your DataTable options for Vacant Shops tab
-            });
+            $('#vacantShopsTable').DataTable({});
         });
     </script>
 @endsection

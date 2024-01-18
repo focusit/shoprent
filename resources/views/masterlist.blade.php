@@ -220,12 +220,12 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{ url('generate_bill') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Bill Format</p>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ url('bills') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>

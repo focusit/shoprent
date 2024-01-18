@@ -67,8 +67,8 @@
                             <span class="info-box-icon bg-warning  elevation-1"><i class="fas fa-credit-card"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Payment</span>
-                                <span class="info-box-number">41,410</span>
+                                <span class="info-box-text">Payments</span>
+                                <span class="info-box-number">{{ DB::table('payments')->count() }}</span>
                             </div>
                         </div>
                     </div>

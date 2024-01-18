@@ -10,7 +10,6 @@ class PaymentController extends Controller
 {
     public function create($id)
     {
-        // Assuming you have a 'bills' relationship on the Payment model
         $bill = Bill::findOrFail($id);
         return view('payments.create', compact('bill'));
     }
@@ -40,10 +39,7 @@ class PaymentController extends Controller
         // Check if the total payments cover the entire bill amount
         if ($bill->payments && $bill->payments->count() > 0) {
             $totalPayments = $bill->payments->sum('amount');
-
-            // Assuming 'amount' field in 'bills' table represents the total bill amount
             if ($totalPayments >= $bill->amount) {
-                // Update the status of the associated bill to 'paid'
                 $bill->status = 'paid';
                 $bill->save();
             }

@@ -17,7 +17,6 @@
                             <th>ID</th>
                             <th>Amount</th>
                             <th>Payment Date</th>
-                            <!-- Add other payment-related columns as needed -->
                         </tr>
                     </thead>
                     <tbody>
@@ -26,7 +25,6 @@
                                 <td>{{ $payment->id }}</td>
                                 <td>{{ $payment->amount }}</td>
                                 <td>{{ $payment->payment_date }}</td>
-                                <!-- Add other payment-related columns as needed -->
                             </tr>
                         @empty
                             <tr>
