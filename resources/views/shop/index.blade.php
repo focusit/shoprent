@@ -110,14 +110,6 @@
                                                 @endforelse
                                             </tbody>
                                         </table>
-
-                                        @push('scripts')
-                                            <script>
-                                                // Log the $shops array to the browser console
-                                                console.log(@json($shops));
-                                            </script>
-                                        @endpush
-
                                         </table>
                                     </div>
 

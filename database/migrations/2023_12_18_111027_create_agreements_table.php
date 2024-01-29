@@ -20,7 +20,6 @@ class CreateAgreementsTable extends Migration
             $table->text('remark')->nullable();
             $table->string('document_field')->nullable();
             $table->timestamps();
-
             // Indexing shop_id and tenant_id for better performance
             $table->index('shop_id');
             $table->index('tenant_id');

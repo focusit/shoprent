@@ -239,6 +239,13 @@
                                         <p>view-latest bill</p>
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ url('bills') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Paid Bills</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 

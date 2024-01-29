@@ -47,12 +47,31 @@ class AgreementController extends Controller
                 'tenant_id' => 'required|exists:tenants,tenant_id',
                 'shop_id' => 'required|exists:shop_rents,shop_id',
                 'with_effect_from' => 'required|date',
-                'valid_till' => 'required|date',
+                'valid_till' => 'required|date|after_or_equal:with_effect_from',
                 'rent' => 'required|numeric',
                 'status' => 'required|in:active,inactive',
                 'remark' => 'nullable|string',
                 'document_field' => 'required|file|mimes:pdf,jpeg,jpg',
                 'agreement_id' => 'required|unique:agreements,agreement_id',
+            ], [
+                'tenant_id.required' => 'The tenant ID field is required.',
+                'tenant_id.exists' => 'The selected tenant is invalid.',
+                'shop_id.required' => 'The shop ID field is required.',
+                'shop_id.exists' => 'The selected shop is invalid.',
+                'with_effect_from.required' => 'The With Effect From field is required.',
+                'with_effect_from.date' => 'The With Effect From field must be a valid date.',
+                'valid_till.required' => 'The Valid Till field is required.',
+                'valid_till.date' => 'The Valid Till field must be a valid date.',
+                'valid_till.after_or_equal' => 'The Valid Till field must be a date after or equal to With Effect From.',
+                'rent.required' => 'The Rent field is required.',
+                'rent.numeric' => 'The Rent field must be a numeric value.',
+                'status.required' => 'The Status field is required.',
+                'status.in' => 'The selected Status is invalid.',
+                'document_field.required' => 'The Document Field field is required.',
+                'document_field.file' => 'The Document Field must be a file.',
+                'document_field.mimes' => 'The Document Field must be a file of type: pdf, jpeg, jpg.',
+                'agreement_id.required' => 'The Agreement ID field is required.',
+                'agreement_id.unique' => 'The Agreement ID has already been taken.',
             ]);
             $agreement = new Agreement([
                 'agreement_id' => $request->input('agreement_id'),
@@ -78,14 +97,17 @@ class AgreementController extends Controller
             $shop->allocateToTenant($request->input('tenant_id'));
 
             return redirect()->route('allocation.list')->with('success', 'Shop allocated successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // If validation fails, redirect back with errors
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            // Handle other exceptions
             dd($e->getMessage());
         }
     }
 
     public function allocationList()
     {
-        $allocations = ShopRent::with('tenant')->where('status', 'occupied')->get();
         $allocations = ShopRent::with('agreements')->where('status', 'active')->get();
         return redirect()->route('agreements.index')->with('allocations', $allocations);
     }
@@ -133,7 +155,7 @@ class AgreementController extends Controller
                 'tenant_id' => 'required|exists:tenants,tenant_id',
                 'shop_id' => 'required|exists:shop_rents,shop_id',
                 'with_effect_from' => 'required|date',
-                'valid_till' => 'required|date',
+                'valid_till' => 'required|date|after_or_equal:with_effect_from',
                 'rent' => 'required|numeric',
                 'status' => 'required|in:active,inactive',
                 'remark' => 'nullable|string',

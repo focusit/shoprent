@@ -82,7 +82,7 @@
                                                         </button>
                                                     @else
                                                         <button type="button" class="btn btn-info btn-danger" disabled>
-                                                           Paid
+                                                            Paid
                                                         </button>
                                                     @endif
                                                 </td>

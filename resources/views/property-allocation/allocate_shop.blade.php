@@ -66,6 +66,15 @@
                                 {{ session('error') }}
                             </div>
                         @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form
                             action="{{ isset($agreement) ? route('agreements.update', $agreement->agreement_id) : route('allocate.shop.form') }}"
                             method="POST" enctype="multipart/form-data">
@@ -80,6 +89,9 @@
                                         <input type="text" id="shop_search" name="shop_search" class="form-control"
                                             value="{{ old('shop_search', isset($agreement) ? $agreement->shop_id : '') }}"
                                             placeholder="Search for a vacant shop..." required>
+                                        @error('shop_search')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                         <input type="hidden" id="shop_id" name="shop_id"
                                             value="{{ old('shop_id', isset($agreement) ? $agreement->shop_id : '') }}">
                                     </div>
@@ -90,6 +102,9 @@
                                         <input type="text" id="tenant_search" name="tenant_search" class="form-control"
                                             value="{{ old('tenant_search', isset($agreement) ? $agreement->tenant_id : '') }}"
                                             placeholder="Search for a tenant..." required>
+                                        @error('tenant_search')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                         <input type="hidden" id="tenant_id" name="tenant_id"
                                             value="{{ old('tenant_id', isset($agreement) ? $agreement->tenant_id : '') }}">
                                     </div>
@@ -102,6 +117,9 @@
                                         <input type="text" id="agreement_id" name="agreement_id" class="form-control"
                                             value="{{ old('agreement_id', isset($agreement) ? $agreement->agreement_id : '') }}"
                                             placeholder="Agreement ID" required>
+                                        @error('agreement_id')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -111,6 +129,9 @@
                                             class="form-control"
                                             value="{{ old('with_effect_from', isset($agreement) ? $agreement->with_effect_from : '') }}"
                                             required>
+                                        @error('with_effect_from')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +142,9 @@
                                         <input type="date" id="valid_till" name="valid_till" class="form-control"
                                             value="{{ old('valid_till', isset($agreement) ? $agreement->valid_till : '') }}"
                                             required>
+                                        @error('valid_till')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -130,6 +154,9 @@
                                             placeholder="Rent"
                                             value="{{ old('rent', isset($agreement) ? $agreement->rent : '') }}" required>
                                     </div>
+                                    @error('rent')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="row">
@@ -145,6 +172,9 @@
                                                 {{ old('status', isset($agreement) && $agreement->status == 'inactive' ? 'selected' : '') }}>
                                                 Inactive</option>
                                         </select>
+                                        @error('status')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -152,13 +182,19 @@
                                         <label for="remark">Remark:</label>
                                         <textarea id="remark" name="remark" class="form-control" placeholder="Remark">{{ old('remark', isset($agreement) ? $agreement->remark : '') }}</textarea>
                                     </div>
+                                    @error('remark')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="document_field">Document Field (PDF-JPEG):</label>
                                 <input type="file" id="document_field" name="document_field" class="form-control"
                                     value="{{ old('rent', isset($agreement) ? $agreement->document_field : '') }}"
-                                    accept=".pdf, .jpeg, .jpg" required>
+                                    accept=".pdf, .jpeg, .jpg">
+                                @error('document_field')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <button type="submit" class="btn btn-danger toastsDefaultDefault">Allocate</button>
                         </form>

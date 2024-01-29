@@ -13,7 +13,7 @@ class TenantController extends Controller
      */
     public function index()
     {
-        $tenants = Tenant::paginate(10);
+        $tenants = Tenant::paginate(20);
         return view('tenants.index', compact('tenants'));
     }
 

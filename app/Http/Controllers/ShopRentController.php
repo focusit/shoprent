@@ -99,7 +99,6 @@ class ShopRentController extends Controller
 
         return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
     }
-
     protected function validateShop(Request $request)
     {
         return $request->validate([

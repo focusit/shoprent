@@ -28,7 +28,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <h4>
-                                        <i class="fas fa-globe"></i> AdminLTE, Inc.
+                                        <i class="fas fa-globe"></i> MC 1
                                         <small class="float-right">{{ date('Y/m/d') }}</small>
                                     </h4>
                                 </div>
@@ -39,7 +39,7 @@
                                 <div class="col-sm-4 invoice-col">
                                     <strong>From</strong>
                                     <address>
-                                        <strong>Admin, Inc.</strong><br>
+                                        <strong>MC 1</strong><br>
                                         795 Folsom Ave, Suite 600<br>
                                         San Francisco, CA 94107<br>
                                         Phone: (804) 123-5432<br>

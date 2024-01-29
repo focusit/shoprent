@@ -1,5 +1,3 @@
-<section class="content">
-    <div class="container-fluid">
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
             <!-- .card-body -->
