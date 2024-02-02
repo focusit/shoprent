@@ -81,61 +81,61 @@
     </div>
 
     <script>
-   document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('currentMonthBtn').addEventListener('click', function() {
-        updateTable('example1', '{{ \Carbon\Carbon::now()->format('m') }}');
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('currentMonthBtn').addEventListener('click', function() {
+                updateTable('example1', '{{ \Carbon\Carbon::now()->format('m') }}');
+            });
 
-    var monthButtons = document.querySelectorAll('.monthBtn');
-    monthButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            var selectedMonth = button.getAttribute('data-month');
-            updateTable('example1', selectedMonth);
+            var monthButtons = document.querySelectorAll('.monthBtn');
+            monthButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var selectedMonth = button.getAttribute('data-month');
+                    updateTable('example1', selectedMonth);
+                });
+            });
         });
-    });
-});
 
-function updateTable(tableId, selectedMonth) {
-    var billsByMonth = {!! json_encode($billsByMonth, JSON_FORCE_OBJECT) !!};
-    var billsForSelectedMonth = billsByMonth[selectedMonth];
+        function updateTable(tableId, selectedMonth) {
+            var billsByMonth = {!! json_encode($billsByMonth, JSON_FORCE_OBJECT) !!};
+            var billsForSelectedMonth = billsByMonth[selectedMonth];
 
-    var tableBody = document.getElementById('billTableBody');
-    tableBody.innerHTML = '';
+            var tableBody = document.getElementById('billTableBody');
+            tableBody.innerHTML = '';
 
-    if (billsForSelectedMonth && billsForSelectedMonth.length > 0) {
-        billsForSelectedMonth.forEach(function(bill) {
-            var agreementShowUrl = '/agreements/' + bill.agreement_id;
-            var regenerateUrl = '/bills/regenerate/' + bill.agreement_id;
-            var printUrl = '/bills/print/' + bill.agreement_id;
+            if (billsForSelectedMonth && billsForSelectedMonth.length > 0) {
+                billsForSelectedMonth.forEach(function(bill) {
+                    var agreementShowUrl = '/agreements/' + bill.agreement_id;
+                    var regenerateUrl = '/bills/regenerate/' + bill.agreement_id;
+                    var printUrl = '/bills/print/' + bill.agreement_id;
 
-            var row = '<tr>' +
-                '<td>' + bill.id + '</td>' +
-                '<td><a href="' + agreementShowUrl + '">' + bill.agreement_id + '</a></td>' +
-                '<td>' + bill.shop_id + '</td>' +
-                '<td>' + bill.shop_address + '</td>' +
-                '<td>' + bill.tenant_id + '</td>' +
-                '<td>' + bill.tenant_full_name + '</td>' +
-                '<td>' + bill.rent + '</td>' +
-                '<td>' + bill.status + '</td>' +
-                '<td>' + bill.bill_date + '</td>' +
-                '<td>' +
-                '<form action="' + regenerateUrl + '" method="post">' +
-                '@csrf' +
-                '<button type="submit" class="btn btn-warning">Regenerate</button>' +
-                '</form>' +
-                '</td>' +
-                '<td>' +
-                '<a href="' + printUrl + '" target="_blank" class="btn btn-info btn-sm">' +
-                '<i class="fas fa-print"></i> Print Bill' +
-                '</a>' +
-                '</td>' +
-                '</tr>';
-            tableBody.innerHTML += row;
-        });
-    } else {
-        var noDataRow = '<tr><td colspan="11">No bills found.</td></tr>';
-        tableBody.innerHTML = noDataRow;
-    }
-}
-</script>
+                    var row = '<tr>' +
+                        '<td>' + bill.id + '</td>' +
+                        '<td><a href="' + agreementShowUrl + '">' + bill.agreement_id + '</a></td>' +
+                        '<td>' + bill.shop_id + '</td>' +
+                        '<td>' + bill.shop_address + '</td>' +
+                        '<td>' + bill.tenant_id + '</td>' +
+                        '<td>' + bill.tenant_full_name + '</td>' +
+                        '<td>' + bill.rent + '</td>' +
+                        '<td>' + bill.status + '</td>' +
+                        '<td>' + bill.bill_date + '</td>' +
+                        '<td>' +
+                        '<form action="' + regenerateUrl + '" method="post">' +
+                        '@csrf' +
+                        '<button type="submit" class="btn btn-warning">Regenerate</button>' +
+                        '</form>' +
+                        '</td>' +
+                        '<td>' +
+                        '<a href="' + printUrl + '" target="_blank" class="btn btn-info btn-sm">' +
+                        '<i class="fas fa-print"></i> Print Bill' +
+                        '</a>' +
+                        '</td>' +
+                        '</tr>';
+                    tableBody.innerHTML += row;
+                });
+            } else {
+                var noDataRow = '<tr><td colspan="11">No bills found.</td></tr>';
+                tableBody.innerHTML = noDataRow;
+            }
+        }
+    </script>
 @endsection

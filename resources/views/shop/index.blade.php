@@ -42,7 +42,6 @@
                                             Shops</a>
                                     </li>
                                 </ul>
-
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <!-- All Shops Tab -->

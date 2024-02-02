@@ -6,6 +6,7 @@ use App\Models\Agreement;
 use App\Models\Bill;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BillController extends Controller
 {
@@ -13,88 +14,129 @@ class BillController extends Controller
     {
         $agreementsData = Agreement::select('agreement_id', 'rent', 'shop_id', 'tenant_id')->get();
         $billingSettings = Bill::getBillingSettings();
+        // $recentMonth = Carbon::now()->format('m');
+        // $recentYear = Carbon::now()->format('Y');
+
+        // $billsData = Bill::whereYear('year', $recentYear)
+        //     ->whereMonth('month', $recentMonth)
+        //     ->get();
         $bills = Bill::all();
+
         return view('bills.index', compact('agreementsData', 'billingSettings', 'bills'));
     }
-    public function show($id)
+
+
+    public function show($agreement_id)
     {
-        $bill = Bill::findOrFail($id);
+        $bill = Bill::findOrFail($agreement_id);
         return view('bills.show', compact('bill'));
     }
     public function create()
     {
         return view('bills.create');
     }
-    public function billsList()
-    {
-        $billsByMonth = Bill::orderBy('year')->orderBy('month')->get()->groupBy(function ($bill) {
-            return Carbon::createFromDate($bill->year, $bill->month, 1)->format('F Y');
-        });
 
-        return view('bills.bills_list', compact('billsByMonth'));
+    public function billsList($selectedYear = null, $selectedMonth = null)
+    {
+        // If $selectedYear or $selectedMonth are not provided, use the current year and month
+        $selectedYear = $selectedYear ?? date('Y');
+        $selectedMonth = $selectedMonth ?? date('m');
+
+        $billsByMonth = Bill::where('year', $selectedYear)
+            ->where('month', $selectedMonth)
+            ->orderBy('month')
+            ->get()
+            ->groupBy(function ($bill) {
+                return Carbon::createFromDate($bill->year, $bill->month, 1)->format('F Y');
+            });
+
+        // $sqlQuery = DB::getQueryLog()[0]['query'];
+
+        // Log or dd() the SQL query for debugging
+        // dd($sqlQuery);
+
+        return view('bills.bills_list', compact('billsByMonth', 'selectedYear', 'selectedMonth'));
     }
+
 
     public function store(Request $request)
     {
         return redirect()->route('bills.index')->with('success', 'Bill created successfully!');
     }
 
-    public function edit($id)
+    public function edit($agreement_id)
     {
-        $bill = Bill::findOrFail($id);
+        $bill = Bill::findOrFail($agreement_id);
         return view('bills.edit', compact('bill'));
     }
 
-    public function update(Request $request, $id)
-    {
-        return redirect()->route('bills.index')->with('success', 'Bill updated successfully!');
-    }
 
-    public function destroy($id)
+    public function destroy($agreement_id)
     {
-        $bill = Bill::findOrFail($id);
+        $bill = Bill::findOrFail($agreement_id);
         $bill->delete();
 
         return redirect()->route('bills.index')->with('success', 'Bill deleted successfully!');
     }
-    public function generate()
+    public function generate(Request $request, $year = null, $month = null)
     {
+        // If year and month are not provided, use the current date
+        $year = $request->input('selectedYear') ?? date('Y');
+        $month = $request->input('selectedMonth') ?? date('m');
+
         $activeAgreements = Agreement::where('status', 'active')->get();
 
         foreach ($activeAgreements as $agreement) {
-            // Check if a bill already exists for the agreement
-            $existingBill = Bill::where('agreement_id', $agreement->agreement_id)->first();
+            // Check if a bill already exists for the agreement and the specified month
+            $existingBill = Bill::where('agreement_id', $agreement->agreement_id)
+                ->where('year', $year)
+                ->where('month', $month)
+                ->first();
 
             if (!$existingBill) {
-                // If no existing bill, generate and create a new one
-                $billData = $this->generateBillData($agreement->agreement_id);
-                Bill::create($billData);
-            } else {
-                // If an existing bill is found, update it with new data
-                $newBillData = $this->generateBillData($agreement->agreement_id);
-                $existingBill->update($newBillData);
+                // If no existing bill, generate and create a new one for the specified month
+                $billData = $this->generateBillData($agreement->agreement_id, $year, $month);
+
+                // Ensure that valid bill data is returned before attempting to create
+                if ($billData) {
+                    Bill::create($billData);
+                }
             }
         }
 
-        return redirect()->route('bills.index')->with('success', 'Bills generated successfully.');
+        return redirect()->route('bills.billsList', ['year' => $year, 'month' => $month])->with('success', 'Bills generated successfully.');
     }
 
 
 
-    private function generateBillData($agreement_id)
+
+    private function generateBillData($agreement_id, $year, $month)
     {
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
-        $billingSettings = Bill::getBillingSettings();
-        $dueDate = $billingSettings['due_date'];
 
-        if (Carbon::now() <= $dueDate) {
+        // Ensure that billing settings exist
+        $billingSettings = Bill::getBillingSettings();
+        if (!$billingSettings) {
+            return null;
+        }
+
+        // Convert due date and bill date to Carbon instances
+        $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
+        $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
+
+        if (!$billDate->isValid()) {
+            $billDate = Carbon::now()->startOfMonth();
+        }
+
+        if (now() <= $dueDate) {
             $penalty = 0;
             $discount = $billingSettings['discount'];
         } else {
             $penalty = $billingSettings['penalty'];
             $discount = 0;
         }
-        // Prepare the data for the new bill
+
+        // Prepare the data for the new bill with the specified year and month
         $billData = [
             'agreement_id' => $agreement->agreement_id,
             'shop_id' => $agreement->shop->shop_id,
@@ -102,30 +144,73 @@ class BillController extends Controller
             'tenant_full_name' => $agreement->tenant->full_name,
             'shop_address' => $agreement->shop->address,
             'rent' => $agreement->rent,
-            'bill_date' => Carbon::now(),
-            'due_date' => $dueDate,
+            'year' => $year,
+            'month' => $month,
+            'bill_date' => $billDate->toDateString(),
+            'due_date' => $dueDate->toDateString(),
             'status' => 'unpaid',
             'penalty' => $penalty,
             'discount' => $discount,
         ];
-        // dd($billData);
+
         return $billData;
     }
 
 
-
-    public function regenerate($agreement_id)
+    public function regenerate(Request $request, $agreement_id, $year = null, $month = null)
     {
-        $existingBill = Bill::where('agreement_id', $agreement_id)->first();
-        if ($existingBill) {
-            $newBillData = $this->generateBillData($agreement_id);
+        // If year and month are not provided, use the current date
+        $year = $request->input('selectedYear') ?? date('Y');
+        $month = $request->input('selectedMonth') ?? date('m');
+        // Retrieve the existing bill for the specified agreement, year, and month
+        $existingBill = Bill::where('id', $agreement_id)
+            ->whereYear('year', $year)
+            ->whereMonth('month', $month)
+            ->first();
+
+        // Retrieve the agreement using its ID
+        $agreement = Agreement::find($agreement_id);
+
+        // Check if both an existing bill and an agreement were found
+        if ($existingBill && $agreement) {
+            // Generate new bill data based on the agreement, year, and month
+            $newBillData = $this->generateBillData($agreement_id, $year, $month);
+            // dd("Bill Data here", $newBillData);
             $existingBill->update($newBillData);
+            // dd("existing bill",$existingBill);
             return redirect()->route('bills.index')->with('success', 'Bill regenerated successfully.');
         } else {
-            return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement.');
+            return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement and month.');
         }
     }
-    public function print($agreement_id)
+
+    public function update(Request $request, $id)
+    {
+        $bill = Bill::findOrFail($id);
+
+        // Check if the bill is already paid; if so, do not update it
+        if ($bill->status == 'paid') {
+            return redirect()->route('bills.index')->with('error', 'Cannot update a paid bill.');
+        }
+
+        $updatedData = $request->only(['bill_date', 'rent', 'status', 'due_date']);
+
+        $penalty = $this->$updatedData['due_date'];
+        $discount = $this->$updatedData['due_date'];
+
+        $bill->update([
+            // 'bill_date' => $updatedData['bill_date'],
+            'rent' => $updatedData['rent'],
+            'status' => $updatedData['status'],
+            'due_date' => $updatedData['due_date'],
+            'penalty' => $penalty,
+            'discount' => $discount,
+        ]);
+
+        return redirect()->route('bills.index')->with('success', 'Bill updated successfully!');
+    }
+
+    public function print($id, $agreement_id)
     {
         $bill = Bill::where('agreement_id', $agreement_id)->first();
         return view('bills.print', compact('bill'));

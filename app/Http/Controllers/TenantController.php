@@ -141,7 +141,7 @@ class TenantController extends Controller
     }
     public function autocompleteSearch(Request $request)
     {
-        
+
         $query = $request->input('query');
 
         $tenants = Tenant::where('tenant_id', 'like', '%' . $query . '%')->orderBy('tenant_id', 'asc')

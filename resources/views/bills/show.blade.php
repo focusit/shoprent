@@ -64,10 +64,10 @@
                                                 </form>
                                             </td> --}}
                                             <td>
-                                                <a href="{{ route('bills.print', $bill->agreement_id) }}" target="_blank"
+                                                {{-- <a href="{{ route('bills.print', $bill->id) }}" target="_blank"
                                                     class="btn btn-info btn-sm">
                                                     <i class="fas fa-print"></i> Print Bill
-                                                </a>
+                                                </a> --}}
                                             </td>
                                         </tr>
 

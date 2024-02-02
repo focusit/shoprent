@@ -77,17 +77,18 @@ Route::group(['middleware' => 'admin_auth'], function () {
     // Route::get('/bills/bills_list', [BillController::class, 'billsList'])->name('bills.bills_list');
     // Route::get('/bills/bills_list/{year?}/{month?}', [BillController::class, 'billsList'])->name('bills.billsList');
     Route::get('/bills/bills_list', [BillController::class, 'billsList'])->name('bills.bills_list');
-    Route::get('/bills/bills_list/{year}/{month}', [BillController::class, 'billsList'])->name('bills.billsList');
+    Route::get('/bills/bills_list/{year?}/{month?}', [BillController::class, 'billsList'])->name('bills.billsList');
     Route::get('/bills/{id}', [BillController::class, 'show'])->name('bills.show');
     Route::get('/bills/create', [BillController::class, 'create'])->name('bills.create');
     Route::post('/bills', [BillController::class, 'store'])->name('bills.store');
-    Route::get('/bills/{id}/edit', [BillController::class, 'edit'])->name('bills.edit');
-    Route::put('/bills/{id}', [BillController::class, 'update'])->name('bills.update');
-    Route::delete('/bills/{id}', [BillController::class, 'destroy'])->name('bills.destroy');
+    Route::get('/bills/{agreement_id}/edit', [BillController::class, 'edit'])->name('bills.edit');
+    Route::put('/bills/{agreement_id}', [BillController::class, 'update'])->name('bills.update');
+    Route::delete('/bills/{agreement_id}', [BillController::class, 'destroy'])->name('bills.destroy');
     ///genrate bill
-    Route::post('/bills/generate', [BillController::class, 'generate'])->name('bills.generate');
-    Route::post('/bills/regenerate/{agreement_id}', [BillController::class, 'regenerate'])->name('bills.regenerate');
-    Route::get('/bills/print/{agreement_id}', [BillController::class, 'print'])->name('bills.print');
+    Route::post('/bills/generate/{year?}/{month?}', [BillController::class, 'generate'])->name('bills.generate');
+    Route::post('/bills/regenerate/{agreement_id}/{year?}/{month?}', [BillController::class, 'regenerate'])->name('bills.regenerate');
+    Route::get('/bills/print/{id}/{agreement_id}', [BillController::class, 'print'])->name('bills.print');
+
 
     // Bill Routes
     // Route::get('/bill_list', [BillController::class, 'index'])->name('bill_list');

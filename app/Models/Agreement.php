@@ -29,7 +29,7 @@ class Agreement extends Model
     }
     public function bills()
     {
-        return $this->hasMany(Bill::class);
+        return $this->hasMany(Bill::class, 'agreement_id', 'agreement_id');
     }
     public function tenant()
     {

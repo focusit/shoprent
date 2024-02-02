@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Admin Hun',
             'email' => 'admin@shoprent.com',
-            'password' => 'admin',
+            'password' => '$2a$12$tZIalU4Xb/3D29CeJXpHIOJZ9AXe/zX6vmWfY6vH6Ma7rreVV8WPS',
             'is_admin' => true,
         ]);
     }

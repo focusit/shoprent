@@ -110,20 +110,20 @@
             </div>
             <!-- /.card-body -->
         </div>
-    </div>
-</section>
+        </div>
+        </section>
 
-<script>
-    $(document).ready(function() {
-        // Check if there's a success message in the session
-        @if (session('success'))
-            // Show the AdminLTE toast
-            $(document).Toasts('create', {
-                class: 'bg-success',
-                title: 'Success',
-                body: '{{ session('success') }}',
-                icon: 'fas fa-check'
+        <script>
+            $(document).ready(function() {
+                // Check if there's a success message in the session
+                @if (session('success'))
+                    // Show the AdminLTE toast
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Success',
+                        body: '{{ session('success') }}',
+                        icon: 'fas fa-check'
+                    });
+                @endif
             });
-        @endif
-    });
-</script>
+        </script>

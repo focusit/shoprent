@@ -16,7 +16,7 @@ class CreateBillsTable extends Migration
             $table->decimal('rent', 10, 2);
             $table->string('tenant_full_name');
             $table->string('shop_address');
-            $table->date('bill_date')->default(now());
+            $table->date('bill_date');
             $table->date('due_date');
             $table->string('status');
             $table->decimal('penalty', 10, 2);

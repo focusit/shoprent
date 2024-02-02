@@ -105,7 +105,17 @@ class AgreementController extends Controller
             dd($e->getMessage());
         }
     }
+    public function showAgreementDetails($agreement_id)
+    {
+        // Assuming you have a relationship named 'bills' in your Agreement model
+        $agreement = Agreement::with('bills')->where('agreement_id', $agreement_id)->first();
 
+        if (!$agreement) {
+            abort(404); // Agreement not found
+        }
+
+        return view('agreements.show', compact('agreement'));
+    }
     public function allocationList()
     {
         $allocations = ShopRent::with('agreements')->where('status', 'active')->get();
@@ -203,6 +213,7 @@ class AgreementController extends Controller
         return redirect()->route('agreements.index')->with('success', 'Agreement has been deleted successfully');
     }
 }
+
 
 //     public function handleDocument($request, $agreement)
 //     {

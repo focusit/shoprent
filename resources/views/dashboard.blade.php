@@ -21,11 +21,10 @@
             <div class="container-fluid">
                 <!-- Info boxes -->
                 <div class="row">
-
                     <!--.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box bg-gradient-danger mb-3">
-                            <span class="info-box-icon elevation-1 bg-warning"><i class="fas fa-shopping-bag"></i></span>
+                        <div class="info-box  mb-3">
+                            <span class="info-box-icon elevation-1 bg-success"><i class="fas fa-shopping-bag"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Shop</span>
                                 <span class="info-box-number">{{ DB::table('shop_rents')->count() }}</span>
@@ -36,13 +35,12 @@
 
                     <!--.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3 bg-gradient-danger">
-                            <span class="info-box-icon  elevation-1 bg-warning"><i class="fas fa-user-friends"></i></span>
-
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon  elevation-1 bg-success"><i class="fas fa-user-friends"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Tenants</span>
                                 <span class="info-box-number">{{ DB::table('tenants')->count() }}</span>
-                            </div>
+                        </div>
                         </div>
                     </div>
                     <!-- /.col -->
@@ -51,8 +49,8 @@
                     <div class="clearfix hidden-md-up"></div>
                     <!--.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box bg-gradient-danger mb-3">
-                            <span class="info-box-icon bg-warning  elevation-1"><i class="fas fa-coins"></i></span>
+                        <div class="info-box  mb-3">
+                            <span class="info-box-icon bg-success  elevation-1"><i class="fas fa-coins"></i></span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Bills</span>
@@ -63,8 +61,8 @@
                     <!-- /.col -->
                     <!--.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3 bg-gradient-danger">
-                            <span class="info-box-icon bg-warning  elevation-1"><i class="fas fa-credit-card"></i></span>
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-credit-card"></i></span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Payments</span>
@@ -84,7 +82,7 @@
                                 @foreach ($cards as $card)
                                     <div class="col-lg-4 mb-4">
                                         <div class="d-flex h-100">
-                                            <div class="card card-warning w-100">
+                                            <div class="card card-success w-100">
                                                 <div class="card-header">
                                                     <h3 class="card-title">{{ $card['title'] }}</h3>
                                                     <div class="card-tools">
@@ -94,7 +92,7 @@
                                                 <div class="card-body">
                                                     {{ $card['body'] }}
                                                 </div>
-                                                <div class="card-footer bg-danger">
+                                                <div class="card-footer">
                                                     <a href="{{ $card['linkCreate'] }}" class="card-link">
                                                         {{ $card['linkTextCreate'] }}</a>
                                                     <a href="{{ $card['linkView'] }}" class="card-link">
