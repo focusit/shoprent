@@ -103,18 +103,3 @@ Route::group(['middleware' => 'admin_auth'], function () {
         return view('payment');
     });
 });
-
-
-
-//bills
-
-// Route::get('/bills/generate', [BillController::class, 'generate'])->name('bills.generate');
-// Route::post('/bills/generate', [BillController::class, 'storeGeneratedBills'])->name('bills.generate.store');
-
-// Route::get('/bills', [BillController::class, 'index'])->name('bills.index');
-// Route::get('/bills/create', [BillController::class, 'create'])->name('bills.create');
-// Route::post('/bills', [BillController::class, 'store'])->name('bills.store');
-// Route::get('/bills/{bill}', [BillController::class, 'show'])->name('bills.show');
-// Route::get('/bills/{bill}/edit', [BillController::class, 'edit'])->name('bills.edit');
-// Route::put('/bills/{bill}', [BillController::class, 'update'])->name('bills.update');
-// Route::delete('/bills/{bill}', [BillController::class, 'destroy'])->name('bills.destroy');
