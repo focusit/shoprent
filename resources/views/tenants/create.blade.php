@@ -1,6 +1,6 @@
 @extends('masterlist')
 
-@section('title', 'Create Shop')
+@section('title', 'Create Tenant')
 
 @section('body')
 

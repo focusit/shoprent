@@ -72,8 +72,10 @@
                 </div>
 
                 <!-- /.card-body -->
+                <div class="text-center m-3">
+                    <a href="{{ route('shops.index') }}" class="btn btn-primary">Back to List</a>
+                </div>
             </div>
-            <div class="text-center mt-3">
-                <a href="{{ route('shops.index') }}" class="btn btn-primary">Back to List</a>
-            </div>
-        @endsection
+        </div>
+    </div>
+@endsection

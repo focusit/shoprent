@@ -1,6 +1,5 @@
 @extends('masterlist')
-
-@section('title', 'Bills')
+@section('title', 'tenant_list')
 
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -23,59 +22,60 @@
                         </button>
                     @endforeach
                 </div>
-
-                <table class="table" id="example1">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Agreement ID</th>
-                            <th>Shop ID</th>
-                            <th>Shop Address</th>
-                            <th>Tenant ID</th>
-                            <th>Tenant Name</th>
-                            <th>Rent</th>
-                            <th>Status</th>
-                            <th>Bill Date</th>
-                            <th>Action</th>
-                            <th>Print Bills</th>
-                        </tr>
-                    </thead>
-                    <tbody id="billTableBody">
-                        @forelse ($billsByMonth[Carbon\Carbon::now()->format('F Y')] ?? [] as $bill)
+                <div class="content-wrapper">
+                    <table class="table table-bordered table-striped" id="example1">
+                        <thead>
                             <tr>
-                                <td>{{ $bill->id }}</td>
-                                <td>
-                                    <a href="{{ route('agreements.show', $bill->agreement_id) }}">
-                                        {{ $bill->agreement_id }}
-                                    </a>
-                                </td>
-                                <td>{{ $bill->shop_id }}</td>
-                                <td>{{ $bill->shop_address }}</td>
-                                <td>{{ $bill->tenant_id }}</td>
-                                <td>{{ $bill->tenant_full_name }}</td>
-                                <td>{{ $bill->rent }}</td>
-                                <td>{{ $bill->status }}</td>
-                                <td>{{ $bill->bill_date }}</td>
-                                <td>
-                                    <form action="{{ route('bills.regenerate', $bill->agreement_id) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-warning">Regenerate</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <a href="{{ route('bills.print', $bill->agreement_id) }}" target="_blank"
-                                        class="btn btn-info btn-sm">
-                                        <i class="fas fa-print"></i> Print Bill
-                                    </a>
-                                </td>
+                                <th>ID</th>
+                                <th>Agreement ID</th>
+                                <th>Shop ID</th>
+                                <th>Shop Address</th>
+                                <th>Tenant ID</th>
+                                <th>Tenant Name</th>
+                                <th>Rent</th>
+                                <th>Status</th>
+                                <th>Bill Date</th>
+                                <th>Action</th>
+                                <th>Print Bills</th>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="11">No bills found.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody id="billTableBody">
+                            @forelse ($billsByMonth[Carbon\Carbon::now()->format('F Y')] ?? [] as $bill)
+                                <tr>
+                                    <td>{{ $bill->id }}</td>
+                                    <td>
+                                        <a href="{{ route('agreements.show', $bill->agreement_id) }}">
+                                            {{ $bill->agreement_id }}
+                                        </a>
+                                    </td>
+                                    <td>{{ $bill->shop_id }}</td>
+                                    <td>{{ $bill->shop_address }}</td>
+                                    <td>{{ $bill->tenant_id }}</td>
+                                    <td>{{ $bill->tenant_full_name }}</td>
+                                    <td>{{ $bill->rent }}</td>
+                                    <td>{{ $bill->status }}</td>
+                                    <td>{{ $bill->bill_date }}</td>
+                                    <td>
+                                        <form action="{{ route('bills.regenerate', $bill->agreement_id) }}" method="post">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning">Regenerate</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('bills.print', $bill->agreement_id) }}" target="_blank"
+                                            class="btn btn-info btn-sm">
+                                            <i class="fas fa-print"></i> Print Bill
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="11">No bills found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

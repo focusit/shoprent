@@ -15,7 +15,7 @@ class TenantSeeder extends Seeder
                 'govt_id' => 'A' . str_pad($i, 5, '0', STR_PAD_LEFT),
                 'image' => '1702127445.jpg',
                 'address' => '456 Oak St',
-                'pincode' => '20002',
+                'pincode' => '200002',
                 'email' => 'tenant' . $i . '@example.com',
                 'full_name' => 'John Doe ' . $i,
                 'govt_id_number' => 'A' . str_pad($i, 5, '0', STR_PAD_LEFT),

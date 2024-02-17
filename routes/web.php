@@ -45,6 +45,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     Route::get('/shops/{shop_id}/edit', [ShopRentController::class, 'edit'])->name('shops.edit');
     Route::put('/shops/{shop_id}', [ShopRentController::class, 'update'])->name('shops.update');
     Route::delete('/shops/{shop_id}', [ShopRentController::class, 'destroy'])->name('shops.destroy');
+    Route::post('/checkShopId', [ShopRentController::class, 'checkShopId'])->name('checkShopId');
 
     // Tenant Routes
     Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
@@ -54,6 +55,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     Route::get('/tenants/{tenant_id}/edit', [TenantController::class, 'edit'])->name('tenants.edit');
     Route::put('/tenants/{tenant_id}', [TenantController::class, 'update'])->name('tenants.update');
     Route::delete('/tenants/{tenant_id}', [TenantController::class, 'destroy'])->name('tenants.destroy');
+    Route::post('/checkTenantId', [TenantController::class, 'checkTenantId'])->name('checkTenantId');
 
     //Autocomplete
     Route::match(['get', 'post'], '/autocomplete-search', [ShopRentController::class, 'autocompleteSearch'])->name('autocomplete.search');
@@ -70,6 +72,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     Route::get('/agreements/{agreement_id}', [AgreementController::class, 'show'])->name('agreements.show');
     Route::get('/agreements/{agreement_id}/edit', [AgreementController::class, 'edit'])->name('agreements.edit');
     Route::put('/agreements/{agreement_id}', [AgreementController::class, 'update'])->name('agreements.update');
+    Route::post('/checkAgreementId', [AgreementController::class, 'checkAgreementId'])->name('checkAgreementId');
     // Route::delete('/agreements/{agreement_id}', [AgreementController::class, 'destroy'])->name('tenants.destroy');
 
     // View all bills

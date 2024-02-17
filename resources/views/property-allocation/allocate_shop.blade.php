@@ -116,11 +116,13 @@
                                         <label for="agreement_id">Agreement ID:</label>
                                         <input type="text" id="agreement_id" name="agreement_id" class="form-control"
                                             value="{{ old('agreement_id', isset($agreement) ? $agreement->agreement_id : '') }}"
-                                            placeholder="Agreement ID" required>
+                                            placeholder="Agreement ID" oninput="checkAgreementId()" required>
+                                        <span id="agreementIdStatus"></span>
                                         @error('agreement_id')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -261,5 +263,42 @@
                 $('#tenant_id').val(ui.item.value);
             }
         });
+
+        function checkAgreementId() {
+            var agreementId = document.getElementById('agreement_id').value;
+            var agreementIdStatus = document.getElementById('agreementIdStatus');
+
+            if (agreementId.trim() === '') {
+                agreementIdStatus.innerHTML = '<span style="color: red;">Please enter an Agreement ID</span>';
+                return;
+            }
+
+            console.log('Checking Agreement ID:', agreementId);
+
+            // Perform an AJAX request to check the Agreement ID
+            fetch('/checkAgreementId', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}', // Include CSRF token
+                    },
+                    body: JSON.stringify({
+                        agreement_id: agreementId
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log('Response Data:', data);
+
+                    agreementIdStatus.innerHTML = data.exists ?
+                        '<span style="color: red;">Agreement ID already exists!</span>' :
+                        '<span style="color: green;">Agreement ID is available!</span>';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            // document.getElementById('agreement_id').addEventListener('input', checkAgreementId);
+
+        }
     </script>
 @endsection

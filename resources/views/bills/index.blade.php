@@ -31,14 +31,14 @@
                                     @csrf
                                     <div class="mb-4">
                                         <label for="year">Select Year:</label>
-                                        <select id="year" onchange="updateGenerateButtonState()">
+                                        <select id="year">
                                             @for ($year = date('Y'); $year >= 2020; $year--)
                                                 <option value="{{ $year }}">{{ $year }}</option>
                                             @endfor
                                         </select>
 
                                         <label for="month">Select Month:</label>
-                                        <select id="month" onchange="updateGenerateButtonState()">
+                                        <select id="month">
                                             @foreach (range(1, 12) as $month)
                                                 @php
                                                     $currentYear = date('Y');
@@ -57,7 +57,7 @@
                                             value="{{ date('m') }}">
                                     </div>
                                     <div class="card-card-default mb-4">
-                                        <button type="submit" class="btn btn-success" id="generateButton" disabled>Generate
+                                        <button type="submit" class="btn btn-success" id="generateButton">Generate
                                             Bills</button>
                                     </div>
                                 </form>
@@ -134,10 +134,6 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                            <form action="{{ route('bills.generate') }}" method="post">
-                                @csrf
-                                <button type="submit" class="btn btn-success">Generate Bills</button>
-                            </form>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -149,8 +145,6 @@
     </div>
     <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-    </div>
     <!-- /.content-wrapper -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -170,9 +164,7 @@
             function updateTable() {
                 var selectedYear = document.getElementById('year').value;
                 var selectedMonth = document.getElementById('month').value;
-                var generateButton = document.getElementById('generateButton');
 
-                generateButton.disabled = !(selectedYear && selectedMonth);
                 console.log('Selected Year here:', selectedYear);
                 console.log('Selected Month:', selectedMonth);
             }

@@ -145,7 +145,14 @@ class AgreementController extends Controller
 
         return redirect()->route('agreements.index')->with('success', 'Agreement has been created successfully');
     }
+    public function checkAgreementId(Request $request)
+    {
+        $TenantId = $request->input('agreement_id');
 
+        $exists = Agreement::where('agreement_id', $TenantId)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
     public function show($agreement_id)
     {
         $agreement = Agreement::findOrFail($agreement_id);

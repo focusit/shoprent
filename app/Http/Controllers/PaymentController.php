@@ -33,7 +33,7 @@ class PaymentController extends Controller
             'payment_date' => $request->input('payment_date'),
             'payment_method' => $request->input('payment_method'),
         ]);
-
+        
         $payment->save();
 
         // Check if the total payments cover the entire bill amount
@@ -44,7 +44,6 @@ class PaymentController extends Controller
                 $bill->save();
             }
         }
-
         return redirect()->route('bills.show', ['id' => $id])->with('success', 'Payment made successfully.');
     }
 }

@@ -15,7 +15,7 @@ class ShopRentSeeder extends Seeder
                 'latitude' => '40.7128',
                 'longitude' => '-74.0060',
                 'address' => '123 Main St',
-                'pincode' => '10001',
+                'pincode' => '100001',
                 'rent' => 1500,
                 'status' => 'vaccant',
                 'image' => '1703249535.jpg',

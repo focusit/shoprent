@@ -10,10 +10,10 @@ class ShopRent extends Model
     use HasFactory;
 
     protected $primaryKey = 'shop_id';
+    protected $guarded = ['shop_id'];
 
     public $incrementing = false;
     protected $fillable = [
-        'shop_id',
         'latitude',
         'longitude',
         'address',

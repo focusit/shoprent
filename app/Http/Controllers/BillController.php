@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use App\Models\Agreement;
 use App\Models\Bill;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,12 +16,6 @@ class BillController extends Controller
     {
         $agreementsData = Agreement::select('agreement_id', 'rent', 'shop_id', 'tenant_id')->get();
         $billingSettings = Bill::getBillingSettings();
-        // $recentMonth = Carbon::now()->format('m');
-        // $recentYear = Carbon::now()->format('Y');
-
-        // $billsData = Bill::whereYear('year', $recentYear)
-        //     ->whereMonth('month', $recentMonth)
-        //     ->get();
         $bills = Bill::all();
 
         return view('bills.index', compact('agreementsData', 'billingSettings', 'bills'));
@@ -95,11 +91,16 @@ class BillController extends Controller
 
             if (!$existingBill) {
                 // If no existing bill, generate and create a new one for the specified month
-                $billData = $this->generateBillData($agreement->agreement_id, $year, $month);
+                $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month);
 
                 // Ensure that valid bill data is returned before attempting to create
-                if ($billData) {
-                    Bill::create($billData);
+                if ($billAndTransactionData) {
+                    // Create a new bill
+                    Bill::create($billAndTransactionData['billData']);
+
+                    // Create a new transaction
+                    // dd($billAndTransactionData['transactionData']);
+                    Transaction::create($billAndTransactionData['transactionData']);
                 }
             }
         }
@@ -152,8 +153,20 @@ class BillController extends Controller
             'penalty' => $penalty,
             'discount' => $discount,
         ];
-
-        return $billData;
+        $transactionData = [
+            'transaction_number' => Str::random(16),
+            'property_type' => $agreement->shop->shop_id,
+            'tenant_name' => $agreement->tenant->full_name,
+            'transaction_date' => $billDate->toDateString(),
+            // 'amount' => $agreement->rent,
+            // 'discount' => $discount,
+            // 'penalty' => $penalty,
+            'payment_method' => 'example_payment_method',
+            'type' => 'example_type',
+            // 'mode' => 'example_mode',
+            'remarks' => 'example_remarks',
+        ];
+        return ['billData' => $billData, 'transactionData' => $transactionData];
     }
 
 
