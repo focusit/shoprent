@@ -3,6 +3,22 @@
 
 @section('title', 'Register')
 
+<style>
+    .wrap-input100 {
+        position: relative;
+    }
+
+    .toggle-password,
+    .toggle-password-confirm {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 10;
+    }
+</style>
+
 @section('content')
     <div class="limiter">
         <div class="container-login100">
@@ -17,14 +33,12 @@
                         Member Registration
                     </span>
 
-                    <!-- Display Success Message -->
                     @if (session('success'))
                         <div class="alert alert-success" role="alert">
                             {{ session('success') }}
                         </div>
                     @endif
 
-                    <!-- Display Validation Errors -->
                     @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
                             <ul>
@@ -58,19 +72,24 @@
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
-                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                        <span toggle="#password" class="toggle-password">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </span>
                     </div>
 
                     <div class="wrap-input100 validate-input">
-                        <input class="input100" type="password" name="password_confirmation" placeholder="Confirm Password"
-                            minlength="6">
+                        <input class="input100" type="password" id="password-confirm" name="password_confirmation"
+                            placeholder="Confirm Password" minlength="6">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
-
+                        <span toggle="#password-confirm" class="toggle-password-confirm">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </span>
                     </div>
-                    <div class="form-check">
+
+                    <div class="wrap-input100 validate-input">
                         <input type="checkbox" name="is_admin" class="form-check-input" value="1">
                         <span class="focus-input100"></span>
                         <label class="form-check-label" for="is_admin">Register as Admin</label>
@@ -91,17 +110,29 @@
             </div>
         </div>
     </div>
-@endsection
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordInput = document.getElementById('password');
-        const togglePassword = document.querySelector('.toggle-password');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function togglePasswordVisibility(toggleButton, targetInput) {
+                const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                targetInput.setAttribute('type', type);
+                toggleButton.querySelector('i').classList.toggle('fa-eye-slash');
+                toggleButton.querySelector('i').classList.toggle('fa-eye');
+            }
 
-        togglePassword.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
+            const togglePassword = document.querySelector('.toggle-password');
+            const togglePasswordConfirm = document.querySelector('.toggle-password-confirm');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('password-confirm');
+
+            togglePassword.addEventListener('click', function() {
+                togglePasswordVisibility(this, passwordInput);
+            });
+
+            togglePasswordConfirm.addEventListener('click', function() {
+                togglePasswordVisibility(this, confirmPasswordInput);
+            });
         });
-    });
-</script>
+    </script>
+
+@endsection
