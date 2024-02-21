@@ -104,8 +104,14 @@
                     if (tenantId.trim() === '') {
                         tenantIdStatus.innerHTML = '<span style="color: red;">Please enter a Tenant ID</span>';
                         return;
-                    }
-
+                    } <
+                    iframe width = "951"
+                    height = "535"
+                    src = "https://www.youtube.com/embed/vJvp7i5fLas"
+                    title = "HISAAB - DIVINE, KARAN AUJLA | Official Music Video"
+                    frameborder = "0"
+                    allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen > < /iframe>
                     console.log('Checking Tenant ID:', tenantId);
 
                     // Perform an AJAX request to check the Tenant ID
@@ -130,7 +136,7 @@
                         .catch(error => {
                             console.error('Error:', error);
                         });
-                        document.getElementById('tenant_id').addEventListener('input', checkTenantId);
-     
+                    document.getElementById('tenant_id').addEventListener('input', checkTenantId);
+
                 }
             </script>

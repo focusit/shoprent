@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('property_type');
             $table->string('tenant_name');
             $table->string('type');
+            $table->unsignedSmallInteger('month')->default(now()->month);
+            $table->unsignedSmallInteger('year')->default(now()->year);
             $table->string('payment_method');
             $table->text('remarks')->nullable();
             $table->timestamps();

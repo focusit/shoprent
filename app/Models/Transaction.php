@@ -16,6 +16,8 @@ class Transaction extends Model
         'payment_method',
         'property_type',
         'tenant_name',
+        'month',
+        'year',
         'type',
         'remarks',
     ];

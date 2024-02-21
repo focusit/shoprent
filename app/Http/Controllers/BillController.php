@@ -123,6 +123,7 @@ class BillController extends Controller
 
         // Convert due date and bill date to Carbon instances
         $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
+        // dd($dueDate);
         $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
 
         if (!$billDate->isValid()) {
@@ -136,8 +137,8 @@ class BillController extends Controller
             $penalty = $billingSettings['penalty'];
             $discount = 0;
         }
-
-        // Prepare the data for the new bill with the specified year and month
+        // dd($dueDate);
+        // Prepare the data for the new bill with the specified data
         $billData = [
             'agreement_id' => $agreement->agreement_id,
             'shop_id' => $agreement->shop->shop_id,
@@ -161,6 +162,8 @@ class BillController extends Controller
             // 'amount' => $agreement->rent,
             // 'discount' => $discount,
             // 'penalty' => $penalty,
+            'year' => $year,
+            'month' => $month,
             'payment_method' => 'example_payment_method',
             'type' => 'example_type',
             // 'mode' => 'example_mode',
