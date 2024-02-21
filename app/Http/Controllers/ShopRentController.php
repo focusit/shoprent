@@ -59,7 +59,7 @@ class ShopRentController extends Controller
     public function update(Request $request, $shop_id)
     {
         $request->validate([
-            'shop_id' => 'required|string|unique:shop_rents,shop_id',
+            'shop_id' => 'nullable|string',
             'latitude' => 'nullable|string',
             'longitude' => 'nullable|string',
             'address' => 'nullable|string',
@@ -99,10 +99,10 @@ class ShopRentController extends Controller
 
         return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
     }
-    protected function validateShop(Request $request)
+    protected function validateShop(Request $request, $shop_id = null)
     {
         return $request->validate([
-            'shop_id' => 'required|string|unique:shop_rents,shop_id',
+            'shop_id' => 'required|string|unique:shop_rents,shop_id,' . $shop_id,
             'latitude' => 'required|string',
             'longitude' => 'required|string',
             'address' => 'required|string',
@@ -149,7 +149,15 @@ class ShopRentController extends Controller
             $agreement->document_field = $fileName;
         }
     }
+    public function checkShopId(Request $request)
+    {
+        $shopId = $request->input('shop_id');
 
+        // Check if the shop ID exists in the database
+        $exists = ShopRent::where('shop_id', $shopId)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
     public function allocateShop(Request $request)
     {
         try {

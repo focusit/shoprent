@@ -146,7 +146,7 @@
                                     class="noPrint"><i class="fas fa-print"></i> Print</a>
 
                                 <button type="button" class="btn btn-primary" id="downloadpdf" style="margin-right: 5px;">
-                                    <i class="fas fa-download"></i> Generate PDF</button>
+                                    <i class="fas fa-download"></i>Generate PDF</button>
                             </div>
 
                         </div>

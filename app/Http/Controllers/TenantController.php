@@ -58,7 +58,14 @@ class TenantController extends Controller
         $tenant = Tenant::findOrFail($tenant_id);
         return view('tenants.show', compact('tenant'));
     }
+    public function checkTenantId(Request $request)
+    {
+        $TenantId = $request->input('tenant_id');
 
+        $exists = Tenant::where('tenant_id', $TenantId)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -139,6 +146,7 @@ class TenantController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }
+
     public function autocompleteSearch(Request $request)
     {
 

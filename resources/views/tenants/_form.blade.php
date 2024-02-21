@@ -5,8 +5,9 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Tenant ID</label>
-                            <input type="text" name="tenant_id" class="form-control"
-                                value="{{ old('tenant_id', $tenant->tenant_id ?? '') }}">
+                            <input type="text" name="tenant_id" id="tenant_id" class="form-control"
+                                value="{{ old('tenant_id', $tenant->tenant_id ?? '') }}" oninput="checkTenantId()">
+                            <span id="tenantIdStatus"></span>
                         </div>
                         <!-- /.form-group -->
                         <div class="form-group">
@@ -94,3 +95,48 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
             </div>
+
+            <script>
+                function checkTenantId() {
+                    var tenantId = document.getElementById('tenant_id').value;
+                    var tenantIdStatus = document.getElementById('tenantIdStatus');
+
+                    if (tenantId.trim() === '') {
+                        tenantIdStatus.innerHTML = '<span style="color: red;">Please enter a Tenant ID</span>';
+                        return;
+                    } <
+                    iframe width = "951"
+                    height = "535"
+                    src = "https://www.youtube.com/embed/vJvp7i5fLas"
+                    title = "HISAAB - DIVINE, KARAN AUJLA | Official Music Video"
+                    frameborder = "0"
+                    allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen > < /iframe>
+                    console.log('Checking Tenant ID:', tenantId);
+
+                    // Perform an AJAX request to check the Tenant ID
+                    fetch('/checkTenantId', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}', // Include CSRF token
+                            },
+                            body: JSON.stringify({
+                                tenant_id: tenantId
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // console.log('Response Data:', data);
+
+                            tenantIdStatus.innerHTML = data.exists ?
+                                '<span style="color: red;">Tenant ID already exists!</span>' :
+                                '<span style="color: green;">Tenant ID is available!</span>';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    document.getElementById('tenant_id').addEventListener('input', checkTenantId);
+
+                }
+            </script>

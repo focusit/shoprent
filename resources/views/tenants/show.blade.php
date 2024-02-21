@@ -19,7 +19,8 @@
                 <tr>
                     <td class="text-center" colspan="2">
                         <figure>
-                            <img src="{{ asset('tenant-images/' . $tenant->image) }}" alt="Shop Image" style="max-width: 100%;">
+                            <img src="{{ asset('tenant-images/' . $tenant->image) }}" alt="Shop Image"
+                                style="max-width: 100%;">
                         </figure>
                     </td>
                 </tr>
@@ -60,10 +61,9 @@
             </table>
         </div>
         <!-- /.card-body -->
-    </div>
 
-    <div class="text-center mt-3">
-        <a href="{{ route('tenants.index') }}" class="btn btn-primary">Back to List</a>
+        <div class="text-center m-3">
+            <a href="{{ route('tenants.index') }}" class="btn btn-primary">Back to List</a>
+        </div>
     </div>
-</div>
 @endsection
