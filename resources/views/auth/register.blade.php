@@ -52,11 +52,13 @@
                     </div>
 
                     <div class="wrap-input100 validate-input">
-                        <input class="input100" type="password" name="password" placeholder="Password" minlength="6">
+                        <input class="input100" type="password" name="password" id="password" placeholder="Password"
+                            minlength="6">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
+                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input">
@@ -66,6 +68,7 @@
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
+
                     </div>
                     <div class="form-check">
                         <input type="checkbox" name="is_admin" class="form-check-input" value="1">
@@ -89,3 +92,16 @@
         </div>
     </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.querySelector('.toggle-password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
