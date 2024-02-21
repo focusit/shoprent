@@ -58,7 +58,8 @@
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
-                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"
+                         style="margin-left: 85%; margin-top: -30px"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input">
@@ -68,20 +69,22 @@
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
+                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"
+                        style="margin-left: 85%; margin-top: -30px"></span>
 
                     </div>
-                    <div class="form-check">
+                    <div class="form-check" style="text-align: center">
                         <input type="checkbox" name="is_admin" class="form-check-input" value="1">
                         <span class="focus-input100"></span>
                         <label class="form-check-label" for="is_admin">Register as Admin</label>
                     </div>
-                    <div class="container-login100-form-btn">
+                    <div class="container-login100-form-btn" style="margin-top: -5%">
                         <button class="login100-form-btn">
                             Register
                         </button>
                     </div>
 
-                    <div class="text-center p-t-136">
+                    <div class="text-center p-t-136" style="padding-top: 35px">
                         <a class="txt2" href="{{ route('login') }}">
                             Already have an account? Login here
                             <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
@@ -105,3 +108,4 @@
         });
     });
 </script>
+
