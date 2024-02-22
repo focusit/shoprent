@@ -66,8 +66,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input">
-                        <input class="input100" type="password" name="password" id="password" placeholder="Password"
-                            minlength="6">
+                        <input class="input100" type="password" name="password" id="password" placeholder="Password" minlength="6">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
@@ -75,15 +74,10 @@
                         <span toggle="#password" class="toggle-password">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </span>
-
-                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"
-                         style="margin-left: 85%; margin-top: -30px"></span>
-
                     </div>
 
                     <div class="wrap-input100 validate-input">
-                        <input class="input100" type="password" id="password-confirm" name="password_confirmation"
-                            placeholder="Confirm Password" minlength="6">
+                        <input class="input100" type="password" id="password-confirm" name="password_confirmation" placeholder="Confirm Password" minlength="6">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
@@ -93,24 +87,18 @@
                         </span>
                     </div>
 
-                    <div class="wrap-input100 validate-input">
-
-                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"
-                        style="margin-left: 85%; margin-top: -30px"></span>
-
-                    </div>
-                    <div class="form-check" style="text-align: center">
+                    <div class="form-check">
                         <input type="checkbox" name="is_admin" class="form-check-input" value="1">
                         <span class="focus-input100"></span>
                         <label class="form-check-label" for="is_admin">Register as Admin</label>
                     </div>
-                    <div class="container-login100-form-btn" style="margin-top: -5%">
+                    <div class="container-login100-form-btn">
                         <button class="login100-form-btn">
                             Register
                         </button>
                     </div>
 
-                    <div class="text-center p-t-136" style="padding-top: 35px">
+                    <div class="text-center p-t-136">
                         <a class="txt2" href="{{ route('login') }}">
                             Already have an account? Login here
                             <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
@@ -122,28 +110,29 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function togglePasswordVisibility(toggleButton, targetInput) {
-                const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                targetInput.setAttribute('type', type);
-                toggleButton.querySelector('i').classList.toggle('fa-eye-slash');
-                toggleButton.querySelector('i').classList.toggle('fa-eye');
-            }
-
+        document.addEventListener('DOMContentLoaded', function () {
             const togglePassword = document.querySelector('.toggle-password');
             const togglePasswordConfirm = document.querySelector('.toggle-password-confirm');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('password-confirm');
 
-            togglePassword.addEventListener('click', function() {
-                togglePasswordVisibility(this, passwordInput);
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                // Toggle eye icon
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+                this.querySelector('i').classList.toggle('fa-eye');
             });
 
-            togglePasswordConfirm.addEventListener('click', function() {
-                togglePasswordVisibility(this, confirmPasswordInput);
+            togglePasswordConfirm.addEventListener('click', function () {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+
+                // Toggle eye icon
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+                this.querySelector('i').classList.toggle('fa-eye');
             });
         });
-
+    </script>
 @endsection
-    });
-</script>
