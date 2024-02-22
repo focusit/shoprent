@@ -33,7 +33,8 @@ class Bill extends Model
         'due_date',
         'penalty',
         'discount',
-        'status'
+        'status',
+        'transaction_number',
     ];
 
     /**
@@ -49,6 +50,10 @@ class Bill extends Model
             return json_decode(File::get($jsonFilePath), true);
         }
         return [];
+    }
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
     }
     public function tenant()
     {

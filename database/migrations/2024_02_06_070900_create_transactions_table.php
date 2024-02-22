@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('type');
             $table->unsignedSmallInteger('month')->default(now()->month);
             $table->unsignedSmallInteger('year')->default(now()->year);
-            $table->string('payment_method');
+            $table->string('payment_method')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
-        });
+        });        
     }
 
     /**

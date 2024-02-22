@@ -19,7 +19,7 @@ class TenantSeeder extends Seeder
                 'email' => 'tenant' . $i . '@example.com',
                 'full_name' => 'John Doe ' . $i,
                 'govt_id_number' => 'A' . str_pad($i, 5, '0', STR_PAD_LEFT),
-                'contact' => '123-456-789' . $i,
+                'contact' => '6375397813' . $i,
                 'password' => bcrypt('password123'),
             ]);
         }

@@ -8,7 +8,7 @@ use App\Models\Bill;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BillController extends Controller
 {
@@ -83,7 +83,7 @@ class BillController extends Controller
         $activeAgreements = Agreement::where('status', 'active')->get();
 
         foreach ($activeAgreements as $agreement) {
-            // Check if a bill already exists for the agreement and the specified month
+            // Check if a bill already exists for the agreement, year, and month
             $existingBill = Bill::where('agreement_id', $agreement->agreement_id)
                 ->where('year', $year)
                 ->where('month', $month)
@@ -93,14 +93,30 @@ class BillController extends Controller
                 // If no existing bill, generate and create a new one for the specified month
                 $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month);
 
-                // Ensure that valid bill data is returned before attempting to create
-                if ($billAndTransactionData) {
-                    // Create a new bill
-                    Bill::create($billAndTransactionData['billData']);
+                // Ensure that valid bill and transaction data are returned before attempting to create
+                if ($billAndTransactionData && $billAndTransactionData['transactionData']) {
+                    // Extract transaction data
+                    $transactionData = $billAndTransactionData['transactionData'];
+
+                    // Log the transaction data for debugging
+                    logger('Transaction Data:', $transactionData);
 
                     // Create a new transaction
-                    // dd($billAndTransactionData['transactionData']);
-                    Transaction::create($billAndTransactionData['transactionData']);
+                    try {
+                        $createdTransaction = Transaction::create($transactionData);
+
+                        // Check if the transaction is created successfully
+                        if ($createdTransaction) {
+                            // Create a new bill only if the transaction is created successfully
+                            Bill::create($billAndTransactionData['billData']);
+                        } else {
+                            // Log a warning if transaction creation fails
+                            logger('Transaction creation failed:', ['agreement_id' => $agreement->agreement_id]);
+                        }
+                    } catch (\Exception $e) {
+                        // Log the exception
+                        logger('Error creating transaction:', ['error' => $e->getMessage(), 'agreement_id' => $agreement->agreement_id]);
+                    }
                 }
             }
         }
@@ -111,19 +127,20 @@ class BillController extends Controller
 
 
 
+
+
+
+
     private function generateBillData($agreement_id, $year, $month)
     {
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
-
-        // Ensure that billing settings exist
         $billingSettings = Bill::getBillingSettings();
+
         if (!$billingSettings) {
             return null;
         }
 
-        // Convert due date and bill date to Carbon instances
         $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
-        // dd($dueDate);
         $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
 
         if (!$billDate->isValid()) {
@@ -137,9 +154,25 @@ class BillController extends Controller
             $penalty = $billingSettings['penalty'];
             $discount = 0;
         }
-        // dd($dueDate);
-        // Prepare the data for the new bill with the specified data
-        $billData = [
+
+        // Generate a unique transaction number
+        $uniqueTransactionNumber = $this->generateUniqueTransactionNumber();
+        Log::info('Generated Transaction Number:', ['transaction_number' => $uniqueTransactionNumber]);
+
+        // Create a new transaction with the unique 'transaction_number'
+        $transaction = Transaction::create([
+            'transaction_number' => $uniqueTransactionNumber,
+            'property_type' => $agreement->agreement_id,
+            'tenant_name' => $agreement->tenant->full_name,
+            'transaction_date' => Carbon::now()->toDateString(),
+            'year' => $year,
+            'month' => $month,
+            'type' => 'example_type',
+            'remarks' => 'example_remarks',
+        ]);
+
+        // Create a new bill and associate it with the transaction
+        $bill = Bill::create([
             'agreement_id' => $agreement->agreement_id,
             'shop_id' => $agreement->shop->shop_id,
             'tenant_id' => $agreement->tenant->tenant_id,
@@ -153,24 +186,27 @@ class BillController extends Controller
             'status' => 'unpaid',
             'penalty' => $penalty,
             'discount' => $discount,
-        ];
-        $transactionData = [
-            'transaction_number' => Str::random(16),
-            'property_type' => $agreement->shop->shop_id,
-            'tenant_name' => $agreement->tenant->full_name,
-            'transaction_date' => $billDate->toDateString(),
-            // 'amount' => $agreement->rent,
-            // 'discount' => $discount,
-            // 'penalty' => $penalty,
-            'year' => $year,
-            'month' => $month,
-            'payment_method' => 'example_payment_method',
-            'type' => 'example_type',
-            // 'mode' => 'example_mode',
-            'remarks' => 'example_remarks',
-        ];
-        return ['billData' => $billData, 'transactionData' => $transactionData];
+            'transaction_number' => $uniqueTransactionNumber,
+        ]);
+
+        return ['billData' => $bill, 'transactionData' => $transaction->toArray()];
     }
+
+    private function generateUniqueTransactionNumber()
+    {
+        $uniqueTransactionNumber = Str::random(16);
+
+        // Ensure the generated 'transaction_number' is unique
+        while (Transaction::where('transaction_number', $uniqueTransactionNumber)->exists()) {
+            $uniqueTransactionNumber = Str::random(16);
+        }
+
+        return $uniqueTransactionNumber;
+    }
+
+
+
+
 
 
     public function regenerate(Request $request, $agreement_id, $year = null, $month = null)
