@@ -54,6 +54,10 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    public function showProfile()
+    {
+        return view('auth.profile');
+    }
     public function register(Request $request)
     {
         // Validation rules
