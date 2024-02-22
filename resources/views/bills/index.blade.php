@@ -67,6 +67,7 @@
                                     <tr class="bg-info">
                                         <th>ID</th>
                                         <th>Agreement ID</th>
+                                        <th>Transaction Number</th>
                                         <th>Shop ID</th>
                                         <th>Shop Address</th>
                                         <th>Tenant ID</th>
@@ -88,6 +89,7 @@
                                                     {{ $bill->agreement_id }}
                                                 </a>
                                             </td>
+                                            <td>{{ $bill->transaction_number }}</td>
                                             <td>{{ $bill->shop_id }}</td>
                                             <td>{{ $bill->shop_address }}</td>
                                             <td>{{ $bill->tenant_id }}</td>

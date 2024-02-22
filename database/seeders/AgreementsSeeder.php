@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Agreement;
+use App\Models\ShopRent;
+use App\Models\Tenant;
 use Carbon\Carbon;
 
 class AgreementsSeeder extends Seeder
@@ -26,7 +28,19 @@ class AgreementsSeeder extends Seeder
         'updated_at' => now(),
       ];
 
-      Agreement::create($agreementData);
+      // Create an agreement
+      $agreement = Agreement::create($agreementData);
+
+      // Update shop and tenant based on agreement status
+      if ($agreement->status === 'active') {
+        // Update ShopRent status to 'occupied'
+        ShopRent::where('shop_id', $agreement->shop_id)
+          ->update(['status' => 'occupied', 'tenant_id' => $agreement->tenant_id]);
+
+        // // Update Tenant status to 'allocated'
+        // Tenant::where('tenant_id', $agreement->tenant_id)
+        //   ->update(['status' => 'allocated']);
+      }
     }
   }
 }

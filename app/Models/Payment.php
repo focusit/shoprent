@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     protected $fillable = [
-        'bill_id',
         'amount',
         'payment_date',
         'payment_method',
         'status',
         'remark',
+        'transaction_number',
     ];
 
     protected $dates = ['payment_date'];
@@ -20,5 +20,9 @@ class Payment extends Model
     public function bill()
     {
         return $this->belongsTo(Bill::class, 'id');
+    }
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 }

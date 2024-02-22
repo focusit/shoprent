@@ -21,4 +21,13 @@ class Transaction extends Model
         'type',
         'remarks',
     ];
+    public function bills()
+    {
+        return $this->hasMany(Bill::class)->onDelete('cascade');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class)->onDelete('cascade');
+    }
 }
