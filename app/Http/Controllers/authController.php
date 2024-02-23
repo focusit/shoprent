@@ -95,4 +95,37 @@ class AuthController extends Controller
         // Redirect to login page or any other page after registration
         return redirect('/');
     }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'new_password' => [
+                'required',
+                'string',
+                'min:6',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            ],
+        ]);
+
+        $user = Auth::user();
+
+        // Check if the provided current password matches the user's current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'The current password is incorrect.']);
+        }
+
+        // Check if the old password and new password are the same
+        if ($request->current_password === $request->new_password) {
+            return back()->withErrors(['new_password' => 'The new password should be different from the current password.']);
+        }
+
+        // Update the user's password using the User model
+        $user->password = bcrypt($request->new_password);
+        User::where('id', $user->id)->update([
+            'password' => bcrypt($request->new_password),
+        ]);
+
+        return redirect()->route('profile')->with('success', 'Password updated successfully.');
+    }
 }

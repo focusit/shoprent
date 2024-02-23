@@ -41,6 +41,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
+    Route::post('/profile/update', [AuthController::class, 'updatePassword'])->name('profile.update');
     Route::get('/dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
 
     // Shop Routes
