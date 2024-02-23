@@ -53,12 +53,9 @@
                             <a href="#" class="dropdown-item"
                                 onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
                         </form>
-                        <form>
-                            @csrf
-                            <a href="profile" class="dropdown-item">
-                            profile
+                            <a href="{{ route('profile') }}" class="dropdown-item">
+                            Profile
                         </a>
-                        </form>
                     </div>
                 </li>
                 <li class="nav-item">
