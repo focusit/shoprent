@@ -28,15 +28,6 @@
                                 <input type="text" name="full_name" class="form-control"
                                     value="{{ auth()->user()->name }}" disabled>
                             </div>
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
                             <form action="{{ route('profile.update') }}" method="post">
                                 @csrf
                                 <div class="form-group">
@@ -49,6 +40,11 @@
                                     <input type="password" name="current_password" class="form-control"
                                         id="current_password">
                                 </div>
+                                @error('current_password')
+                        <div class="alert alert-danger">
+                            {{ $mess }}
+                        </div>
+                    @enderror
                                 <div class="form-group">
                                     <label>New Password</label>
                                     <input type="password" name="new_password" class="form-control" id="new_password">
