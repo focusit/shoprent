@@ -29,7 +29,7 @@ class ShopRentController extends Controller
         if (!$request->image->move(public_path('images'), $imageName)) {
             return redirect()->back()->with('error', 'Failed to upload the image.');
         }
-
+        // dd($request->all());
         ShopRent::create([
             'shop_id' => $request->input('shop_id'),
             'latitude' => $request->input('latitude'),
@@ -40,7 +40,6 @@ class ShopRentController extends Controller
             'status' => $request->input('status'),
             'image' => $imageName,
         ]);
-
         return redirect()->route('shops.index')->with('success', 'Shop created successfully.');
     }
 
@@ -99,10 +98,10 @@ class ShopRentController extends Controller
 
         return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
     }
-    protected function validateShop(Request $request, $shop_id = null)
+    protected function validateShop(Request $request)
     {
         return $request->validate([
-            'shop_id' => 'required|string|unique:shop_rents,shop_id,' . $shop_id,
+            'shop_id' => 'required|string|unique:shop_rents,shop_id',
             'latitude' => 'required|string',
             'longitude' => 'required|string',
             'address' => 'required|string',

@@ -29,7 +29,7 @@ class AuthController extends Controller
                 Auth::logout();
                 return back()->withErrors(['email' => 'Unauthorized. Please login as an admin.'])->onlyInput('email');
             }
-            toastr()->addSuccess('Your account has been restored.');
+            // toastr()->addSuccess('Your account has been restored.');
             return redirect()->route('dashboard')->with('info', 'You have successfully logged in as an admin.');
         }
 

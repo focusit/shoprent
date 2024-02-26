@@ -22,10 +22,15 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Shop Image</label>
-                        <input class="form-control form-control-md" type="file" name="image">
-                        @if (isset($shop) && $shop->image)
-                            <img src="{{ asset($shop->image) }}" alt="Shop Image">
-                        @endif
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="image">
+                                <label class="custom-file-label">Choose file</label>
+                                @if (isset($shop) && $shop->image)
+                                    <img src="{{ asset($shop->image) }}" alt="Shop Image">
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -105,23 +110,17 @@
     <!-- /.card-body -->
 </div>
 </section>
-<script src="validate.js"></script>
-<script>
-    $(document).ready(function() {
-        // Check if there's a success message in the session
-        @if (session('success'))
-            // Show the AdminLTE toast
-            $(document).Toasts('create', {
-                class: 'bg-success',
-                title: 'Success',
-                body: '{{ session('success') }}',
-                icon: 'fas fa-check'
-            });
-        @endif
-    });
 
-    latitude
-        // console.log('Checking Shop ID:', shopId);
+<script>
+    // Check Shop ID
+    function checkShopId() {
+        var shopId = document.getElementById('shop_id').value;
+        var shopIdStatus = document.getElementById('shopIdStatus');
+        if (shopId.trim() === '') {
+            shopIdStatus.innerHTML = '<span style="color: red;">Please enter a Shop ID</span>';
+            return;
+        }
+        console.log('Checking Shop ID:', shopId);
 
         // Perform an AJAX request to check the shop ID
         // Example using fetch API
@@ -149,4 +148,3 @@
         document.getElementById('shop_id').addEventListener('input', checkShopId);
     }
 </script>
-

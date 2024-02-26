@@ -14,6 +14,7 @@ class ShopRent extends Model
 
     public $incrementing = false;
     protected $fillable = [
+        'shop_id',
         'latitude',
         'longitude',
         'address',
