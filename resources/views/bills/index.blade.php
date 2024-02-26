@@ -44,6 +44,9 @@
                                                     $currentYear = date('Y');
                                                     $currentMonth = date('m');
                                                     $disabled = $year == $currentYear && $month > $currentMonth ? 'disabled' : '';
+                                                    
+                                                    // $disabled = ($month == date('n') || $month == date('n')) ?'':'disabled' ;
+                                                
                                                 @endphp
                                                 <option value="{{ str_pad($month, 2, '0', STR_PAD_LEFT) }}"
                                                     {{ $disabled }}>
