@@ -105,7 +105,7 @@
     <!-- /.card-body -->
 </div>
 </section>
-
+<script src="validate.js"></script>
 <script>
     $(document).ready(function() {
         // Check if there's a success message in the session
@@ -120,14 +120,8 @@
         @endif
     });
 
-    function checkShopId() {
-        var shopId = document.getElementById('shop_id').value;
-        var shopIdStatus = document.getElementById('shopIdStatus');
-        if (shopId.trim() === '') {
-            shopIdStatus.innerHTML = '<span style="color: red;">Please enter a Shop ID</span>';
-            return;
-        }
-        console.log('Checking Shop ID:', shopId);
+    latitude
+        // console.log('Checking Shop ID:', shopId);
 
         // Perform an AJAX request to check the shop ID
         // Example using fetch API
@@ -155,3 +149,4 @@
         document.getElementById('shop_id').addEventListener('input', checkShopId);
     }
 </script>
+

@@ -49,11 +49,17 @@
                                     <label>New Password</label>
                                     <input type="password" name="new_password" class="form-control" id="new_password">
                                 </div>
+                                @error('new_password')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <div class="form-group">
                                     <label>Confirm Password</label>
                                     <input type="password" name="new_password_confirmation" class="form-control"
                                         id="new_password_confirmation">
                                 </div>
+                                @error('new_password_confirmation')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <button type="submit" class="btn btn-success">Update Profile</button>
                             </form>
 

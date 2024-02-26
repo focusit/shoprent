@@ -29,7 +29,7 @@ class AuthController extends Controller
                 Auth::logout();
                 return back()->withErrors(['email' => 'Unauthorized. Please login as an admin.'])->onlyInput('email');
             }
-
+            toastr()->addSuccess('Your account has been restored.');
             return redirect()->route('dashboard')->with('info', 'You have successfully logged in as an admin.');
         }
 
@@ -125,6 +125,7 @@ class AuthController extends Controller
         User::where('id', $user->id)->update([
             'password' => bcrypt($request->new_password),
         ]);
+
 
         return redirect()->route('profile')->with('success', 'Password updated successfully.');
     }
