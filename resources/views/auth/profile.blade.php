@@ -28,7 +28,7 @@
                                 <input type="text" name="full_name" class="form-control"
                                     value="{{ auth()->user()->name }}" disabled>
                             </div>
-                            @if ($errors->any())
+                            {{-- @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
                                         @foreach ($errors->all() as $error)
@@ -36,7 +36,7 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                            @endif
+                            @endif --}}
                             <form action="{{ route('profile.update') }}" method="post">
                                 @csrf
                                 <div class="form-group">
@@ -49,15 +49,24 @@
                                     <input type="password" name="current_password" class="form-control"
                                         id="current_password">
                                 </div>
+                                @error('current_password')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <div class="form-group">
                                     <label>New Password</label>
                                     <input type="password" name="new_password" class="form-control" id="new_password">
                                 </div>
+                                @error('new_password')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <div class="form-group">
                                     <label>Confirm Password</label>
                                     <input type="password" name="new_password_confirmation" class="form-control"
                                         id="new_password_confirmation">
                                 </div>
+                                @error('new_password_confirmation')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <button type="submit" class="btn btn-success">Update Profile</button>
                             </form>
 

@@ -32,13 +32,14 @@ class PaymentController extends Controller
         $totalPayments = $bill->payments->sum('amount');
         $billStatus = ($totalPayments + $request->input('amount')) >= $bill->amount ? 'paid' : 'unpaid';
 
-
         // Check if the bill already has a transaction
         if ($transactionTable) {
             // If it has, update the payment method
-            $transactionTable->payment_method->update([
-                'payment_method' => $request->input('payment_method'),
-            ]);
+            if ($transactionTable->payment_method) {
+                $transactionTable->payment_method->update([
+                    'payment_method' => $request->input('payment_method'),
+                ]);
+            }
         }
 
         // Find the associated transaction number
