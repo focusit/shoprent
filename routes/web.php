@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -113,3 +114,4 @@ Route::group(['middleware' => 'admin_auth'], function () {
         return view('payment');
     });
 });
+Route::get('/user-dashboard', [DashboardController::class, 'index'])->name('dashboard');
