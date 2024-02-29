@@ -69,5 +69,8 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         'admin_auth' => \App\Http\Middleware\AdminAuthMiddleware::class,
+        'user_auth' => \App\Http\Middleware\RedirectIfNotUser::class,
+
     ];
+   
 }

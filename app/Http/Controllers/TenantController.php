@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,6 +46,13 @@ class TenantController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
             'image' => $imageName,
+        ]);
+        User::create([
+            'name' => $request->input('full_name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+            'is_admin' => 0,
+            // Add any other necessary fields for the user model
         ]);
 
         return redirect()->route('tenants.index')->with('success', 'Tenant created successfully.');
