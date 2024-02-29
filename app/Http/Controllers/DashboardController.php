@@ -11,11 +11,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('client.dashboard');
+        return view('auth.login');
     }
 
-    public function fetchShops(){
-        
+    public function dashboard()
+    {
+        return view('client.index');
     }
     /**
      * Show the form for creating a new resource.

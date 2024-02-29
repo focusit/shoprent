@@ -20,7 +20,10 @@ use App\Http\Controllers\TenantController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+Route::get('/admin', function () {
     return view('/auth.login');
 });
 
@@ -37,13 +40,23 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+Route::group(['middleware' => 'user_auth'], function () {
+    // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
+    // Route::post('/login', [AuthController::class, 'login'])->name('login');
+    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
+    // Route::post('/profile/update', [AuthController::class, 'updatePassword'])->name('profile.update');
+});
+
+
+
 Route::group(['middleware' => 'admin_auth'], function () {
     // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     Route::post('/profile/update', [AuthController::class, 'updatePassword'])->name('profile.update');
-    Route::get('/dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin-dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
 
     // Shop Routes
     Route::get('/shops', [ShopRentController::class, 'index'])->name('shops.index');
@@ -114,4 +127,3 @@ Route::group(['middleware' => 'admin_auth'], function () {
         return view('payment');
     });
 });
-Route::get('/user-dashboard', [DashboardController::class, 'index'])->name('dashboard');
