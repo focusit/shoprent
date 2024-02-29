@@ -31,10 +31,11 @@ Route::get('/admin', function () {
 
 
 // Show the login form
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::get('/login', [DashboardController::class, 'userLogin'])->name('login.form');
 // Handle the login form submission
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 // Logout the user
+
 
 //Registeration
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
