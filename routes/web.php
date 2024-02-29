@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgreementController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClientDashboard;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -20,8 +20,8 @@ use App\Http\Controllers\TenantController;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/', [ClientDashboard::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [ClientDashboard::class, 'dashboard'])->name('dashboard');
 
 Route::get('/admin', function () {
     return view('/auth.login');
@@ -31,9 +31,9 @@ Route::get('/admin', function () {
 
 
 // Show the login form
-Route::get('/login', [DashboardController::class, 'userLogin'])->name('login.form');
+Route::get('/login', [ClientDashboard::class, 'userLogin'])->name('login.form');
 // Handle the login form submission
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/admin', [AuthController::class, 'login'])->name('login');
 // Logout the user
 
 

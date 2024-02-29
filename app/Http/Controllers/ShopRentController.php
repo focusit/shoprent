@@ -72,8 +72,8 @@ class ShopRentController extends Controller
 
         $this->handleImage($request, $shop);
 
-        // Check if the status is changing from 'occupied' to 'vaccant'
-        if ($shop->status === 'occupied' && $request->input('status') === 'vaccant') {
+        // Check if the status is changing from 'occupied' to 'vacant'
+        if ($shop->status === 'occupied' && $request->input('status') === 'vacant') {
             // Set tenant_id to null
             $shop->tenant_id = null;
         }
@@ -128,7 +128,7 @@ class ShopRentController extends Controller
 
     public function showAllocateShopForm()
     {
-        $shops = ShopRent::where('status', 'vaccant')->get();
+        $shops = ShopRent::where('status', 'vacant')->get();
         $tenants = Tenant::all();
         return view('property-allocation.allocate_shop', ['shops' => $shops, 'tenants' => $tenants]);
     }
@@ -214,9 +214,9 @@ class ShopRentController extends Controller
         $query = $request->input('query');
 
         if (empty($query)) {
-            $results = ShopRent::where('status', 'vaccant')->orderBy('shop_id', 'asc')->get();
+            $results = ShopRent::where('status', 'vacant')->orderBy('shop_id', 'asc')->get();
         } else {
-            $results = ShopRent::where('status', 'vaccant')
+            $results = ShopRent::where('status', 'vacant')
                 ->where('shop_id', 'like', '%' . $query . '%')
                 ->orderBy('shop_id', 'asc')
                 ->limit(100)

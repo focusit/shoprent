@@ -17,7 +17,7 @@ class ShopRentSeeder extends Seeder
                 'address' => '123 Main St',
                 'pincode' => '100001',
                 'rent' => 1500,
-                'status' => 'vaccant',
+                'status' => 'vacant',
                 'image' => '1703249535.jpg',
             ]);
         }

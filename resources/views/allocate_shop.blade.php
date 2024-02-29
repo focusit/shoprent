@@ -28,7 +28,7 @@
                                     style="max-height: 200px; overflow-y: auto;">
                                     <option value="" selected disabled>Select Shop</option>
                                     @foreach ($shops as $shop)
-                                        @if ($shop->status === 'vaccant')
+                                        @if ($shop->status === 'vacant')
                                             <option value="{{ $shop->shop_id }}">{{ $shop->shop_id }}</option>
                                         @endif
                                     @endforeach

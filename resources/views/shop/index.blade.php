@@ -198,7 +198,7 @@
                                             </thead>
                                             <tbody>
                                                 @forelse($shops as $shop)
-                                                    @if ($shop->status === 'vaccant')
+                                                    @if ($shop->status === 'vacant')
                                                         <tr>
                                                             <td>{{ $shop->id }}</td>
                                                             <td>{{ $shop->shop_id }}</td>

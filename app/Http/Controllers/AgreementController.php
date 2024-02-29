@@ -19,7 +19,7 @@ class AgreementController extends Controller
 
     public function showAllocateShopForm()
     {
-        $shops = ShopRent::where('status', 'vaccant')->get();
+        $shops = ShopRent::where('status', 'vacant')->get();
         $tenants = Tenant::all();
         return view('property-allocation.allocate_shop', ['shops' => $shops, 'tenants' => $tenants]);
     }
