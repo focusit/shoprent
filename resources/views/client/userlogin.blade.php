@@ -10,7 +10,7 @@
                 <form method="POST" action="{{ route('login') }}" class="login100-form validate-form">
                     @csrf
                     <span class="login100-form-title">
-                        Admin Login
+                        User Login
                     </span>
 
                     @if (session('success'))
@@ -60,11 +60,6 @@
                             click
                         </a>
                     </div>
-                    <div class="text-center p-t-136" style="padding-top: 35px">
-                        <a class="txt2" href="{{ route('register') }}">
-                            Create your Account
-                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-                        </a>
                 </form>
             </div>
         </div>

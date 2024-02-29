@@ -72,7 +72,7 @@
                     <!-- /.col -->
 
                     <!-- Tenant Image Section -->
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <div class="form-group">
                             <label>Tenant Image</label>
                             <input class="form-control form-control-md" type="file" name="image">
@@ -80,6 +80,20 @@
                                 <img src="{{ asset($tenant->image) }}" alt="Tenant Image" class="mt-2"
                                     style="max-width: 100%;">
                             @endif
+                        </div>
+                    </div> --}}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tenant Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="image">
+                                    <label class="custom-file-label">Choose file</label>
+                                    @if (isset($shop) && $shop->image)
+                                        <img src="{{ asset($shop->image) }}" alt="Shop Image">
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
