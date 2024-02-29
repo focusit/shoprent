@@ -106,7 +106,7 @@ class AuthController extends Controller
                 'confirmed',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             ],
-        ]);
+        ]); 
 
         $user = Auth::user();
 
