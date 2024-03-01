@@ -52,7 +52,6 @@ class TenantController extends Controller
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
             'is_admin' => 0,
-            // Add any other necessary fields for the user model
         ]);
 
         return redirect()->route('tenants.index')->with('success', 'Tenant created successfully.');
