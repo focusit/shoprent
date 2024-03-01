@@ -93,7 +93,7 @@ class AuthController extends Controller
         ]);
 
         // Redirect to login page or any other page after registration
-        return redirect('/');
+        return redirect('/admin');
     }
     public function updatePassword(Request $request)
     {
@@ -106,7 +106,7 @@ class AuthController extends Controller
                 'confirmed',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             ],
-        ]); 
+        ]);
 
         $user = Auth::user();
 

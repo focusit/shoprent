@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgreementController;
-use App\Http\Controllers\UserController\ClientDashboard;
+use App\Http\Controllers\ClientDashboard;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -25,8 +25,6 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 Route::get('/', function () {
     return view('/client.userlogin');
 });
-Route::get('/dashboard', [ClientDashboard::class, 'dashboard'])->name('dashboard');
-
 Route::get('/admin', function () {
     return view('/auth.login');
 });
@@ -35,10 +33,9 @@ Route::get('/admin', function () {
 
 
 // Show the login form
-Route::get('/login', [ClientDashboard::class, 'showUserLoginForm'])->name('login.form');
+Route::get('/login', [ClientDashboard::class, 'userLogin'])->name('login.form');
 // Handle the login form submission
 Route::post('/admin', [AuthController::class, 'login'])->name('login');
-Route::post('/', [ClientDashboard::class, 'userLogin'])->name('userLogin');
 // Logout the user
 
 
@@ -46,24 +43,21 @@ Route::post('/', [ClientDashboard::class, 'userLogin'])->name('userLogin');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+
 Route::middleware(['auth:web'])->group(function () {
-    // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
-    // Route::post('/login', [AuthController::class, 'login'])->name('login');
-    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     // Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     // Route::post('/profile/update', [AuthController::class, 'updatePassword'])->name('profile.update');
     Route::get('/user-dashboard', [ClientDashboard::class, 'userDashboard'])->name('userDashboard');
 });
 
-
-
-Route::middleware(['auth:admin'])->group(function () {
+Route::middleware(['admin_auth'])->group(function () {
     // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     Route::post('/profile/update', [AuthController::class, 'updatePassword'])->name('profile.update');
-    Route::get('/admin-dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [IndexController::class, 'dashboard'])->name('dashboard');
 
     // Shop Routes
     Route::get('/shops', [ShopRentController::class, 'index'])->name('shops.index');

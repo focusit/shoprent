@@ -7,7 +7,7 @@
                     <h2>WELCOME TO EXPLORE </h2>
                     <img src="{{ asset('login-asset/images/img-01.png') }}" alt="IMG">
                 </div>
-                <form method="POST" action="{{ route('login') }}" class="login100-form validate-form">
+                <form method="POST" action="{{ route('userLogin') }}" class="login100-form validate-form">
                     @csrf
                     <span class="login100-form-title">
                         User Login
