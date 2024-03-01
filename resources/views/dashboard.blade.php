@@ -40,7 +40,7 @@
                             <div class="info-box-content">
                                 <span class="info-box-text">Tenants</span>
                                 <span class="info-box-number">{{ DB::table('tenants')->count() }}</span>
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <!-- /.col -->
@@ -90,7 +90,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
-                                                    {{ $card['body'] }}
+                                                    @if (isset($card['body']))
+                                                        {!! $card['body'] !!} 
+                                                    @else
+                                                        No data available
+                                                    @endif
                                                 </div>
                                                 <div class="card-footer">
                                                     <a href="{{ $card['linkCreate'] }}" class="card-link">
