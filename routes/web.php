@@ -9,6 +9,8 @@ use App\Http\Controllers\indexController;
 use App\Http\Controllers\ShopRentController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\TenantController;
+use Barryvdh\Debugbar\Facades\Debugbar;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -128,3 +130,11 @@ Route::group(['middleware' => 'admin_auth'], function () {
         return view('payment');
     });
 });
+
+
+//setting Dbeugbar 
+if (app()->environment('local')) {
+    Debugbar::enable();
+} else {
+    Debugbar::disable();
+}
