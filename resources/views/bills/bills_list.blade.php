@@ -110,7 +110,6 @@
 
 
 
-    <!-- End of custom content -->
     <script>
         function filterBills() {
             var year = $('#year').val();

@@ -44,7 +44,7 @@ class Bill extends Model
      */
     public static function getBillingSettings()
     {
-        $jsonFilePath = storage_path('app/billing_settings.json');
+        $jsonFilePath = public_path('billing_settings.json');
 
         if (File::exists($jsonFilePath)) {
             return json_decode(File::get($jsonFilePath), true);

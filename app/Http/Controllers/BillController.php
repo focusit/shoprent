@@ -134,14 +134,19 @@ class BillController extends Controller
     private function generateBillData($agreement_id, $year, $month)
     {
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
-        $billingSettings = Bill::getBillingSettings();
 
-        if (!$billingSettings) {
-            return null;
+        try {
+            $billingSettings = Bill::getBillingSettings();
+            // Continue processing with $billingSettings
+            $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
+            $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
+            // dd($billingSettings);
+        } catch (\Exception $e) {
+            // Handle the exception when the billing settings file is not found
+            dd('Error: ' . $e->getMessage() . 'check wether file exist or not or contact admin');
         }
 
-        $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
-        $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
+
 
         if (!$billDate->isValid()) {
             $billDate = Carbon::now()->startOfMonth();
