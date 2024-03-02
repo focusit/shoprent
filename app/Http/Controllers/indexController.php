@@ -122,7 +122,7 @@ class indexController extends Controller
                            </tr>';
         }
 
-        return '<table class="table " style="border:dashed 1.5px #ddd; width: 100%;">
+        return '<table class="table " style="border:dashed 1.5px #ddd; width: 100%; hover:transform:scale(1.01);">
                     <thead>
                         <tr>
                             <th >Category</th>

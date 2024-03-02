@@ -57,7 +57,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 
 
-Route::middleware(['auth:admin'])->group(function () {
+Route::group(['middleware' => ['admin_auth']], function () {
     // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

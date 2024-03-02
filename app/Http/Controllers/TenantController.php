@@ -51,6 +51,7 @@ class TenantController extends Controller
             'name' => $request->input('full_name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
+            'tenant_id' => $request->input('tenant_id'),
             'is_admin' => 0,
         ]);
 

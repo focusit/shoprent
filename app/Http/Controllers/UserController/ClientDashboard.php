@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agreement;
+use App\Models\Bill;
+use App\Models\Payment;
+use App\Models\ShopRent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +22,15 @@ class ClientDashboard extends Controller
 
     public function userDashboard()
     {
-        return view('client.index');
+        $tenantId = Auth::user()->tenant_id;
+
+        $totalShops = ShopRent::where('tenant_id', $tenantId)->count();
+        $totalAgreements = Agreement::all()->where('tenant_id', $tenantId)->count();
+        $agreementId = Agreement::all()->where('tenant_id', $tenantId);
+        $totalBills = Bill::all()->where('tenant_id', $tenantId)->count();
+        $totalPayments = Payment::all()->where('agreement_id', $agreementId)->count();
+
+        return view('client.index', compact('totalShops', 'totalBills', 'totalAgreements', 'totalPayments'));
     }
     /**
      * Show the form for creating a new resource.
@@ -40,61 +52,13 @@ class ClientDashboard extends Controller
             $user = Auth::user();
 
             if (!$user->is_admin) {
-                // Regular user logged in, redirect to user dashboard
                 return redirect()->route('userDashboard')->with('info', 'You have successfully logged in as a user.');
             } else {
-                // Admin logged in, log them out
                 Auth::logout();
                 return back()->withErrors(['email' => 'Unauthorized. Please login as a user.'])->onlyInput('email');
             }
         }
 
         return back()->withErrors(['email' => 'Invalid email or password.'])->withInput($request->only('email'));
-    }
-
-
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.`
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
