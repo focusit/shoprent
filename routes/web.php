@@ -118,6 +118,7 @@ Route::group(['middleware' => ['admin_auth']], function () {
 
     // View all bills
     Route::get('/bills', [BillController::class, 'index'])->name('bills.index');
+    // Route::get('/billpayment', [BillController::class, 'billpayment'])->name('bills.billpayment');
     // Route::get('/bills/bills_list', [BillController::class, 'billsList'])->name('bills.bills_list');
     // Route::get('/bills/bills_list/{year?}/{month?}', [BillController::class, 'billsList'])->name('bills.billsList');
     Route::get('/bills/bills_list', [BillController::class, 'billsList'])->name('bills.bills_list');
@@ -146,6 +147,9 @@ Route::group(['middleware' => ['admin_auth']], function () {
     Route::get('/payments', function () {
         return view('payment');
     });
+
+    Route::get('/billpay', [BillController::class, 'paidBills'])->name('billsPaid');
+
 });
 
 

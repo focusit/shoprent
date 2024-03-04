@@ -273,4 +273,10 @@ class BillController extends Controller
         $bill = Bill::where('agreement_id', $agreement_id)->first();
         return view('bills.print', compact('bill'));
     }
+
+    public function paidBills()
+    {
+        $bills = Bill::all();
+        return view('bills.billpay', compact('bills'));
+    }
 }
