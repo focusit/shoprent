@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('transaction_date');
             $table->string('property_type');
             $table->string('tenant_name');
+            $table->string('tenant_id');
             $table->string('type');
             $table->unsignedSmallInteger('month')->default(now()->month);
             $table->unsignedSmallInteger('year')->default(now()->year);

@@ -52,12 +52,25 @@ Route::middleware(['auth:web'])->group(function () {
     // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     // Route::post('/profile/update', [AuthController::class, 'updatePassword'])->name('profile.update');
+    Route::post('/user-logout', [ClientDashboard::class, 'userLogout'])->name('userLogout');
+
     Route::get('/user-dashboard', [ClientDashboard::class, 'userDashboard'])->name('userDashboard');
+    // View User Shops
+    Route::get('/user-shops', [ClientDashboard::class, 'viewUserShops'])->name('viewUserShops');
+
+    // View User Agreements
+    Route::get('/user-agreements', [ClientDashboard::class, 'viewUserAgreements'])->name('viewUserAgreements');
+
+    // View User Bills
+    Route::get('/user-bills', [ClientDashboard::class, 'viewUserBills'])->name('viewUserBills');
+
+    // View User Payments
+    Route::get('/user-payments', [ClientDashboard::class, 'viewUserPayments'])->name('viewUserPayments');
 });
 
 
 
-Route::middleware(['auth:admin'])->group(function () {
+Route::group(['middleware' => ['admin_auth']], function () {
     // Route::get('/logout', [IndexController::class, 'logout'])->name('logout');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

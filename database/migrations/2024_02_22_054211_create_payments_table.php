@@ -16,15 +16,17 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('transaction_number')->unique();
+            $table->string('tenant_id');
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');
             $table->string('payment_method');
-            $table->string('status')->default('failed');
+            $table->string('status')->default('success');
             $table->text('remark')->nullable();
             $table->timestamps();
 
             // Foreign key constraint
             $table->foreign('transaction_number')->references('transaction_number')->on('transactions')->onDelete('cascade');
+            $table->foreign('tenant_id')->references('tenant_id')->on('tenants')->onDelete('cascade');
         });
     }
 

@@ -35,7 +35,7 @@
         <nav class="main-header navbar navbar-expand navbar-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-            <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                             class="fas fa-bars"></i></a>
                 </li>
@@ -48,7 +48,7 @@
                         <i class="far fa-user"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('userLogout') }}">
                             @csrf
                             <a href="#" class="dropdown-item"
                                 onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
@@ -91,7 +91,7 @@
                         <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
-                            <a href="{{ route('dashboard') }}" class="nav-link active">
+                            <a href="{{ route('userDashboard') }}" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p> Dashboard </p>
                             </a>
@@ -109,6 +109,7 @@
                                 </div>
                             </div>
                         </li><br>
+                        {{-- shops --}}
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
@@ -118,15 +119,68 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('shops.create') }}" class="nav-link">
+                                    <a href="{{ route('viewUserShops') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p> Add Shops</p>
+                                        <p> View My Shops</p>
                                     </a>
                                 </li>
+                            </ul>
+                        </li>
+                        {{-- agreements --}}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>Agreements
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('shops.index') }}" class="nav-link">
+                                    <a href="{{ route('viewUserAgreements') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>View All Shops</p>
+                                        <p> View My Agreements</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {{-- bills --}}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>Bills
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('viewUserBills') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p> View My Bills</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {{-- payments --}}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>Payments
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('viewUserPayments') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p> View My Payments</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('viewUserPayments') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p> View My Transactions</p>
                                     </a>
                                 </li>
                             </ul>

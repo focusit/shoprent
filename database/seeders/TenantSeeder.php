@@ -27,6 +27,7 @@ class TenantSeeder extends Seeder
                 'name' => 'John Doe ' . $i,
                 'email' => 'tenant' . $i . '@example.com',
                 'password' =>  bcrypt('admin'),
+                'tenant_id' => 'T' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'is_admin' => 0,
             ]);
         }

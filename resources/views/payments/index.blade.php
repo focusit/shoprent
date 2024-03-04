@@ -11,7 +11,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table class="table">
+                <table class="table" id="example1">
                     <thead>
                         <tr>
                             <th>ID</th>

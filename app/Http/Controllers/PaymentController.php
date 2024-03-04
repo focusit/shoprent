@@ -44,6 +44,7 @@ class PaymentController extends Controller
 
         // Find the associated transaction number
         $transactionNumber = $bill->transaction_number;
+        $tenant_id = $bill->tenant_id;
 
         // Create a new payment
         $payment = new Payment([
@@ -51,6 +52,7 @@ class PaymentController extends Controller
             'amount' => $request->input('amount'),
             'payment_date' => $request->input('payment_date'),
             'payment_method' => $request->input('payment_method'),
+            'tenant_id' => $tenant_id,
             'remark' => $request->input('remark'),
         ]);
 
