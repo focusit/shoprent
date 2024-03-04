@@ -25,7 +25,7 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 Route::get('/', function () {
     return view('/client.userlogin');
 });
-Route::get('/dashboard', [ClientDashboard::class, 'dashboard'])->name('dashboard');
+// Route::get('/dashboard', [ClientDashboard::class, 'dashboard'])->name('dashboard');
 
 Route::get('/admin', function () {
     return view('/auth.login');
@@ -149,7 +149,6 @@ Route::group(['middleware' => ['admin_auth']], function () {
     });
 
     Route::get('/billpay', [BillController::class, 'paidBills'])->name('billsPaid');
-
 });
 
 

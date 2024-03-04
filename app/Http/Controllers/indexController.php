@@ -106,11 +106,11 @@ class indexController extends Controller
         return view('dashboard', compact('cards'));
     }
 
-    public function logout()
-    {
-        auth()->logout();
-        return redirect('/admin')->with('success', 'you have been Logged out successfully');
-    }
+    // public function logout()
+    // {
+    //     auth()->logout();
+    //     return redirect('/admin')->with('success', 'you have been Logged out successfully');
+    // }
     private function generateCardBody($data)
     {
         $tableRows = '';

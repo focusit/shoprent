@@ -227,7 +227,7 @@ class ClientDashboard extends Controller
         $transactions = $this->getTransactions();
         return view('client.view_payments', compact('payments', 'transactions'));
     }
-    
+
     private function generateCardBody($data)
     {
         $tableRows = '';
