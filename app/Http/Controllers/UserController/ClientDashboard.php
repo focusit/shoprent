@@ -145,7 +145,7 @@ class ClientDashboard extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('/')->with('info', 'You have been successfully logged out.');
+        return redirect()->route('/login')->with('info', 'You have been successfully logged out.');
     }
 
     public function getShops()

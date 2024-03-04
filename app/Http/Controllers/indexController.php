@@ -109,7 +109,7 @@ class indexController extends Controller
     public function logout()
     {
         auth()->logout();
-        return redirect('/login')->with('success', 'you have been Logged out successfully');
+        return redirect('/admin')->with('success', 'you have been Logged out successfully');
     }
     private function generateCardBody($data)
     {
