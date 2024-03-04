@@ -168,6 +168,7 @@ class BillController extends Controller
         $transaction = Transaction::create([
             'transaction_number' => $uniqueTransactionNumber,
             'property_type' => $agreement->agreement_id,
+            'tenant_id' => $agreement->tenant->tenant_id,
             'tenant_name' => $agreement->tenant->full_name,
             'transaction_date' => Carbon::now()->toDateString(),
             'year' => $year,

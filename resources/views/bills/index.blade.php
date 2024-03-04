@@ -32,6 +32,8 @@
                                     <div class="mb-4">
                                         <label for="year">Select Year:</label>
                                         <select id="year">
+                                            <option value="Please select">Please select</option>
+
                                             @for ($year = date('Y'); $year >= 2020; $year--)
                                                 <option value="{{ $year }}">{{ $year }}</option>
                                             @endfor
@@ -39,11 +41,16 @@
 
                                         <label for="month">Select Month:</label>
                                         <select id="month">
+                                            <option value="Please select">Please select</option>
+
                                             @foreach (range(1, 12) as $month)
                                                 @php
                                                     $currentYear = date('Y');
                                                     $currentMonth = date('m');
-                                                    $disabled = $year == $currentYear && $month > $currentMonth ? 'disabled' : '';
+                                                    $disabled =
+                                                        $year == $currentYear && $month > $currentMonth
+                                                            ? 'disabled'
+                                                            : '';
 
                                                     // $disabled = $month == date('n') || $month == date('n') ? '' : 'disabled';
 
@@ -173,6 +180,7 @@
                 console.log('Selected Year here:', selectedYear);
                 console.log('Selected Month:', selectedMonth);
             }
+            function generateButton
         });
     </script>
 

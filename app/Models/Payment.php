@@ -13,6 +13,7 @@ class Payment extends Model
         'status',
         'remark',
         'transaction_number',
+        'tenant_id',
     ];
 
     protected $dates = ['payment_date'];
@@ -24,5 +25,9 @@ class Payment extends Model
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);
+    }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 }
