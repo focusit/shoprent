@@ -181,21 +181,22 @@ class AgreementController extends Controller
 
             // Find the agreement by agreement_id
             $agreement = Agreement::findOrFail($agreement_id);
-
-            // Update agreement details
-            $agreement->update([
-                'shop_id' => $request->input('shop_id'),
-                'tenant_id' => $request->input('tenant_id'),
-                'with_effect_from' => $request->input('with_effect_from'),
-                'valid_till' => $request->input('valid_till'),
-                'rent' => $request->input('rent'),
-                'status' => $request->input('status'),
-                'document_field' => 'sometimes|file|mimes:pdf,jpeg,jpg',
-                'remark' => $request->input('remark'),
-            ]);
-
             // Handle document update
             $this->handleDocument($request, $agreement);
+            // Update agreement details
+            // $agreement->update([
+            //     'shop_id' => $request->input('shop_id'),
+            //     'tenant_id' => $request->input('tenant_id'),
+            //     'with_effect_from' => $request->input('with_effect_from'),
+            //     'valid_till' => $request->input('valid_till'),
+            //     'rent' => $request->input('rent'),
+            //     'status' => $request->input('status'),
+            //     'document_field' => $request->input('document_field'),
+            //     'remark' => $request->input('remark'),
+            // ]);
+
+            $agreement->update($request->except(['document_field', '_method', '_token']));
+
 
             // Allocate the shop to the tenant
             $shop = ShopRent::where('shop_id', $request->input('shop_id'))->first();
