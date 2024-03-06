@@ -24,11 +24,11 @@
                         <label>Shop Image</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="image">
-                                <label class="custom-file-label">Choose file</label>
-                                @if (isset($shop) && $shop->image)
+                                <input type="file" class="custom-file-input" name="image"placeholder="image">
+                                <label class="custom-file-label">{{ isset($shop) ? $shop->image : 'Choose file ' }}</label>
+                                {{-- @if (isset($shop) && $shop->image)
                                     <img src="{{ asset($shop->image) }}" alt="Shop Image">
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </div>
@@ -113,6 +113,16 @@
 
 <script>
     // Check Shop ID
+    document.addEventListener('DOMContentLoaded', function() {
+        var fileInput = document.querySelector('.custom-file-input');
+        var label = document.querySelector('.custom-file-label');
+
+        fileInput.addEventListener('change', function() {
+            var fileName = this.files[0].name;
+
+            label.innerHTML = fileName;
+        });
+    });
     function checkShopId() {
         var shopId = document.getElementById('shop_id').value;
         var shopIdStatus = document.getElementById('shopIdStatus');

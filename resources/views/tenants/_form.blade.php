@@ -84,14 +84,14 @@
                     </div> --}}
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Tenant Image</label>
+                            <label>Tenant Image </label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image">
-                                    <label class="custom-file-label">Choose file</label>
-                                    @if (isset($shop) && $shop->image)
+                                    <input type="file" class="custom-file-input" name="image"placeholder="image">
+                                    <label class="custom-file-label">{{ isset($tenant) ? $tenant->image : 'Choose file ' }}</label>
+                                    {{-- @if (isset($shop) && $shop->image)
                                         <img src="{{ asset($shop->image) }}" alt="Shop Image">
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
                         </div>
@@ -109,8 +109,19 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
             </div>
-
+        </section>
             <script>
+                  
+                  document.addEventListener('DOMContentLoaded', function() {
+                        var fileInput = document.querySelector('.custom-file-input');
+                        var label = document.querySelector('.custom-file-label');
+
+                        fileInput.addEventListener('change', function() {
+                            var fileName = this.files[0].name;
+
+                            label.innerHTML = fileName;
+                        });
+                    });
                 function checkTenantId() {
                     var tenantId = document.getElementById('tenant_id').value;
                     var tenantIdStatus = document.getElementById('tenantIdStatus');
@@ -118,14 +129,7 @@
                     if (tenantId.trim() === '') {
                         tenantIdStatus.innerHTML = '<span style="color: red;">Please enter a Tenant ID</span>';
                         return;
-                    } <
-                    iframe width = "951"
-                    height = "535"
-                    src = "https://www.youtube.com/embed/vJvp7i5fLas"
-                    title = "HISAAB - DIVINE, KARAN AUJLA | Official Music Video"
-                    frameborder = "0"
-                    allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen > < /iframe>
+                    } 
                     console.log('Checking Tenant ID:', tenantId);
 
                     // Perform an AJAX request to check the Tenant ID
@@ -153,4 +157,5 @@
                     document.getElementById('tenant_id').addEventListener('input', checkTenantId);
 
                 }
+              
             </script>
