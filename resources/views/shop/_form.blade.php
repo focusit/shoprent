@@ -25,7 +25,9 @@
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="image">
-                                <label class="custom-file-label">Choose file</label>
+                                <label class="custom-file-label">
+                                    {{ isset($shop) && $shop->image ? basename($shop->image) : 'Choose file' }}
+                                </label>
                                 @if (isset($shop) && $shop->image)
                                     <img src="{{ asset($shop->image) }}" alt="Shop Image">
                                 @endif
@@ -112,6 +114,18 @@
 </section>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var fileInput = document.querySelector('.custom-file-input');
+        var label = document.querySelector('.custom-file-label');
+
+        fileInput.addEventListener('change', function() {
+            // Get the selected file name
+            var fileName = this.files[0].name;
+
+            // Update the custom file label with the selected file name
+            label.innerHTML = fileName;
+        });
+    });
     // Check Shop ID
     function checkShopId() {
         var shopId = document.getElementById('shop_id').value;

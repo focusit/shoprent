@@ -215,32 +215,36 @@ class BillController extends Controller
 
 
 
-    public function regenerate(Request $request, $agreement_id, $year = null, $month = null)
+    public function regenerate(Request $request, $transaction_number)
     {
-        // If year and month are not provided, use the current date
-        $year = $request->input('selectedYear') ?? date('Y');
-        $month = $request->input('selectedMonth') ?? date('m');
-        // Retrieve the existing bill for the specified agreement, year, and month
-        $existingBill = Bill::where('id', $agreement_id)
-            ->whereYear('year', $year)
-            ->whereMonth('month', $month)
+        // Retrieve the existing bill for the specified agreement and transaction number
+        $existingBill = Bill::where('transaction_number', $transaction_number)
             ->first();
 
-        // Retrieve the agreement using its ID
-        $agreement = Agreement::find($agreement_id);
+        // Check if an existing bill was found
+        if ($existingBill) {
+            // Extract month and year from the existing bill's data
+            $year = $existingBill->year;
+            $month = $existingBill->month;
 
-        // Check if both an existing bill and an agreement were found
-        if ($existingBill && $agreement) {
-            // Generate new bill data based on the agreement, year, and month
-            $newBillData = $this->generateBillData($agreement_id, $year, $month);
-            // dd("Bill Data here", $newBillData);
-            $existingBill->update($newBillData);
-            // dd("existing bill",$existingBill);
-            return redirect()->route('bills.index')->with('success', 'Bill regenerated successfully.');
+            // Get the updated billing settings
+            $billingSettings = Bill::getBillingSettings();
+
+            // Update specific fields of the existing bill with the new billing settings
+            $existingBill->update([
+                'bill_date' => $billingSettings['billing_date'],
+                'due_date' => $billingSettings['due_date'],
+                // Add other fields based on your billing settings JSON structure
+            ]);
+
+            return redirect()->route('bills.index')->with('success', "Bill for {$year}-{$month} regenerated successfully.");
         } else {
-            return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement and month.');
+            return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement and transaction number.');
         }
     }
+
+
+
 
     public function update(Request $request, $id)
     {

@@ -108,7 +108,7 @@
                                             <td>{{ $bill->status }}</td>
                                             <td>{{ $bill->bill_date }}</td>
                                             <td>
-                                                <form action="{{ route('bills.regenerate', $bill->agreement_id) }}"
+                                                <form action="{{ route('bills.regenerate', $bill->transaction_number) }}"
                                                     method="post">
                                                     @csrf
                                                     <input type="hidden" name="selectedYear" id="selectedYear"
@@ -180,6 +180,7 @@
                 console.log('Selected Year here:', selectedYear);
                 console.log('Selected Month:', selectedMonth);
             }
+
             function generateButton
         });
     </script>

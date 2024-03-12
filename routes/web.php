@@ -131,7 +131,7 @@ Route::group(['middleware' => ['admin_auth']], function () {
     Route::delete('/bills/{agreement_id}', [BillController::class, 'destroy'])->name('bills.destroy');
     ///genrate bill
     Route::post('/bills/generate/{year?}/{month?}', [BillController::class, 'generate'])->name('bills.generate');
-    Route::post('/bills/regenerate/{agreement_id}/{year?}/{month?}', [BillController::class, 'regenerate'])->name('bills.regenerate');
+    Route::post('/bills/regenerate/{transaction_number}/{year?}/{month?}', [BillController::class, 'regenerate'])->name('bills.regenerate');
     Route::get('/bills/print/{id}/{agreement_id}', [BillController::class, 'print'])->name('bills.print');
 
 
