@@ -68,7 +68,7 @@
                                 <td>{{ $bill->status }}</td>
                                 <td>{{ $bill->bill_date }}</td>
                                 <td>
-                                    <form action="{{ route('bills.regenerate', $bill->agreement_id) }}" method="post">
+                                    <form action="{{ route('bills.regenerate', $bill->transaction_number) }}" method="post">
                                         @csrf
                                         <input type="hidden" name="selectedYear" id="selectedYear"
                                             value="{{ date('Y') }}">

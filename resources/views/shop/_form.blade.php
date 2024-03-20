@@ -112,6 +112,18 @@
 </section>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var fileInput = document.querySelector('.custom-file-input');
+        var label = document.querySelector('.custom-file-label');
+
+        fileInput.addEventListener('change', function() {
+            // Get the selected file name
+            var fileName = this.files[0].name;
+
+            // Update the custom file label with the selected file name
+            label.innerHTML = fileName;
+        });
+    });
     // Check Shop ID
     document.addEventListener('DOMContentLoaded', function() {
         var fileInput = document.querySelector('.custom-file-input');

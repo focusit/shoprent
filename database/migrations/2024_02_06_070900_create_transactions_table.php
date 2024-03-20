@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('property_type');
             $table->string('tenant_name');
             $table->string('tenant_id');
+            $table->float('previous_balance')->default(0.00);
             $table->string('type');
             $table->unsignedSmallInteger('month')->default(now()->month);
             $table->unsignedSmallInteger('year')->default(now()->year);
