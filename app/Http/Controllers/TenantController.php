@@ -42,18 +42,19 @@ class TenantController extends Controller
             'govt_id_number' => $request->input('govt_id_number'),
             'address' => $request->input('address'),
             'pincode' => $request->input('pincode'),
+            'gst_number'=> $request->input('gst_number') ,
             'contact' => $request->input('contact'),
             'email' => $request->input('email'),
             'password' => $request->input('password'),
             'image' => $imageName,
         ]);
-        User::create([
-            'name' => $request->input('full_name'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
-            'tenant_id' => $request->input('tenant_id'),
-            'is_admin' => 0,
-        ]);
+        // User::create([
+        //     'name' => $request->input('full_name'),
+        //     'email' => $request->input('email'),
+        //     'password' => bcrypt($request->input('password')),
+        //     'tenant_id' => $request->input('tenant_id'),
+        //     'is_admin' => 0,
+        // ]);
 
         return redirect()->route('tenants.index')->with('success', 'Tenant created successfully.');
     }
@@ -98,6 +99,7 @@ class TenantController extends Controller
             'pincode' => 'nullable|numeric|regex:/^\d{6}$/',
             'email' => 'nullable|string',
             'password' => 'nullable|string',
+            'gst_number'=> 'nullable|string',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -144,13 +146,14 @@ class TenantController extends Controller
         return $request->validate([
             'tenant_id' => 'required|string|unique:tenants,tenant_id,' . $tenant_id,
             'full_name' => 'required|string',
-            'govt_id' => 'required|string',
-            'govt_id_number' => 'required|string',
-            'address' => 'required|string',
-            'contact' => 'required|numeric',
-            'pincode' => 'required|numeric|regex:/^\d{6}$/',
-            'email' => 'required|string|unique:tenants,email,' . $tenant_id,
-            'password' => 'required|string',
+            'govt_id' => 'nullable|string',
+            'govt_id_number' => 'nullable|string',
+            'address' => 'nullable|string',
+            'contact' => 'nullable|numeric',
+            'pincode' => 'nullable|numeric|regex:/^\d{6}$/',
+            'email' => 'nullable|string|unique:tenants,email,' . $tenant_id,
+            'password' => 'nullable|string',
+            'gst_number'=>'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }

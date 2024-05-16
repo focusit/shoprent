@@ -38,6 +38,7 @@
                                             <th>Address</th>
                                             <th>Email</th>
                                             <th>Image</th>
+                                            <th>GST No</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -51,6 +52,7 @@
                                                 <td>{{ $tenant->contact }}</td>
                                                 <td>{{ $tenant->address }}</td>
                                                 <td>{{ $tenant->email }}</td>
+                                                <td>{{ $tenant->gst_number}}</td>
                                                 <td>
                                                     @method('UPDATE')
                                                     @if ($tenant->image)

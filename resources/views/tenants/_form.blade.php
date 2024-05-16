@@ -62,6 +62,7 @@
                             <input type="text" name="contact" class="form-control"
                                 value="{{ old('contact', $tenant->contact ?? '') }}">
                         </div>
+                        
                         <div class="form-group">
                             <label>Password</label>
                             <input type="password" name="password" class="form-control"
@@ -72,16 +73,13 @@
                     <!-- /.col -->
 
                     <!-- Tenant Image Section -->
-                    {{-- <div class="col-md-6">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label>Tenant Image</label>
-                            <input class="form-control form-control-md" type="file" name="image">
-                            @if (isset($tenant) && $tenant->image)
-                                <img src="{{ asset($tenant->image) }}" alt="Tenant Image" class="mt-2"
-                                    style="max-width: 100%;">
-                            @endif
+                            <label>GST no</label>
+                            <input type="text" name="contact" class="form-control"
+                                value="{{ old('gst_number', $tenant->gst_number ?? '') }}">
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Tenant Image </label>
@@ -110,6 +108,17 @@
                 </div>
             </div>
         </section>
+          </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
             <script>
                   
                   document.addEventListener('DOMContentLoaded', function() {

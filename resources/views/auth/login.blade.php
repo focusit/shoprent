@@ -4,7 +4,6 @@
         <div class="container-login100">
             <div class="wrap-login100">
                 <div class="login100-pic js-tilt" data-tilt>
-                    <h2>WELCOME TO EXPLORE </h2>
                     <img src="{{ asset('login-asset/images/img-01.png') }}" alt="IMG">
                 </div>
                 <form method="POST" action="{{ route('login') }}" class="login100-form validate-form">
@@ -52,14 +51,14 @@
                     @if (session('error'))
                         <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
-                    <div class="text-center p-t-12">
+                    {{-- <div class="text-center p-t-12">
                         <span class="txt1">
                             Forgot Password
                         </span>
                         <a class="txt2" href="#">
                             click
                         </a>
-                    </div>
+                    </div> --}}
                     <div class="text-center p-t-136" style="padding-top: 35px">
                         <a class="txt2" href="{{ route('register') }}">
                             Create your Account

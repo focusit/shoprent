@@ -1,4 +1,13 @@
 
-.card{
-    /* background: linear-gradient(-80deg, #afc984ff, #eeace1f7, #c9a9dbff); */
+/* .card{
+    /* background: linear-gradient(-80deg, #afc984ff, #eeace1f7, #c9a9dbff); *
+} */
+a {
+    color: #000;
+}
+.font-weight-light {
+    font-weight: 501 !important;
+}
+.nav-pills .nav-link {
+    color: #000;
 }

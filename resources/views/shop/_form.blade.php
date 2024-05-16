@@ -1,114 +1,142 @@
 <!-- SELECT2 EXAMPLE -->
-<div class="card card-default">
-    <!-- .card-body -->
-    <div class="card-body">
-        <form action="{{ isset($shop) ? route('shops.update', $shop->id) : route('shops.create') }}" method="POST"
-            enctype="multipart/form-data">
-            @csrf
-            @if (isset($shop))
-                @method('PUT')
-            @endif
+    <div class="card card-default">
+        <!-- .card-body -->
+        <div class="card-body">
+            <form action="{{ isset($shop) ? route('shops.update', $shop->id) : route('shops.create') }}" method="POST"
+                enctype="multipart/form-data">
+                @csrf
+                @if (isset($shop))
+                    @method('PUT')
+                @endif
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Shop ID</label>
-                        <input type="text" class="form-control" name="shop_id" id="shop_id"
-                            value="{{ isset($shop) ? $shop->shop_id : '' }}" oninput="checkShopId()">
-                        <span id="shopIdStatus"></span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shop ID</label>
+                            <input type="text" class="form-control" name="shop_id" id="shop_id"
+                                value="{{ isset($shop) ? $shop->shop_id : '' }}" oninput="checkShopId()">
+                            <span id="shopIdStatus"></span>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Shop Image</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="image"placeholder="image">
-                                <label class="custom-file-label">{{ isset($shop) ? $shop->image : 'Choose file ' }}</label>
-                                {{-- @if (isset($shop) && $shop->image)
-                                    <img src="{{ asset($shop->image) }}" alt="Shop Image">
-                                @endif --}}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shop Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="image"placeholder="image">
+                                    <label class="custom-file-label">{{ isset($shop) ? $shop->image : 'Choose file ' }}</label>
+                                    {{-- @if (isset($shop) && $shop->image)
+                                        <img src="{{ asset($shop->image) }}" alt="Shop Image">
+                                    @endif --}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Latitude</label>
-                        <input type="text" class="form-control" name="latitude"
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Latitude</label>
+                            <input type="text" class="form-control" name="latitude"
                             value="{{ isset($shop) ? $shop->latitude : '' }}">
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Longitude</label>
-                        <input type="text" class="form-control" name="longitude"
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Longitude</label>
+                            <input type="text" class="form-control" name="longitude"
                             value="{{ isset($shop) ? $shop->longitude : '' }}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Add other input fields as needed -->
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Pincode</label>
-                        <input type="number" class="form-control" name="pincode" minlength="6" maxlength="6"
-                            value="{{ isset($shop) ? $shop->pincode : '' }}">
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Rent</label>
-                        <input type="text" class="form-control" name="rent"
-                            value="{{ isset($shop) ? $shop->rent : '' }}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Add other input fields as needed -->
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" name="status" required>
-                            <option value="" selected disabled>Select</option>
-                            <option value="occupied"
-                                {{ isset($shop) && $shop->status === 'occupied' ? 'selected' : '' }}>Occupied
-                            </option>
-                            <option value="vacant" {{ isset($shop) && $shop->status === 'vacant' ? 'selected' : '' }}>
-                                Vacant
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" class="form-control" name="address"
+                <div class="row">
+                    <!-- Add other input fields as needed -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" class="form-control" name="address"
                             value="{{ isset($shop) ? $shop->address : '' }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Pincode</label>
+                            <input type="number" class="form-control" name="pincode" minlength="6" maxlength="6"
+                            value="{{ isset($shop) ? $shop->pincode : '' }}">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <!-- Add other input fields as needed -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Construction Year</label>
+                            <input type="text" class="form-control" name="construction year"
+                            value="{{ isset($shop) ? $shop->construction_year : '' }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Property Owner Name</label>
+                            <input type="text" class="form-control" name="owner name" 
+                            value="{{ isset($shop) ? $shop->owner_name : '' }}">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <!-- Add other input fields as needed -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Rent</label>
+                            <input type="text" class="form-control" name="rent"
+                            value="{{ isset($shop) ? $shop->rent : '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                                <option value="" selected disabled>Select</option>
+                                <option value="occupied"
+                                    {{ isset($shop) && $shop->status === 'occupied' ? 'selected' : '' }}>Occupied
+                                </option>
+                                <option value="vacant" {{ isset($shop) && $shop->status === 'vacant' ? 'selected' : '' }}>
+                                    Vacant
+                                </option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card-footer">
-                <button type="submit" class="btn btn-success">
-                    {{ isset($shop) ? 'Update Shop' : 'Create Shop' }}
-                </button>
-            </div>
-        </form>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">
+                        {{ isset($shop) ? 'Update Shop' : 'Create Shop' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
     </div>
-    <!-- /.card-body -->
+</section>
 </div>
+</div>
+<!-- /.card -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
 </section>
 
 <script>

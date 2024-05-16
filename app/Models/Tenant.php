@@ -21,6 +21,7 @@ class Tenant extends Model
         'email',
         'full_name',
         'govt_id_number',
+        'gst_number',
         'contact',
         'password',
     ];

@@ -14,15 +14,16 @@ return new class extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
             $table->string('tenant_id')->unique()->cascade('cascade');
-            $table->string('govt_id');
+            $table->string('govt_id')->nullable();
             $table->string('image');
-            $table->string('address');
-            $table->string('pincode');
-            $table->string('email')->unique();
+            $table->string('address')->nullable();
+            $table->string('pincode')->nullable();
+            $table->string('email')->nullable()->unique();
             $table->string('full_name');
-            $table->string('govt_id_number')->unique();
-            $table->string('contact', 15);
-            $table->string('password');
+            $table->string('govt_id_number')->unique()->nullable();
+            $table->string('contact', 15)->nullable();
+            $table->string('password')->nullable();
+            $table->string('gst_number')->default('pending');
             $table->timestamps();
         });
     }

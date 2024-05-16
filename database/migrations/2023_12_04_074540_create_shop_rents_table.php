@@ -14,15 +14,17 @@ return new class extends Migration
         Schema::create('shop_rents', function (Blueprint $table) {
             $table->id();
             $table->string('shop_id')->unique();
-            $table->string('address');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('pincode');
+            $table->string('address')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('pincode')->nullable();
+            $table->string('Construction_year')->nullable();
+            $table->string('owner_name')->nullable();
             $table->string('status');
             $table->decimal('rent', 8, 2);
             $table->string('tenant_id')->nullable(); // Add this line
             $table->foreign('tenant_id')->references('tenant_id')->on('tenants')->onDelete('set null'); 
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

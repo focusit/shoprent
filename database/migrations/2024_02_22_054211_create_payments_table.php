@@ -18,6 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->string('transaction_number')->unique();
             $table->string('tenant_id');
             $table->decimal('amount', 10, 2);
+            $table->decimal('previous_balance', 10, 2)->default(0.0);
             $table->date('payment_date');
             $table->string('payment_method');
             $table->string('status')->default('success');

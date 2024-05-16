@@ -4,7 +4,7 @@
         <div class="container-login100">
             <div class="wrap-login100">
                 <div class="login100-pic js-tilt" data-tilt>
-                    <h2>WELCOME TO EXPLORE </h2>
+                    
                     <img src="{{ asset('login-asset/images/img-01.png') }}" alt="IMG">
                 </div>
                 <form method="POST" action="{{ route('userLogin') }}" class="login100-form validate-form">
@@ -54,10 +54,10 @@
                     @endif
                     <div class="text-center p-t-12">
                         <span class="txt1">
-                            Forgot Password
+                            If you are allready an Admin 
                         </span>
-                        <a class="txt2" href="#">
-                            click
+                        <a class="txt2" href="{{ route('login') }}"style=" font-size: medium; color:blue;">
+                            click here
                         </a>
                     </div>
                 </form>

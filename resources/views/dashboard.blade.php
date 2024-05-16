@@ -9,10 +9,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
-            <!-- .container-fluid -->
-            <div class="container-fluid">
-            </div>
-            <!-- /.container-fluid -->
+               
         </div>
         <!-- /.content-header -->
 
@@ -20,6 +17,9 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Info boxes -->
+                <div class="row">
+                 <h1>Rent a Shop </h1>
+                </div>
                 <div class="row">
                     <!--.col -->
                     <div class="col-12 col-sm-6 col-md-3">
@@ -75,6 +75,8 @@
                 <!-- /Info boxes -->
 
                 <!-- Main row -->
+
+                
                 <div class="row">
                     <div class="content">
                         <div class="container-fluid">
