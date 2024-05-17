@@ -10,3 +10,4 @@ deployment:
     - /usr/local/bin/php $DEPLOYPATH/artisan route:cache
     - /usr/local/bin/php $DEPLOYPATH/artisan view:cache
     - /usr/local/bin/php $DEPLOYPATH/artisan key:generate
+    
