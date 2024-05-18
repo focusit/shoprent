@@ -11,7 +11,7 @@ class ShopRentController extends Controller
 {
     public function index()
     {
-        $shops = ShopRent::paginate(20);
+        $shops = ShopRent::paginate(100);
         return view('shop.index', compact('shops'));
     }
 
@@ -23,12 +23,13 @@ class ShopRentController extends Controller
     public function store(Request $request)
     {
         $this->validateShop($request);
-
+        if($request->hasFile('image')){
         $imageName = time() . '.' . $request->image->extension();
 
         if (!$request->image->move(public_path('images'), $imageName)) {
             return redirect()->back()->with('error', 'Failed to upload the image.');
         }
+    }
         // dd($request->all());
         ShopRent::create([
             'shop_id' => $request->input('shop_id'),
@@ -36,9 +37,11 @@ class ShopRentController extends Controller
             'longitude' => $request->input('longitude'),
             'address' => $request->input('address'),
             'pincode' => $request->input('pincode'),
+            'construction_year'=> $request->input('construction_year'),
+            'owner_name' => $request->input('owner_name'),
             'rent' => $request->input('rent'),
             'status' => $request->input('status'),
-            'image' => $imageName,
+            'image' => $imageName ??"",
         ]);
         return redirect()->route('shops.index')->with('success', 'Shop created successfully.');
     }
@@ -62,6 +65,8 @@ class ShopRentController extends Controller
             'latitude' => 'nullable|string',
             'longitude' => 'nullable|string',
             'address' => 'nullable|string',
+            'owner_name' => 'nullable|string',
+            'construction_year' => 'nullable|string',
             'pincode' => 'nullable|numeric|regex:/^\d{6}$/',
             'rent' => 'nullable|numeric',
             'status' => 'nullable|string',
@@ -102,13 +107,15 @@ class ShopRentController extends Controller
     {
         return $request->validate([
             'shop_id' => 'required|string|unique:shop_rents,shop_id',
-            'latitude' => 'required|string',
-            'longitude' => 'required|string',
-            'address' => 'required|string',
-            'pincode' => 'required|numeric|regex:/^\d{6}$/',
+            'latitude' => 'nullable|string',
+            'longitude' => 'nullable|string',
+            'address' => 'nullable|string',
+            'pincode' => 'nullable|numeric|regex:/^\d{6}$/',
             'status' => 'required|string',
             'rent' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'owner_name' => 'nullable|string',
+            'construction_year' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }
 

@@ -17,6 +17,15 @@
             </div><!-- /.container-fluid -->
         </section>
 
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-lightblue">
+                            <div class="card-header">
+                                <h3 class="card-title">Add new Shop</h3>
+                            </div>
+                            <div class="card-body">
         <!-- Main content -->
         <section class="content">
             @if ($errors->any())

@@ -37,7 +37,6 @@
 <script src="{{ asset('dist/js/list.js') }}">
 </script>
 </body>
-
 </html>
 
 <!--telent list/SHOPLIST/BILL LIST/-->

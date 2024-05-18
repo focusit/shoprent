@@ -31,6 +31,16 @@ Route::get('/admin', function () {
     return view('/auth.login');
 });
 
+Route::get('/user', function () {
+    return view('/users.user');
+});
+Route::get('/newuser', function () {
+    return view('/users.new_user');
+});
+Route::get('/assessmentSummary', function () {
+    return view('/assessment');
+});
+
 
 
 

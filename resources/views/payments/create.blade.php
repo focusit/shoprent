@@ -67,6 +67,12 @@
                                                     value="{{ $bill->rent }}" required>
 
                                             </div>
+                                           {{ $bill->previous_balance}}
+                                            <div class="form-group">
+                                                <label for="previousBalance">Previous Balance:</label>
+                                                <input type="text" id="previousBalance" name="previousBalance" class="form-control"
+                                                    value="{{  $bill->previous_balance ? $bill->previous_balance : 0 }}" readonly>
+                                            </div>
                                             <div id="cheque_fields" style="display: none;">
                                                 <div class="form-group">
                                                     <label for="cheque_number">Cheque Number:</label>

@@ -30,20 +30,24 @@
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr class="bg-info">
+                                            <th>ID</th>
                                             <th>Tenants ID</th>
                                             <th>Govt ID</th>
                                             <th>ID Number</th>
                                             <th>Full Name</th>
                                             <th>Contact</th>
-                                            <th>Address</th>
+                                            <th >Address</th>
                                             <th>Email</th>
                                             <th>Image</th>
+                                            <th>GST No</th>
+                                            <th>Gender</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse($tenants as $tenant)
                                             <tr>
+                                                <td>{{ $tenant->id}}</td>
                                                 <td>{{ $tenant->tenant_id }}</td>
                                                 <td>{{ $tenant->govt_id }}</td>
                                                 <td>{{ $tenant->govt_id_number }}</td>
@@ -51,7 +55,7 @@
                                                 <td>{{ $tenant->contact }}</td>
                                                 <td>{{ $tenant->address }}</td>
                                                 <td>{{ $tenant->email }}</td>
-                                                <td>
+                                                  <td>
                                                     @method('UPDATE')
                                                     @if ($tenant->image)
                                                         <img src="{{ asset('tenant-images/' . $tenant->image) }}"
@@ -60,7 +64,10 @@
                                                         No Image
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td>{{ $tenant->gst_number}}</td>
+                                                <td>{{ $tenant->gender }}</td>
+                                              
+                                                <td class="p-2">
                                                     <a href="{{ route('tenants.edit', $tenant->tenant_id) }}"
                                                         class="btn btn-info"><i class="fas fa-edit"></i></a>
                                                     <a href="{{ route('tenants.show', $tenant->tenant_id) }}"

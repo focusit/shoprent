@@ -14,7 +14,8 @@ class PaymentController extends Controller
         $bill = Bill::findOrFail($id);
         return view('payments.create', compact('bill'));
     }
-
+       
+    
     public function store(Request $request, $id)
     {
         // Validate the request
@@ -74,12 +75,13 @@ class PaymentController extends Controller
         $amount = $request->input('amount');
 
         // Calculate the previous balance
-        $previousBalance = $totalPayments - $bill->rent;
+        $previousBalance =  $bill->rent-$totalPayments;
 
         // Create a new payment
         $payment = new Payment([
             'transaction_number' => $transactionNumber,
             'amount' => $amount,
+            'previous_balance' => $previousBalance,
             'payment_date' => $request->input('payment_date'),
             'payment_method' => $request->input('payment_method'),
             'tenant_id' => $tenant_id,
@@ -105,4 +107,5 @@ class PaymentController extends Controller
 
         return redirect()->route('bills.show', ['id' => $id])->with('success', 'Payment made successfully.');
     }
+
 }

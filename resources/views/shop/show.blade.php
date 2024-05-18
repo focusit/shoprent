@@ -36,7 +36,7 @@
                 <tr>
                     <th>Latitude</th>
                     <td>{{ $shop->latitude }}</td>
-                </tr>
+                </tr> 
                 <tr>
                     <th>Longitude</th>
                     <td>{{ $shop->longitude }}</td>
@@ -53,6 +53,15 @@
                     <th>Status</th>
                     <td>{{ $shop->status }}</td>
                 </tr>
+                <tr>
+                    <th>owner name</th>
+                    <td>{{ $shop->owner_name }}</td>
+                </tr>
+                <tr>
+                    <th>construction year</th>
+                    <td>{{ $shop->construction_year }}</td>
+                </tr>
+                
                 {{-- <tr>
                     <th>Tenant ID</th>
                     <td>{{ $shop->tenant_id }}</td>

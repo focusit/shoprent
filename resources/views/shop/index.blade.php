@@ -1,6 +1,6 @@
 @extends('masterlist')
 
-@section('title', 'tenant_list')
+@section('title', 'Shop_list')
 
 @section('body')
     <!-- Content Wrapper. Contains page content -->
@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row ">
                     <div class="col">
-                        <h1>Tenants List</h1>
+                        <h1>Shop List</h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -38,8 +38,8 @@
                                             href="#occupiedShops">Occupied Shops</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="vacantShopsTab" data-toggle="tab" href="#vacantShops">Vacant
-                                            Shops</a>
+                                        <a class="nav-link" id="vacantShopsTab" data-toggle="tab" 
+                                           href="#vacantShops">Vacant Shops</a>
                                     </li>
                                 </ul>
                                 <!-- Tab panes -->
@@ -54,6 +54,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
+                                                    <th>owner_name</th>
+                                                    <th>construction_year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     <th>Status</th>
@@ -70,10 +72,13 @@
                                                         <td>{{ $shop->address }}</td>
                                                         <td>{{ $shop->latitude }}</td>
                                                         <td>{{ $shop->longitude }}</td>
+                                                        <td>{{ $shop->owner_name }}</td>
+                                                        <td>{{ $shop->construction_year}}</td>
                                                         <td>{{ $shop->pincode }}</td>
                                                         <td>{{ $shop->rent }}</td>
                                                         <td>{{ $shop->status }}</td>
                                                         <td>{{ $shop->tenant_id }}</td>
+                                                        
                                                         <td>
                                                             @if ($shop->image)
                                                                 <img src="{{ asset('images/' . $shop->image) }}"
@@ -81,6 +86,7 @@
                                                             @else
                                                                 No Image
                                                             @endif
+                                                            
                                                         </td>
                                                         <td class="p-2">
                                                             <a href="{{ route('shops.edit', $shop->shop_id) }}"
@@ -122,6 +128,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
+                                                    <th>owner_name</th>
+                                                    <th>construction_year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     <th>Tenant ID</th>
@@ -138,6 +146,8 @@
                                                             <td>{{ $shop->address }}</td>
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
+                                                            <td>{{ $shop->owner_name }}</td>
+                                                            <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
                                                             <td>{{ $shop->tenant_id }}</td>
@@ -189,6 +199,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
+                                                    <th>owner_name</th>
+                                                    <th>construction_year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     <th>Tenant ID</th>
@@ -205,6 +217,8 @@
                                                             <td>{{ $shop->address }}</td>
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
+                                                            <td>{{ $shop->owner_name }}</td>
+                                                            <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
                                                             <td>{{ $shop->tenant_id }}</td>

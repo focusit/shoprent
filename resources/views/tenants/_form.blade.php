@@ -62,6 +62,7 @@
                             <input type="text" name="contact" class="form-control"
                                 value="{{ old('contact', $tenant->contact ?? '') }}">
                         </div>
+                        
                         <div class="form-group">
                             <label>Password</label>
                             <input type="password" name="password" class="form-control"
@@ -72,26 +73,23 @@
                     <!-- /.col -->
 
                     <!-- Tenant Image Section -->
-                    {{-- <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Tenant Image</label>
-                            <input class="form-control form-control-md" type="file" name="image">
-                            @if (isset($tenant) && $tenant->image)
-                                <img src="{{ asset($tenant->image) }}" alt="Tenant Image" class="mt-2"
-                                    style="max-width: 100%;">
-                            @endif
-                        </div>
-                    </div> --}}
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Tenant Image</label>
+                            <label>GST no</label>
+                            <input type="text" name="gst_number" class="form-control"
+                                value="{{ old('gst_number', $tenant->gst_number ?? '') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tenant Image </label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image">
-                                    <label class="custom-file-label">Choose file</label>
-                                    @if (isset($shop) && $shop->image)
+                                    <input type="file" class="custom-file-input" name="image"placeholder="image">
+                                    <label class="custom-file-label">{{ isset($tenant) ? $tenant->image : 'Choose file ' }}</label>
+                                    {{-- @if (isset($shop) && $shop->image)
                                         <img src="{{ asset($shop->image) }}" alt="Shop Image">
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
                         </div>
@@ -103,14 +101,58 @@
                                 value="{{ old('pincode', $tenant->pincode ?? '') }}">
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select class="form-control select2" name="gender" style="width: 100%;">
+                                <option value="" selected disabled>Select</option>
+                                <option value="male"
+                                    {{ isset($tenant) && $tenant->gender === '' ? 'selected' : '' }}>
+                                    Male
+                                </option>
+                                <option value="female"
+                                    {{ isset($tenant) && $tenant->gender === '' ? 'selected' : '' }}>
+                                    Female
+                                </option>
+                                <option value="other"
+                                    {{ isset($tenant) && $tenant->gender === '' ? 'selected' : '' }}>
+                                    Other
+                                </option>
+                            </select>
+                            {{-- <input type="text" name="gender" class="form-control"
+                                value="{{ old('gender', $tenant->gender ?? '') }}"> --}}
+                        </div>
+                    </div>
                     <!-- /.col -->
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
             </div>
-
+        </section>
+          </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
             <script>
+                  
+                  document.addEventListener('DOMContentLoaded', function() {
+                        var fileInput = document.querySelector('.custom-file-input');
+                        var label = document.querySelector('.custom-file-label');
+
+                        fileInput.addEventListener('change', function() {
+                            var fileName = this.files[0].name;
+
+                            label.innerHTML = fileName;
+                        });
+                    });
                 function checkTenantId() {
                     var tenantId = document.getElementById('tenant_id').value;
                     var tenantIdStatus = document.getElementById('tenantIdStatus');
@@ -118,14 +160,7 @@
                     if (tenantId.trim() === '') {
                         tenantIdStatus.innerHTML = '<span style="color: red;">Please enter a Tenant ID</span>';
                         return;
-                    } <
-                    iframe width = "951"
-                    height = "535"
-                    src = "https://www.youtube.com/embed/vJvp7i5fLas"
-                    title = "HISAAB - DIVINE, KARAN AUJLA | Official Music Video"
-                    frameborder = "0"
-                    allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen > < /iframe>
+                    } 
                     console.log('Checking Tenant ID:', tenantId);
 
                     // Perform an AJAX request to check the Tenant ID
@@ -153,4 +188,5 @@
                     document.getElementById('tenant_id').addEventListener('input', checkTenantId);
 
                 }
+              
             </script>

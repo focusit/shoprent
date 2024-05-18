@@ -24,7 +24,6 @@
         <div class="container-login100">
             <div class="wrap-login100">
                 <div class="login100-pic js-tilt" data-tilt>
-                    <h2>WELCOME TO EXPLORE </h2>
                     <img src="{{ asset('login-asset/images/img-01.png') }}" alt="IMG">
                 </div>
                 <form method="POST" action="{{ route('register') }}" class="login100-form validate-form">
@@ -88,22 +87,26 @@
                     </div>
 
                     <div class="form-check">
-                        <input type="checkbox" name="is_admin" class="form-check-input" value="1">
+                        <input type="checkbox" name="is_admin" class="form-check-input" value="1" style="margin-left: 1.75rem;">
                         <span class="focus-input100"></span>
-                        <label class="form-check-label" for="is_admin">Register as Admin</label>
+                        <label class="form-check-label" for="is_admin" style="padding-left: 3.25rem;">Register as Admin</label>
                     </div>
                     <div class="container-login100-form-btn">
                         <button class="login100-form-btn">
                             Register
                         </button>
+                        <a class="txt2" href="{{ route('login') }}" style="margin-top: 10px;">
+                            Already have an account? Login here
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
                     </div>
-
+{{-- 
                     <div class="text-center p-t-136">
                         <a class="txt2" href="{{ route('login') }}">
                             Already have an account? Login here
                             <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
                         </a>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
         </div>

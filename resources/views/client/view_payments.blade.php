@@ -31,6 +31,8 @@
                                             {{-- <th>Shop Address</th> --}}
                                             <th>Tenant ID</th>
                                             <th>Amount</th>
+                                            <th>Previous Balance</th>
+                                            <th>Total Balance</th>
                                             <th>Payment Date</th>
                                             <th>Payment Method</th>
                                             <th>Status</th>
@@ -47,6 +49,8 @@
                                                 {{-- <td>{{ $payment->transaction_number }}</td> --}}
                                                 <td>{{ $payment->tenant_id }}</td>
                                                 <td>{{ $payment->amount }}</td>
+                                                <td>{{ $payment->previous_balance }}</td>
+                                                <td>{{ $payment->total_balance }}</td>
                                                 <td>{{ $payment->payment_date }}</td>
                                                 <td>{{ $payment->payment_method }}</td>
                                                 <td>{{ $payment->status }}</td>
