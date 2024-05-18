@@ -26,6 +26,7 @@
                                 <h3 class="card-title">Add new Shop</h3>
                             </div>
                             <div class="card-body">
+                                <span style="color: red;">*Marked Fields are Compulsory</span>
         <!-- Main content -->
         <section class="content">
             @if ($errors->any())

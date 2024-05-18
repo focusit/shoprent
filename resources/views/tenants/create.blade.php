@@ -23,13 +23,14 @@
                 <div class="col-12">
                     <div class="card card-lightblue">
                         <div class="card-header">
-                            <h3 class="card-title">Add new Tenants</h3><h6>wefew</h6>
+                            <h3 class="card-title">Add new Tenants</h3>
+                            
                         </div>
                         <div class="card-body">
                             
                             <div class="tab-content">
 
-
+                                <span style="color: red;">* Marked Fields are Compulsory</span>
     <!-- Main content -->
     <section class="content">
         @if ($errors->any())

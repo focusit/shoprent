@@ -1,10 +1,15 @@
+        <style>
+            .astrikes{
+                color:red;
+            }
+            </style>
         <div class="card card-default">
             <!-- .card-body -->
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Tenant ID</label>
+                            <label>Tenant ID <span class="astrikes">*</span></label>
                             <input type="text" name="tenant_id" id="tenant_id" class="form-control"
                                 value="{{ old('tenant_id', $tenant->tenant_id ?? '') }}" oninput="checkTenantId()">
                             <span id="tenantIdStatus"></span>
@@ -47,7 +52,7 @@
                     <!-- /.col -->
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Full Name</label>
+                            <label>Full Name <span class="astrikes">*</span></label>
                             <input type="text" name="full_name" class="form-control"
                                 value="{{ old('full_name', $tenant->full_name ?? '') }}">
                         </div>
