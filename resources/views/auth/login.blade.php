@@ -51,14 +51,14 @@
                     @if (session('error'))
                         <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
-                    {{-- <div class="text-center p-t-12">
+                    <div class="text-center p-t-12">
                         <span class="txt1">
-                            Forgot Password
+                            If you are allready a User 
                         </span>
-                        <a class="txt2" href="#">
-                            click
+                        <a class="txt2" href="{{ route('userLogin') }}"style=" font-size: medium; color:blue;">
+                            click here
                         </a>
-                    </div> --}}
+                    </div>
                     <div class="text-center p-t-136" style="padding-top: 35px">
                         <a class="txt2" href="{{ route('register') }}">
                             Create your Account

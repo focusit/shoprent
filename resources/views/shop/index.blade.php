@@ -78,6 +78,7 @@
                                                         <td>{{ $shop->rent }}</td>
                                                         <td>{{ $shop->status }}</td>
                                                         <td>{{ $shop->tenant_id }}</td>
+                                                        
                                                         <td>
                                                             @if ($shop->image)
                                                                 <img src="{{ asset('images/' . $shop->image) }}"
@@ -85,6 +86,7 @@
                                                             @else
                                                                 No Image
                                                             @endif
+                                                            
                                                         </td>
                                                         <td class="p-2">
                                                             <a href="{{ route('shops.edit', $shop->shop_id) }}"

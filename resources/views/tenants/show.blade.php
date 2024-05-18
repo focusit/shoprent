@@ -59,6 +59,10 @@
                     <td>{{ $tenant->gst_number }}</td>
                 </tr>
                 <tr>
+                    <th>Gender</th>
+                    <td>{{ $tenant->gender }}</td>
+                </tr>
+                <tr>
                     <th>Image</th>
                     <td>{{ $tenant->image }}</td>
                 </tr>

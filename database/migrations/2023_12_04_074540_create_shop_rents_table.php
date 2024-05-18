@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('pincode')->nullable();
-            $table->string('Construction_year')->nullable();
+            $table->string('construction_year')->nullable();
             $table->string('owner_name')->nullable();
             $table->string('status');
             $table->decimal('rent', 8, 2);

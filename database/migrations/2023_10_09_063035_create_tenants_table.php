@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('govt_id_number')->unique()->nullable();
             $table->string('contact', 15)->nullable();
             $table->string('password')->nullable();
-            $table->string('gst_number')->default('pending');
+            $table->string('gst_number')->unique()->nullable();
+            $table->string('gender')->nullable();
             $table->timestamps();
         });
     }

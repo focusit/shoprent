@@ -77,7 +77,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Construction Year</label>
-                            <input type="text" class="form-control" name="construction year"
+                            <input type="year" class="form-control" name="construction_year"
                             value="{{ isset($shop) ? $shop->construction_year : '' }}">
                         </div>
                     </div>

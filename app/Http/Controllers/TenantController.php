@@ -14,7 +14,7 @@ class TenantController extends Controller
      */
     public function index()
     {
-        $tenants = Tenant::paginate(20);
+        $tenants = Tenant::paginate(200);
         return view('tenants.index', compact('tenants'));
     }
 
@@ -32,9 +32,13 @@ class TenantController extends Controller
     public function store(Request $request)
     {
         $this->validateTenants($request);
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('tenant-images'), $imageName);
-
+        if($request->hasFile('image')){
+            $imageName = time() . '.' . $request->image->extension();
+    
+            if (!$request->image->move(public_path('images'), $imageName)) {
+                return redirect()->back()->with('error', 'Failed to upload the image.');
+            }
+        }
         Tenant::create([
             'tenant_id' => $request->input('tenant_id'),
             'full_name' => $request->input('full_name'),
@@ -46,8 +50,10 @@ class TenantController extends Controller
             'contact' => $request->input('contact'),
             'email' => $request->input('email'),
             'password' => $request->input('password'),
-            'image' => $imageName,
+            'image' => $imageName ??"",
+            'gender'=> $request->input('gender'),
         ]);
+        // dd($request);
         // User::create([
         //     'name' => $request->input('full_name'),
         //     'email' => $request->input('email'),
@@ -100,7 +106,8 @@ class TenantController extends Controller
             'email' => 'nullable|string',
             'password' => 'nullable|string',
             'gst_number'=> 'nullable|string',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gender'=> 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $tenant = Tenant::findOrFail($tenant_id);
@@ -154,7 +161,8 @@ class TenantController extends Controller
             'email' => 'nullable|string|unique:tenants,email,' . $tenant_id,
             'password' => 'nullable|string',
             'gst_number'=>'nullable|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gender'=>'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }
 

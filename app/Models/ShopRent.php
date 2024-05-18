@@ -18,7 +18,7 @@ class ShopRent extends Model
         'latitude',
         'longitude',
         'owner_name',
-        'Construction_year',
+        'construction_year',
         'address',
         'pincode',
         'rent',

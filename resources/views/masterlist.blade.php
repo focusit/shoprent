@@ -32,7 +32,7 @@
     <!-- .wrapper -->
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand " style= "background-color: #90E0EF;">
+        <nav class="main-header navbar navbar-expand ">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -51,10 +51,12 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <a href="#" class="dropdown-item"
-                                onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                <i class="fas fa-sign-out-alt">Logout</i>
+                            </a>
                         </form>
-                            <a href="{{ route('profile') }}" class="dropdown-item">
-                            Profile
+                        <a href="{{ route('profile') }}" class="dropdown-item">
+                         <i class="fas fa-user-circle"> Profile</i>
                         </a>
                     </div>
                 </li>
@@ -68,7 +70,9 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4" style="background-color: #90E0EF">
+        <aside class="main-sidebar elevation-0"
+        style="background-color:#0f59871f"
+        >
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 <span class="brand-text font-weight-light">@auth
@@ -89,13 +93,13 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-open">
-                            <a href="{{ route('dashboard') }}" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p> Dashboard </p>
+                        <li class="nav-item menu-open" style="background-color: #3c8dbc;border-radius:10px">
+                            <a href="{{ route('dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt danger"></i>
+                                <p style="color:white" > Dashboard </p>
                             </a>
                         </li><br>
-                        <li class="nav-item menu-open">
+                    <li class="nav-item menu-open" >
                             <div class="form-inline">
                                 <div class="input-group" data-widget="sidebar-search">
                                     <input class="form-control form-control-sidebar" type="search" placeholder="Search"
@@ -110,22 +114,22 @@
                         </li><br>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="fas fa-building"></i>
                                 <p>Shops
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item pl-2">
                                     <a href="{{ route('shops.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p> Add Shops</p>
+                                        <i class="fa fa-plus"></i>
+                                        <p class="pl-1"> Add Shops</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('shops.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View All Shops</p>
+                                        <i class="fa fa-eye"></i>
+                                        <p  class="pl-1">View All Shops</p>
                                     </a>
                                 </li>
                             </ul>
@@ -134,7 +138,7 @@
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-user-friends"></i>
                                 <p>Tenants
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
@@ -142,23 +146,23 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('tenants.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        Add Tenants
+                                        <i class="fa fa-plus"></i>
+                                        <p class="pl-1"> Add Tenants</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('tenants.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>View All Tenants</p>
+                                        <i class="fa fa-eye"></i>
+                                        <p class="pl-1"> View Tenants</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-
-                        {{-- allocation --}}
+{{-- 
+                        allocation
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-tasks"></i>
                                 <p>
                                     Property Allocation
                                     <i class="fas fa-angle-left right"></i>
@@ -179,7 +183,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                         {{-- agreement --}}
                         {{-- <li class="nav-item">
@@ -202,9 +206,9 @@
 
 
                         {{-- /// --}}
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
                                 <p>
                                     Bills
                                     <i class="fas fa-angle-left right"></i>
@@ -217,7 +221,7 @@
                                         <p>Bill Format</p>
                                     </a>
                                 </li> --}}
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{ url('bills') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Generate Bills</p>
@@ -238,35 +242,35 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ url('billpay') }}" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fas fa-credit-card"></i>
                                 <p>
                                     Payments
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="user" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     User
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="assessmentSummary" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Assessment Summary
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

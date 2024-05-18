@@ -76,7 +76,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>GST no</label>
-                            <input type="text" name="contact" class="form-control"
+                            <input type="text" name="gst_number" class="form-control"
                                 value="{{ old('gst_number', $tenant->gst_number ?? '') }}">
                         </div>
                     </div>
@@ -99,6 +99,28 @@
                             <label>Pincode</label>
                             <input type="number" name="pincode" class="form-control"
                                 value="{{ old('pincode', $tenant->pincode ?? '') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select class="form-control select2" name="gender" style="width: 100%;">
+                                <option value="" selected disabled>Select</option>
+                                <option value="male"
+                                    {{ isset($tenant) && $tenant->gender === '' ? 'selected' : '' }}>
+                                    Male
+                                </option>
+                                <option value="female"
+                                    {{ isset($tenant) && $tenant->gender === '' ? 'selected' : '' }}>
+                                    Female
+                                </option>
+                                <option value="other"
+                                    {{ isset($tenant) && $tenant->gender === '' ? 'selected' : '' }}>
+                                    Other
+                                </option>
+                            </select>
+                            {{-- <input type="text" name="gender" class="form-control"
+                                value="{{ old('gender', $tenant->gender ?? '') }}"> --}}
                         </div>
                     </div>
                     <!-- /.col -->
