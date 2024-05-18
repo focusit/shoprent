@@ -1,4 +1,10 @@
 <!-- SELECT2 EXAMPLE -->
+<style>
+    .astrikes{
+        color:red;
+    }
+    </style>
+
     <div class="card card-default">
         <!-- .card-body -->
         <div class="card-body">
@@ -12,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Shop ID</label>
+                            <label>Shop ID <span class="astrikes"><span class="astrikes">*</span></span></label>
                             <input type="text" class="form-control" name="shop_id" id="shop_id"
                                 value="{{ isset($shop) ? $shop->shop_id : '' }}" oninput="checkShopId()">
                             <span id="shopIdStatus"></span>
@@ -96,7 +102,7 @@
                     <!-- Add other input fields as needed -->
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Rent</label>
+                            <label>Rent <span class="astrikes">*</span></label>
                             <input type="text" class="form-control" name="rent"
                             value="{{ isset($shop) ? $shop->rent : '' }}">
                         </div>
@@ -104,7 +110,7 @@
                     
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Status</label>
+                            <label>Status <span class="astrikes">*</span></label>
                             <select class="form-control" name="status" required>
                                 <option value="" selected disabled>Select</option>
                                 <option value="occupied"
