@@ -133,20 +133,23 @@ class TenantController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($tenant_id)
-    {
+     public function destroy($tenant_id)
+{
         $tenant = Tenant::findOrFail($tenant_id);
 
-        // Delete the associated image
-        $filePath = public_path('tenant-images/' . $tenant->image);
-
-        if (file_exists($filePath)) {
-            unlink($filePath);
+    if (!empty($tenant->image)) {
+        $filePath = public_path('images/' . $tenant->image);
+        if (file_exists($filePath) && is_file($filePath)) {
+            if (!unlink($filePath)) {
+                return redirect()->route('tenants.index')->withErrors('Error deleting the image file.');
+            }
+        } else {
+            return redirect()->route('tenants.index')->withErrors('Image file does not exist.');
         }
-        $tenant->delete();
-
-        return redirect()->route('tenants.index')->with('success', 'Tenant deleted successfully.');
     }
+    $tenant->delete();
+    return redirect()->route('tenants.index')->with('success', 'Tenant deleted successfully.');
+}
 
     protected function validateTenants(Request $request, $tenant_id = null)
     {

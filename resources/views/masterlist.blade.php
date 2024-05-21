@@ -120,13 +120,13 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item pl-2">
+                                <li class="nav-item pl-4">
                                     <a href="{{ route('shops.create') }}" class="nav-link">
                                         <i class="fa fa-plus"></i>
                                         <p class="pl-1"> Add Shops</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item pl-4">
                                     <a href="{{ route('shops.index') }}" class="nav-link">
                                         <i class="fa fa-eye"></i>
                                         <p  class="pl-1">View All Shops</p>
@@ -144,13 +144,13 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item pl-4">
                                     <a href="{{ route('tenants.create') }}" class="nav-link">
                                         <i class="fa fa-plus"></i>
                                         <p class="pl-1"> Add Tenants</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item pl-4">
                                     <a href="{{ route('tenants.index') }}" class="nav-link">
                                         <i class="fa fa-eye"></i>
                                         <p class="pl-1"> View Tenants</p>

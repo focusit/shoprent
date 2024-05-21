@@ -163,8 +163,8 @@ Route::group(['middleware' => ['admin_auth']], function () {
 
 
 //setting Dbeugbar 
-if (app()->environment('local')) {
-    Debugbar::enable();
-} else {
-    Debugbar::disable();
-}
+// if (app()->environment('local')) {
+//     Debugbar::enable();
+// } else {
+//     Debugbar::disable();
+// }

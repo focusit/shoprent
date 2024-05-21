@@ -89,20 +89,26 @@ class ShopRentController extends Controller
     }
 
 
-    public function destroy($shop_id)
-    {
-        $shop = ShopRent::findOrFail($shop_id);
+       public function destroy($shop_id)
+{
+    $shop = ShopRent::findOrFail($shop_id);
 
+    if (!empty($shop->image)) {
         $filePath = public_path('images/' . $shop->image);
 
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        if (file_exists($filePath) && is_file($filePath)) {
+            if (!unlink($filePath)) {
+                return redirect()->route('shops.index')->withErrors('Error deleting the image file.');
+            }
+        } else {
+            return redirect()->route('shops.index')->withErrors('Image file does not exist.');
         }
-
-        $shop->delete();
-
-        return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
     }
+
+    $shop->delete();
+
+    return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
+}
     protected function validateShop(Request $request)
     {
         return $request->validate([
