@@ -11,3 +11,6 @@ a {
 .nav-pills .nav-link {
     color: #000;
 }
+.card-success:not(.card-outline)>.card-header {
+    background-color: #678dc1;
+}

@@ -108,7 +108,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Gender</label>
+                            <label>Gender<span class="astrikes">*</span></label>
                             <select class="form-control select2" name="gender" style="width: 100%;">
                                 <option value="" selected disabled>Select</option>
                                 <option value="male"

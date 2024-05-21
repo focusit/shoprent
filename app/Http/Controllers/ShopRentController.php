@@ -168,7 +168,7 @@ class ShopRentController extends Controller
     {
         try {
             $request->validate([
-                'tenant_id' => 'required|exists:tenants,tenant_id',
+                // 'tenant_id' => 'required|exists:tenants,tenant_id',
                 'shop_id' => 'required|exists:shop_rents,shop_id',
                 'with_effect_from' => 'required|date',
                 'valid_till' => 'required|date',
@@ -181,7 +181,7 @@ class ShopRentController extends Controller
             $agreement = new Agreement([
                 'agreement_id' => $request->input('agreement_id'),
                 'shop_id' => $request->input('shop_id'),
-                'tenant_id' => $request->input('tenant_id'),
+                // 'tenant_id' => $request->input('tenant_id'),
                 'with_effect_from' => $request->input('with_effect_from'),
                 'valid_till' => $request->input('valid_till'),
                 'rent' => $request->input('rent'),
