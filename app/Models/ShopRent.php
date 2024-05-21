@@ -24,7 +24,7 @@ class ShopRent extends Model
         'rent',
         'status',
         'image',
-        'tenant_id'
+        // 'tenant_id'
     ];
 
     public function tenant()

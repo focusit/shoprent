@@ -59,7 +59,7 @@
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     <th>Status</th>
-                                                    <th>Tenant ID</th>
+                                                    {{-- <th>Tenant ID</th> --}}
                                                     <th>Images</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -77,7 +77,7 @@
                                                         <td>{{ $shop->pincode }}</td>
                                                         <td>{{ $shop->rent }}</td>
                                                         <td>{{ $shop->status }}</td>
-                                                        <td>{{ $shop->tenant_id }}</td>
+                                                        {{-- <td>{{ $shop->tenant_id }}</td> --}}
                                                         
                                                         <td>
                                                             @if ($shop->image)
@@ -132,7 +132,7 @@
                                                     <th>construction_year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
-                                                    <th>Tenant ID</th>
+                                                    {{-- <th>Tenant ID</th> --}}
                                                     <th>Images</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -150,7 +150,7 @@
                                                             <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
-                                                            <td>{{ $shop->tenant_id }}</td>
+                                                            {{-- <td>{{ $shop->tenant_id }}</td> --}}
                                                             <td>
                                                                 @if ($shop->image)
                                                                     <img src="{{ asset('images/' . $shop->image) }}"
@@ -203,7 +203,7 @@
                                                     <th>construction_year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
-                                                    <th>Tenant ID</th>
+                                                    {{-- <th>Tenant ID</th> --}}
                                                     <th>Images</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -221,7 +221,7 @@
                                                             <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
-                                                            <td>{{ $shop->tenant_id }}</td>
+                                                            {{-- <td>{{ $shop->tenant_id }}</td> --}}
                                                             <td>
                                                                 @if ($shop->image)
                                                                     <img src="{{ asset('images/' . $shop->image) }}"
