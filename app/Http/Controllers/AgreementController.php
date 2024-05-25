@@ -51,7 +51,7 @@ class AgreementController extends Controller
                 'rent' => 'required|numeric',
                 'status' => 'required|in:active,inactive',
                 'remark' => 'nullable|string',
-                'document_field' => 'required|file|mimes:pdf,jpeg,jpg',
+                'document_field' => 'nullable|file|mimes:pdf,jpeg,jpg',
                 'agreement_id' => 'required|unique:agreements,agreement_id',
             ], [
                 'tenant_id.required' => 'The tenant ID field is required.',
@@ -67,7 +67,7 @@ class AgreementController extends Controller
                 'rent.numeric' => 'The Rent field must be a numeric value.',
                 'status.required' => 'The Status field is required.',
                 'status.in' => 'The selected Status is invalid.',
-                'document_field.required' => 'The Document Field field is required.',
+                // 'document_field.required' => 'The Document Field field is required.',
                 'document_field.file' => 'The Document Field must be a file.',
                 'document_field.mimes' => 'The Document Field must be a file of type: pdf, jpeg, jpg.',
                 'agreement_id.required' => 'The Agreement ID field is required.',
@@ -176,7 +176,7 @@ class AgreementController extends Controller
                 'rent' => 'required|numeric',
                 'status' => 'required|in:active,inactive',
                 'remark' => 'nullable|string',
-                'document_field' => 'sometimes|file|mimes:pdf,jpeg,jpg',
+                'document_field' => 'nullable|file|mimes:pdf,jpeg,jpg',
             ]);
 
             // Find the agreement by agreement_id

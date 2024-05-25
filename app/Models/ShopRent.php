@@ -46,7 +46,7 @@ class ShopRent extends Model
         }
 
         // Associate the tenant with the shop
-        $this->tenant_id = $tenantId;
+        // $this->tenant_id = $tenantId;
         // Save changes
         $this->save();
     }
