@@ -158,8 +158,7 @@
                                 </li>
                             </ul>
                         </li>
-{{-- 
-                        allocation
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tasks"></i>
@@ -171,19 +170,19 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ url('allocate-shop') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fa fa-plus"></i>
                                         <p>Allocate Properties</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a href="{{ url('agreements') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Agreements</p>
+                                        <i class="fa fa-eye"></i>
+                                        <p>All Agreements</p>
                                     </a>
                                 </li>
                             </ul>
-                        </li> --}}
+                        </li> 
 
                         {{-- agreement --}}
                         {{-- <li class="nav-item">
