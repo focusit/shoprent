@@ -184,28 +184,8 @@
                             </ul>
                         </li> 
 
-                        {{-- agreement --}}
-                        {{-- <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
-                                <p>
-                                    Agreements
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ url('agreements') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Agreements</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
 
-
-                        {{-- /// --}}
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
                                 <p>
@@ -220,7 +200,7 @@
                                         <p>Bill Format</p>
                                     </a>
                                 </li> --}}
-                                {{-- <li class="nav-item">
+                                <li class="nav-item">
                                     <a href="{{ url('bills') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Generate Bills</p>
@@ -241,7 +221,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li> --}}
+                        </li>
 
                         {{-- <li class="nav-item">
                             <a href="{{ url('billpay') }}" class="nav-link">
