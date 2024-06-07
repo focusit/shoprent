@@ -11,7 +11,7 @@ class ShopRentController extends Controller
 {
     public function index()
     {
-        $shops = ShopRent::paginate(100);
+        $shops = ShopRent::paginate(1000);
         return view('shop.index', compact('shops'));
     }
 

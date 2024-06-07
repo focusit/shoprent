@@ -46,11 +46,11 @@
                                             <tr class="bg-info">
                                                 <th>ID</th>
                                                 <th>Agreement ID</th>
-                                                <th>Transaction Number</th>
                                                 <th>Shop ID</th>
-                                                <th>Shop Address</th>
                                                 <th>Tenant ID</th>
                                                 <th>Tenant Name</th>
+                                                <th>Shop Address</th>
+                                                <th>Transaction Number</th>
                                                 <th>Rent</th>
                                                 <th>Status</th>
                                                 <th>Bill Date</th>
@@ -68,11 +68,11 @@
                                                             {{ $bill->agreement_id }}
                                                         </a>
                                                     </td>
-                                                    <td>{{ $bill->transaction_number }}</td>
                                                     <td>{{ $bill->shop_id }}</td>
-                                                    <td>{{ $bill->shop_address }}</td>
                                                     <td>{{ $bill->tenant_id }}</td>
                                                     <td>{{ $bill->tenant_full_name }}</td>
+                                                    <td>{{ $bill->shop_address }}</td>
+                                                    <td>{{ $bill->transaction_number }}</td>
                                                     <td>{{ $bill->rent }}</td>
                                                     <td>{{ $bill->status }}</td>
                                                     <td>{{ $bill->bill_date }}</td>
@@ -124,9 +124,9 @@
                                                 <th>ID</th>
                                                 <th>Agreement ID</th>
                                                 <th>Shop ID</th>
-                                                <th>Shop Address</th>
                                                 <th>Tenant ID</th>
                                                 <th>Tenant Name</th>
+                                                <th>Shop Address</th>
                                                 <th>Rent</th>
                                                 <th>Status</th>
                                                 <th>Bill Date</th>
@@ -144,9 +144,9 @@
                                                             </a>
                                                         </td>
                                                         <td>{{ $bill->shop_id }}</td>
-                                                        <td>{{ $bill->shop_address }}</td>
                                                         <td>{{ $bill->tenant_id }}</td>
                                                         <td>{{ $bill->tenant_full_name }}</td>
+                                                        <td>{{ $bill->shop_address }}</td>
                                                         <td>{{ $bill->rent }}</td>
                                                         <td>{{ $bill->status }}</td>
                                                         <td>{{ $bill->bill_date }}</td>
@@ -175,9 +175,9 @@
                                                 <th>ID</th>
                                                 <th>Agreement ID</th>
                                                 <th>Shop ID</th>
-                                                <th>Shop Address</th>
                                                 <th>Tenant ID</th>
                                                 <th>Tenant Name</th>
+                                                <th>Shop Address</th>
                                                 <th>Rent</th>
                                                 <th>Status</th>
                                                 <th>Bill Date</th>
@@ -195,9 +195,9 @@
                                                             </a>
                                                         </td>
                                                         <td>{{ $bill->shop_id }}</td>
-                                                        <td>{{ $bill->shop_address }}</td>
                                                         <td>{{ $bill->tenant_id }}</td>
                                                         <td>{{ $bill->tenant_full_name }}</td>
+                                                        <td>{{ $bill->shop_address }}</td>
                                                         <td>{{ $bill->rent }}</td>
                                                         <td>{{ $bill->status }}</td>
                                                         <td>{{ $bill->bill_date }}</td>
