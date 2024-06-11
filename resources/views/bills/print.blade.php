@@ -4,177 +4,139 @@
 
 @section('body')
 
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" id="pdf-content">
 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Invoice</h1>
-                    </div>
-                </div>
-            </div><!-- /.container-fluid -->
+                <h1><strong> Invoice </strong></h1>
+            </div>
+            <!-- /.page header -->
         </section>
 
         <section class="content">
-            <div class="card">&nbsp;
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="invoice p-3 mb-3">
+                            <div class="row">
 
-                            <div class="invoice p-3 mb-3">
-
-                                <div class="row">
-
-                                    <div class="col-4"> 
-                                        <h4>
-                                            <i class="fas fa-globe"></i> Shop Rent Bill <br>
-                                            <small class="float-left">{{ date('Y/m/d') }}</small><br>
-                                            <br> MC 1
-                                        </h4>
-                                    </div>
-                                    <div class="col-4">
-                                        <address>
-                                            <strong>Name:</strong>{{ $bill->tenant_full_name }}<br>
-                                            <strong>Address:</strong>{{$bill->shop_address}}<br>
-                                            <strong>Phone No:</strong>{{$bill->tenant->contact}}<br>
-                                        </address>
-                                   </div>
-                                   <div class="col-4"> 
-                                        <address>
-                                            <strong>Bill date:</strong>
-                                            {{ $bill->bill_date }}<br>
-                                            <strong>Bill Month:</strong>{{ $bill->month }}<br>
-                                        <strong>Bill Validity:</strong>{{ $bill->due_date }}<br>
-                                        <strong>Agreement ID:</strong>{{ $bill->agreement_id }}
-                                        </address>
-                                   </div>
-
+                                <div class="col-4"> 
+                                    <h4>
+                                        <i class="fas fa-globe"></i> Shop Rent Bill <br>
+                                        <small class="float-left">{{ date('Y/m/d') }}</small><br>
+                                        <br> MC 1
+                                    </h4>
+                                </div>
+                                <div class="col-4">
+                                    <address class="float-center">
+                                        <strong>Name:</strong>{{ $bill->tenant_full_name }}<br>
+                                        <strong>Address:</strong>{{$bill->shop_address}}<br>
+                                        <strong>Phone No:</strong>{{$bill->tenant->contact}}<br>
+                                    </address>
+                               </div>
+                               <div class="col-4"> 
+                                    <address class="float-right">
+                                        <strong>Bill date:</strong>
+                                        {{ $bill->bill_date }}<br>
+                                        <strong>Bill Month:</strong>{{ $bill->month }}<br>
+                                    <strong>Bill Validity:</strong>{{ $bill->due_date }}<br>
+                                    <strong>Agreement ID:</strong>{{ $bill->agreement_id }}
+                                    </address>
                                </div>
 
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                            <!-- Main content -->
-                            <div class="invoice p-3 mb-3">
-                                <div class="row">
-                        
-                                    <div class="col-6">
-                                        <div class="invoice p-3 mb-3" style="padding: 1.5rem !important">
-                                            <h4>
-                                                <strong> Current Charges</strong>
-                                                <small class="float-right">from -to </small><br>
-                                            </h4>
-                                            <div class="row">
-                                                <div class="col-10"> 
-                                                 <strong>  Description </strong>  
-                                                 <address>
-                                                    Current Bill-<br>
-                                                    Penalty (late fee)-<br>
-                                                    Discount-<br>
-                                                    Tax-<br>
-                                                </address>
-                                                </div>
-                                                <div class="col-2"> 
-                                                 <strong>  Amount </strong>
-                                                 <address>
-                                                    52456<br>
-                                                    0<br>
-                                                    455<br>
-                                                    452<br>
-                                                </address>
-                                                </div>
-                                           </div> &nbsp;&nbsp;
-                                           <h4>
-                                                Total 
-                                                <small class="float-right">5225</small><br>
-                                           </h4>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-6">
-                                        <div class="invoice p-3 mb-3">
-                                           <div class="row">
-                                                <div class="col-12">
-                                                    <h5><strong> Payment Details </strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-5"> 
-                                                            <strong>  Description </strong> <br>
-                                                            <address>
-                                                                Pervious Bill:<br>
-                                                                Last Payment:<br>
-                                                                Balance:<br>
-                                                            </address>
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <strong>  Date </strong><br>
-                                                            <address>
-                                                                date:23/02/2004<br>
-                                                                date:23/02/2004<br>
-                                                                date:23/02/2004<br>
-                                                            </address>
-                                                        </div>
-                                                        <div class="col-2"> 
-                                                            <strong>  Amount </strong><br>
-                                                            <address>
-                                                                2435<br>
-                                                                245<br>
-                                                                23547<br>
-                                                            </address>
-                                                        </div>
-                                                   </div>
-                                                </div> 
-                                           </div>
-                                           
-                                        </div>
-                                        <div class="invoice p-3 mb-3">
-                                            <div class="row">
-                                                 <div class="col-12">
-                                                     <h5><strong> Tax details: </strong></h5>
-                                                     dsfhsj<br>
-                                                     sdfdg<br>
-                                                     sfseg<br>
-                                                     fdgdfghet<br>yhertyr5
-                                                     tgtrdgweyrthd<br>bf
-                                                     2w23654ubfsdhbuqwheiudweenf
-            
-                                                     asjh
-                                                 </div> 
-                                            </div>
-                                            
-                                         </div>
-                                    </div>
-                                </div>
-                            </div>   
-
-                    <!-- Main content -->
-                    <div class="invoice p-3 mb-3">
-                        <h6>Payable by due date:</h6>
-                        <h6>Payable befor discount date:</h6>
-                        <h6>Payable after dute date charges will be:</h6>
-                        &nbsp;
-                        <div class="row no-print">
-                            <a rel="noopener" target="_blank" class="btn btn-default" onclick="window.print();"
-                                class="noPrint"><i class="fas fa-print"></i> Print
-                            </a>
-                            <button type="button" class="btn btn-primary" id="downloadpdf" style="margin-right: 5px;">
-                                <i class="fas fa-download"></i>Generate PDF
-                            </button>
+                           </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">                    
+                    <div class="col-8">
+                        <div class="invoice p-3 mb-3">
+                           <h4>
+                               <strong> Current Charges</strong><br>
+                               <small>01/01/2023 - 01/31/2024 </small>
+                            </h4>
+                            <div class="row">
+                                <div class="col-10"> 
+                                    <address>
+                                        <strong>  Description </strong> <br> 
+                                        Current Bill-<br>
+                                        Penalty (late fee)-<br>
+                                        Discount-<br>
+                                        Tax-<br>
+                                    </address>
+                                </div>
+                                <div class="col-2"> 
+                                    <strong class="float-right">  Amount </strong><br>
+                                    <address class="float-right">                   
+                                        ??{{ $bill->agreement_id }}<br>
+                                        {{ $bill->penalty }}<br>
+                                        {{ $bill->discount }}<br>
+                                       ?? {{ $bill->agreement_id }}<br>
+                                    </address>
+                                </div>
+                            </div> &nbsp;&nbsp;
+                            <h4>
+                                <strong>Total</strong> 
+                                <small class="float-right"><strong>??5665</strong></small><br>
+                            </h4>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <h6>Payable ??(amount)by due date:
+                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    </h6>
+                                    <h6>Payable ??(amount) befor discount date:
+                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    </h6>
+                                    <h6>Payable ??(amount)after dute date charges will be:
+                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    </h6>
+                        </div>
+                    </div>
+                                
+                    <div class="col-4">
+                        <div class="invoice p-3 mb-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4><strong> Payment Details </strong></h4>
+                                    <div class="row">
+                                        <div class="col-8"> 
+                                            <strong>  Description </strong> <br>
+                                            <address>
+                                                Previous Bill:<br>
+                                                Last Payment:<br>
+                                                Balance:<br>
+                                            </address>
+                                        </div>
+                                        <div class="col-4"> 
+                                            <strong class="float-right">  Amount </strong><br>
+                                            <address class="float-right">
+                                                ??{{ $bill->agreement_id }}<br>
+                                               ?? {{ $bill->agreement_id }}<br>
+                                               ?? {{ $bill->agreement_id }}<br>
+                                            </address>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Main content -->
+                    <div class="row no-print">
+                        <a rel="noopener" target="_blank" class="btn btn-default" onclick="window.print();"
+                            class="noPrint"><i class="fas fa-print"></i> Print
+                        </a>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary" id="downloadpdf" style="margin-right: 5px;">
+                            <i class="fas fa-download"></i>Generate PDF
+                        </button>
+                    </div>
             </div>
         </section>
 
     </div>
+
 @endsection
 
-<!-- Add this in your Blade template -->
+<!-- script file for print and pdf -->
 @section('scripts')
     <script>
         document.getElementById('downloadpdf').addEventListener('click', function() {
