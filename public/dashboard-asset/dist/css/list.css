@@ -14,3 +14,7 @@ a {
 .card-success:not(.card-outline)>.card-header {
     background-color: #678dc1;
 }
+.no-print{
+    display: inline;
+    padding-left: 80% !important;
+}
