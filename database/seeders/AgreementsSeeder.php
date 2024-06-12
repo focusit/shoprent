@@ -12,18 +12,32 @@ class AgreementsSeeder extends Seeder
 {
   public function run()
   {
-    // Generate 10 agreements with random data
-    for ($i = 1; $i <= 10; $i++) {
+    // Fetch all shops and tenants
+    $shops = ShopRent::all();
+    $tenants = Tenant::all();
+
+    // Get the count of agreements to create based on the available shops and tenants
+    $numOfAgreements = min($shops->count(), $tenants->count());
+
+    // Generate agreements and allocate each shop to a tenant
+    for ($i = 0; $i < $numOfAgreements; $i++) {
+      $shop = $shops[$i];
+      $tenant = $tenants[$i];
+      
+      // Generate unique agreement ID
+      $agreementId = '2024-' . ($i + 001);
+      
+      // Generate agreement data
       $agreementData = [
-        'agreement_id' => 'A' . str_pad($i, 3, '0', STR_PAD_LEFT),
-        'shop_id' => 'Q' . str_pad($i, 3, '0', STR_PAD_LEFT),
-        'tenant_id' => 'T' . str_pad($i, 3, '0', STR_PAD_LEFT),
+        'agreement_id' => $agreementId,
+        'shop_id' => $shop->shop_id,
+        'tenant_id' => $tenant->tenant_id,
         'with_effect_from' => Carbon::now()->subMonths(rand(1, 12))->toDateString(),
         'valid_till' => Carbon::now()->addMonths(rand(1, 12))->toDateString(),
         'rent' => rand(1000, 5000),
         'status' => rand(0, 1) ? 'active' : 'inactive',
-        'remark' => 'Random remark for Agreement ' . $i,
-        'document_field' => 'Document ' . $i,
+        'remark' => 'Random remark for Agreement ' . $agreementId,
+        'document_field' => 'Document ' . $agreementId,
         'created_at' => now(),
         'updated_at' => now(),
       ];
@@ -33,13 +47,14 @@ class AgreementsSeeder extends Seeder
 
       // Update shop and tenant based on agreement status
       if ($agreement->status === 'active') {
-        // Update ShopRent status to 'occupied'
-        ShopRent::where('shop_id', $agreement->shop_id)
-          ->update(['status' => 'occupied', 'tenant_id' => $agreement->tenant_id]);
+        // Update ShopRent status to 'occupied' and link tenant_id
+        $shop->update([
+          'status' => 'occupied',
+          'tenant_id' => $tenant->tenant_id
+        ]);
 
-        // // Update Tenant status to 'allocated'
-        // Tenant::where('tenant_id', $agreement->tenant_id)
-        //   ->update(['status' => 'allocated']);
+        // Update Tenant status to 'allocated'
+        $tenant->update(['status' => 'allocated']);
       }
     }
   }
