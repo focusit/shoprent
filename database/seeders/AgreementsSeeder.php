@@ -17,7 +17,7 @@ class AgreementsSeeder extends Seeder
     $tenants = Tenant::all();
 
     // Get the count of agreements to create based on the available shops and tenants
-    $numOfAgreements = min($shops->count(), $tenants->count());
+    $numOfAgreements = min($shops->count(), 1000);
 
     // Generate agreements and allocate each shop to a tenant
     for ($i = 0; $i < $numOfAgreements; $i++) {
@@ -25,7 +25,7 @@ class AgreementsSeeder extends Seeder
       $tenant = $tenants[$i];
       
       // Generate unique agreement ID
-      $agreementId = '2024-' . ($i + 001);
+      $agreementId = '2024-' . ("00".$i);
       
       // Generate agreement data
       $agreementData = [
