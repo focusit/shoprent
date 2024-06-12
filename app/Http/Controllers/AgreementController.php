@@ -87,7 +87,6 @@ class AgreementController extends Controller
             $this->handleDocument($request, $agreement);
             $agreement->save();
 
-            // Allocate the shop to the tenant
             $shop = ShopRent::where('shop_id', $request->input('shop_id'))->first();
 
             if (!$shop) {
@@ -98,20 +97,17 @@ class AgreementController extends Controller
 
             return redirect()->route('allocation.list')->with('success', 'Shop allocated successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // If validation fails, redirect back with errors
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            // Handle other exceptions
             dd($e->getMessage());
         }
     }
     public function showAgreementDetails($agreement_id)
     {
-        // Assuming you have a relationship named 'bills' in your Agreement model
         $agreement = Agreement::with('bills')->where('agreement_id', $agreement_id)->first();
 
         if (!$agreement) {
-            abort(404); // Agreement not found
+            abort(404); 
         }
 
         return view('agreements.show', compact('agreement'));
@@ -130,14 +126,11 @@ class AgreementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // Add your validation rules here
         ]);
 
         $agreement = new Agreement([
-            // Assign request data to agreement properties
         ]);
 
-        // Handle file upload
         $documentPath = $request->file('document_field')->store('public/documents');
         $agreement->document_field = $documentPath;
 
@@ -179,9 +172,7 @@ class AgreementController extends Controller
                 'document_field' => 'nullable|file|mimes:pdf,jpeg,jpg',
             ]);
 
-            // Find the agreement by agreement_id
             $agreement = Agreement::findOrFail($agreement_id);
-            // Handle document update
             $this->handleDocument($request, $agreement);
             // Update agreement details
             // $agreement->update([
@@ -198,7 +189,6 @@ class AgreementController extends Controller
             $agreement->update($request->except(['document_field', '_method', '_token']));
 
 
-            // Allocate the shop to the tenant
             $shop = ShopRent::where('shop_id', $request->input('shop_id'))->first();
 
             if (!$shop) {

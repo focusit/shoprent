@@ -69,7 +69,7 @@
                                 <div class="col-2"> 
                                     <strong class="float-right">  Amount </strong><br>
                                     <address class="float-right">                   
-                                        ??{{ $bill->agreement_id }}<br>
+                                        {{ $bill->rent }}<br>
                                         {{ $bill->penalty }}<br>
                                         {{ $bill->discount }}<br>
                                        ?? {{ $bill->agreement_id }}<br>
@@ -80,14 +80,14 @@
                                 <strong>Total</strong> 
                                 <small class="float-right"><strong>??5665</strong></small><br>
                             </h4>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <h6>Payable ??(amount)by due date:
-                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    <h6>Payable by due date:  {{ $bill->due_date }}
+                                        <medium class="float-right"><strong>??amount</strong></medium><br>
                                     </h6>
-                                    <h6>Payable ??(amount) befor discount date:
-                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    <h6>Payable befor discount date:  {{ $bill->discount_date }}
+                                        <medium class="float-right"><strong>??amount</strong></medium><br>
                                     </h6>
-                                    <h6>Payable ??(amount)after dute date charges will be:
-                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    <h6>Payable after dute date charges will be:  {{ $bill->due_date }}
+                                        <medium class="float-right"><strong>??amount</strong></medium><br>
                                     </h6>
                         </div>
                     </div>

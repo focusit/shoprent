@@ -33,6 +33,7 @@ class Bill extends Model
         'due_date',
         'penalty',
         'discount',
+        'discount_date',
         'status',
         'transaction_number',
     ];

@@ -26,6 +26,9 @@
         <label for="discount">Discount:</label>
         <input type="number" name="discount" required>
 
+        <label for="discount_date">Discount Date:</label>
+        <input type="number" name="discount_date" required>
+
         {{-- <label for="status">Status:</label>
         <select name="status" required>
             <option value="unpaid">Unpaid</option>
