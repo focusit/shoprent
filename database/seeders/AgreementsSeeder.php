@@ -35,9 +35,9 @@ class AgreementsSeeder extends Seeder
         'with_effect_from' => Carbon::now()->subMonths(rand(1, 12))->toDateString(),
         'valid_till' => Carbon::now()->addMonths(rand(1, 12))->toDateString(),
         'rent' => rand(1000, 5000),
-        'status' => rand(0, 1) ? 'active' : 'inactive',
-        'remark' => 'Random remark for Agreement ' . $agreementId,
-        'document_field' => 'Document ' . $agreementId,
+        'status' => 'active',
+        'remark' => '',
+        'document_field' => '',
         'created_at' => now(),
         'updated_at' => now(),
       ];
@@ -46,16 +46,16 @@ class AgreementsSeeder extends Seeder
       $agreement = Agreement::create($agreementData);
 
       // Update shop and tenant based on agreement status
-      if ($agreement->status === 'active') {
-        // Update ShopRent status to 'occupied' and link tenant_id
-        $shop->update([
-          'status' => 'occupied',
-          'tenant_id' => $tenant->tenant_id
-        ]);
+      // if ($agreement->status === 'active') {
+      //   // Update ShopRent status to 'occupied' and link tenant_id
+      //   $shop->update([
+      //     'status' => 'occupied',
+      //     'tenant_id' => $tenant->tenant_id
+      //   ]);
 
-        // Update Tenant status to 'allocated'
-        $tenant->update(['status' => 'allocated']);
-      }
+      //   // Update Tenant status to 'allocated'
+      //   $tenant->update(['status' => 'allocated']);
+      // }
     }
   }
 }
