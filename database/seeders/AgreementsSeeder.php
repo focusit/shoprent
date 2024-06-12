@@ -20,7 +20,7 @@ class AgreementsSeeder extends Seeder
     $numOfAgreements = min($shops->count(), 1000);
 
     // Generate agreements and allocate each shop to a tenant
-    for ($i = 0; $i < $numOfAgreements; $i++) {
+    for ($i = 1; $i <= $numOfAgreements; $i++) {
       $shop = $shops[$i];
       $tenant = $tenants[$i];
       
