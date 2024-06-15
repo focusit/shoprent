@@ -77,7 +77,6 @@ class ShopRentController extends Controller
 
         $this->handleImage($request, $shop);
 
-        // Check if the status is changing from 'occupied' to 'vacant'
         if ($shop->status === 'occupied' && $request->input('status') === 'vacant') {
             // Set tenant_id to null
             $shop->tenant_id = null;
@@ -152,7 +151,6 @@ class ShopRentController extends Controller
             $oldFilePath = public_path('documents/' . $agreement->document_field);
 
             if (is_file($oldFilePath)) {
-                // Check if it's a file before attempting to delete
                 unlink($oldFilePath);
             }
 
@@ -165,7 +163,6 @@ class ShopRentController extends Controller
     {
         $shopId = $request->input('shop_id');
 
-        // Check if the shop ID exists in the database
         $exists = ShopRent::where('shop_id', $shopId)->exists();
 
         return response()->json(['exists' => $exists]);

@@ -18,6 +18,7 @@ class CreateBillsTable extends Migration
             $table->string('shop_address');
             $table->date('bill_date');
             $table->date('due_date');
+            $table->date('discount_date');
             $table->string('status');
             $table->decimal('penalty', 10, 2);
             $table->decimal('discount', 10, 2);

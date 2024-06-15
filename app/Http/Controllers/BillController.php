@@ -76,41 +76,31 @@ class BillController extends Controller
     }
     public function generate(Request $request, $year = null, $month = null)
     {
-        // If year and month are not provided, use the current date
         $year = $request->input('selectedYear') ?? date('Y');
         $month = $request->input('selectedMonth') ?? date('m');
 
         $activeAgreements = Agreement::where('status', 'active')->get();
 
         foreach ($activeAgreements as $agreement) {
-            // Check if a bill already exists for the agreement, year, and month
             $existingBill = Bill::where('agreement_id', $agreement->agreement_id)
                 ->where('year', $year)
                 ->where('month', $month)
                 ->first();
 
             if (!$existingBill) {
-                // If no existing bill, generate and create a new one for the specified month
                 $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month);
 
-                // Ensure that valid bill and transaction data are returned before attempting to create
                 if ($billAndTransactionData && $billAndTransactionData['transactionData']) {
-                    // Extract transaction data
                     $transactionData = $billAndTransactionData['transactionData'];
 
-                    // Log the transaction data for debugging
                     logger('Transaction Data:', $transactionData);
 
-                    // Create a new transaction
                     try {
                         $createdTransaction = Transaction::create($transactionData);
 
-                        // Check if the transaction is created successfully
                         if ($createdTransaction) {
-                            // Create a new bill only if the transaction is created successfully
                             Bill::create($billAndTransactionData['billData']);
                         } else {
-                            // Log a warning if transaction creation fails
                             logger('Transaction creation failed:', ['agreement_id' => $agreement->agreement_id]);
                         }
                     } catch (\Exception $e) {
@@ -137,12 +127,11 @@ class BillController extends Controller
 
         try {
             $billingSettings = Bill::getBillingSettings();
-            // Continue processing with $billingSettings
             $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
             $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
-            // dd($billingSettings);
+            $discountDate = Carbon::createFromFormat('Y-m-d', $billingSettings['discount_date']);
+
         } catch (\Exception $e) {
-            // Handle the exception when the billing settings file is not found
             dd('Error: ' . $e->getMessage() . 'check wether file exist or not or contact admin');
         }
 
@@ -160,11 +149,9 @@ class BillController extends Controller
             $discount = 0;
         }
 
-        // Generate a unique transaction number
         $uniqueTransactionNumber = $this->generateUniqueTransactionNumber();
         Log::info('Generated Transaction Number:', ['transaction_number' => $uniqueTransactionNumber]);
 
-        // Create a new transaction with the unique 'transaction_number'
         $transaction = Transaction::create([
             'transaction_number' => $uniqueTransactionNumber,
             'property_type' => $agreement->agreement_id,
@@ -177,7 +164,6 @@ class BillController extends Controller
             'remarks' => 'example_remarks',
         ]);
 
-        // Create a new bill and associate it with the transaction
         $bill = Bill::create([
             'agreement_id' => $agreement->agreement_id,
             'shop_id' => $agreement->shop->shop_id,
@@ -189,6 +175,7 @@ class BillController extends Controller
             'month' => $month,
             'bill_date' => $billDate->toDateString(),
             'due_date' => $dueDate->toDateString(),
+            'discount_date'=> $discountDate->toDateString(),
             'status' => 'unpaid',
             'penalty' => $penalty,
             'discount' => $discount,
@@ -202,7 +189,6 @@ class BillController extends Controller
     {
         $uniqueTransactionNumber = Str::random(16);
 
-        // Ensure the generated 'transaction_number' is unique
         while (Transaction::where('transaction_number', $uniqueTransactionNumber)->exists()) {
             $uniqueTransactionNumber = Str::random(16);
         }
@@ -217,24 +203,19 @@ class BillController extends Controller
 
     public function regenerate(Request $request, $transaction_number)
     {
-        // Retrieve the existing bill for the specified agreement and transaction number
         $existingBill = Bill::where('transaction_number', $transaction_number)
             ->first();
 
-        // Check if an existing bill was found
         if ($existingBill) {
-            // Extract month and year from the existing bill's data
             $year = $existingBill->year;
             $month = $existingBill->month;
 
-            // Get the updated billing settings
             $billingSettings = Bill::getBillingSettings();
 
-            // Update specific fields of the existing bill with the new billing settings
             $existingBill->update([
                 'bill_date' => $billingSettings['billing_date'],
                 'due_date' => $billingSettings['due_date'],
-                // Add other fields based on your billing settings JSON structure
+
             ]);
 
             return redirect()->route('bills.index')->with('success', "Bill for {$year}-{$month} regenerated successfully.");
@@ -250,7 +231,6 @@ class BillController extends Controller
     {
         $bill = Bill::findOrFail($id);
 
-        // Check if the bill is already paid; if so, do not update it
         if ($bill->status == 'paid') {
             return redirect()->route('bills.index')->with('error', 'Cannot update a paid bill.');
         }

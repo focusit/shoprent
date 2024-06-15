@@ -1,9 +1,11 @@
+
 @extends('masterlist')
 
 @section('title', 'generate_bill')
 
 @section('body')
-
+    
+    @endphp
     <div class="content-wrapper" id="pdf-content">
 
         <!-- Content Header (Page header) -->
@@ -24,8 +26,10 @@
                                 <div class="col-4"> 
                                     <h4>
                                         <i class="fas fa-globe"></i> Shop Rent Bill <br>
-                                        <small class="float-left">{{ date('Y/m/d') }}</small><br>
-                                        <br> MC 1
+                                        <small class="float-left">{{ $bill->mc_name }}</small><br>
+                                        <small class="float-left">{{ $bill->mc_address }}</small><br>
+                                        <small class="float-left">{{ $bill->mc_phone }}</small><br>
+                                        <small class="float-left">{{ $bill->mc_email }}</small> 
                                     </h4>
                                 </div>
                                 <div class="col-4">
@@ -37,6 +41,8 @@
                                </div>
                                <div class="col-4"> 
                                     <address class="float-right">
+                                        <strong>Bill Number:</strong>
+                                        {{ $bill->id }}<br>
                                         <strong>Bill date:</strong>
                                         {{ $bill->bill_date }}<br>
                                         <strong>Bill Month:</strong>{{ $bill->month }}<br>
@@ -61,39 +67,41 @@
                                     <address>
                                         <strong>  Description </strong> <br> 
                                         Current Bill-<br>
-                                        Penalty (late fee)-<br>
                                         Discount-<br>
                                         Tax-<br>
+                                        Previous Balance-<br>
                                     </address>
                                 </div>
                                 <div class="col-2"> 
                                     <strong class="float-right">  Amount </strong><br>
                                     <address class="float-right">                   
-                                        ??{{ $bill->agreement_id }}<br>
-                                        {{ $bill->penalty }}<br>
+                                        {{ $bill->rent }}<br>
                                         {{ $bill->discount }}<br>
-                                       ?? {{ $bill->agreement_id }}<br>
+                                       ..8%<br>
+                                       522 
+                                       <br>(total balance)<br>
                                     </address>
                                 </div>
                             </div> &nbsp;&nbsp;
                             <h4>
                                 <strong>Total</strong> 
-                                <small class="float-right"><strong>??5665</strong></small><br>
+                                <small class="float-right"><strong>..5665</strong></small><br>
                             </h4>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <h6>Payable ??(amount)by due date:
-                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                        <h6>Payable befor discount date: 
+                                            {{    $bill->discount_date }}
+                                        <medium class="float-right"><strong>..amount</strong></medium><br>
                                     </h6>
-                                    <h6>Payable ??(amount) befor discount date:
-                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    <h6>Payable by due date:  {{ $bill->due_date }}
+                                        <medium class="float-right"><strong>..amount</strong></medium><br>
                                     </h6>
-                                    <h6>Payable ??(amount)after dute date charges will be:
-                                        <medium class="float-right"><strong>??{{ $bill->agreement_id }}</strong></medium><br>
+                                    <h6>Payable after dute date charges will be:  {{ $bill->due_date }}
+                                        <medium class="float-right"><strong>..amount</strong></medium><br>
                                     </h6>
                         </div>
                     </div>
                                 
                     <div class="col-4">
-                        <div class="invoice p-3 mb-3">
+                        <div class="invoice p-2 mb-2">
                             <div class="row">
                                 <div class="col-12">
                                     <h4><strong> Payment Details </strong></h4>
@@ -101,23 +109,38 @@
                                         <div class="col-8"> 
                                             <strong>  Description </strong> <br>
                                             <address>
-                                                Previous Bill:<br>
+                                                Previous Amount:<br>
                                                 Last Payment:<br>
                                                 Balance:<br>
+                                                Penalty (late fee)-<br>
                                             </address>
                                         </div>
                                         <div class="col-4"> 
-                                            <strong class="float-right">  Amount </strong><br>
+                                            <strong class="float-right"> Amount </strong><br>
                                             <address class="float-right">
-                                                ??{{ $bill->agreement_id }}<br>
-                                               ?? {{ $bill->agreement_id }}<br>
-                                               ?? {{ $bill->agreement_id }}<br>
+                                                500<br>
+                                               200<br>
+                                               ..<br>
+                                               {{ $bill->penalty }}<br>
                                             </address>
                                         </div>
                                     </div>
                                 </div> 
-                            </div>
+                            </div>&nbsp;&nbsp;
+                            <h5>
+                                <strong>Total Balance</strong> 
+                                <small class="float-right"><strong>..522</strong></small><br>
+                            </h5>
                         </div>
+                         
+                        <div class="row">
+                            <div class="col-12"> 
+                                qr code<br>
+                            </div>
+                        </div>&nbsp;&nbsp;
+                        <h5>
+                            <small class="float-right"><strong>..Signature</strong></small><br>
+                        </h5>
                     </div>
                 </div>
                 <!-- Main content -->
@@ -149,5 +172,6 @@
             printWindow.document.close();
             printWindow.print();
         });
+
     </script>
 @endsection

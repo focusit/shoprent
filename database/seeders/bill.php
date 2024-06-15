@@ -22,6 +22,7 @@ class CreateBillsTable extends Migration
             $table->string('status');
             $table->decimal('penalty', 10, 2);
             $table->decimal('discount', 10, 2);
+            $table->date('discount_date');
             $table->unsignedSmallInteger('month')->default(now()->month);
             $table->unsignedSmallInteger('year')->default(now()->year);
             $table->timestamps();
