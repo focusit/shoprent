@@ -129,7 +129,7 @@ class BillController extends Controller
             $billingSettings = Bill::getBillingSettings();
             $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
             $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
-            $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['discount_date']);
+            $discountDate = Carbon::createFromFormat('Y-m-d', $billingSettings['discount_date']);
 
         } catch (\Exception $e) {
             dd('Error: ' . $e->getMessage() . 'check wether file exist or not or contact admin');
