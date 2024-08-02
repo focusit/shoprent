@@ -142,10 +142,6 @@
                                 </div>
                                 <!-- /.col -->
                             </div>
-                            <!-- /.row -->
-
-                            <!-- this row will not appear when printing -->
-                            <!-- Modify this in your Blade template -->
                             <div class="row no-print">
                                 <a href="printed" rel="noopener" target="_blank" class="btn btn-default"
                                     onclick="window.print();" class="noPrint"><i class="fas fa-print"></i> Print</a>

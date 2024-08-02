@@ -128,7 +128,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>owner_name</th>
+                                                    <th>Owner_name</th>
+                                                    <th>Tenant Name</th>
                                                     <th>construction_year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
@@ -147,6 +148,20 @@
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
                                                             <td>{{ $shop->owner_name }}</td>
+                                                            <!-- tenant name from shop_id -->
+                                                            @forelse($agreements as $agreement)
+                                                                @if ( $agreement->shop_id === $shop->shop_id)
+                                                                    @forelse($tenants as $tenant)
+                                                                        @if($tenant->tenant_id === $agreement->tenant_id)
+                                                                            <td>{{ $tenant->full_name }}</td>
+                                                                        @endif
+                                                                    @empty
+                                                                        <td> </td>
+                                                                    @endforelse
+                                                                @endif
+                                                            @empty
+                                                                <td> </td>
+                                                            @endforelse
                                                             <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
@@ -248,6 +263,10 @@
                                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                                     </button>
                                                                 </form>
+                                                                <a href="{{ route('shop.index', $shop->shop_id) }}"
+                                                                    class="btn  btn-primary btn-sm">
+                                                                    <i class="fa fa-file" aria-hidden="true"></i>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     @endif

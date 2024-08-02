@@ -19,6 +19,10 @@
                             <label>Govt ID</label>
                             <select class="form-control select2" name="govt_id" style="width: 100%;">
                                 <option value="" selected disabled>Select</option>
+                                <option value="AADHAR Card"
+                                    {{ isset($tenant) && $tenant->govt_id === 'occupied' ? 'selected' : '' }}>
+                                    AADHAR Card
+                                </option>
                                 <option value="PAN Card"
                                     {{ isset($tenant) && $tenant->govt_id === 'occupied' ? 'selected' : '' }}>
                                     PAN Card
@@ -108,7 +112,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Gender<span class="astrikes">*</span></label>
+                             <label>Gender<!--<span class="astrikes">*</span>--></label> 
                             <select class="form-control select2" name="gender" style="width: 100%;">
                                 <option value="" selected disabled>Select</option>
                                 <option value="male"

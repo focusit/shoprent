@@ -30,12 +30,12 @@
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" id="myTabs">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="allAgreementsTab" data-toggle="tab"
+                                        <a class="nav-link " id="allAgreementsTab" data-toggle="tab"
                                             href="#allAgreements">All
                                             Agreements</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="activeAgreementsTab" data-toggle="tab"
+                                        <a class="nav-link active" id="activeAgreementsTab" data-toggle="tab"
                                             href="#activeAgreements">Active Agreements</a>
                                     </li>
                                     <li class="nav-item">
@@ -51,15 +51,16 @@
                                     <!-- Tab Content -->
                                     <div class="tab-content" id="myTabsContent">
                                         <!-- All Agreements Tab -->
-                                        <div class="tab-pane fade show active" id="allAgreements">
+                                        <div class="tab-pane fade show " id="allAgreements">
                                             <!-- Table for All Shops -->
-                                            <table id="example1" class="table table-bordered table-striped">
+                                            <table class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
                                                         <th>ID</th>
                                                         <th>Agreement ID</th>
                                                         <th>Shop ID</th>
                                                         <th>Tenant ID</th>
+                                                        <th>Tenant Name</th>
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
@@ -76,6 +77,13 @@
                                                             <td>{{ $agreement->agreement_id }}</td>
                                                             <td>{{ $agreement->shop_id }}</td>
                                                             <td>{{ $agreement->tenant_id }}</td>
+                                                            @forelse ($tenants as $tenant)
+                                                                @if ($tenant->tenant_id === $agreement->tenant_id)
+                                                                    <td>{{ $tenant->full_name }}</td>
+                                                                @endif
+                                                            @empty
+                                                                <td> </td>
+                                                            @endforelse
                                                             <td>{{ $agreement->with_effect_from }}</td>
                                                             <td>{{ $agreement->valid_till }}</td>
                                                             <td>{{ $agreement->rent }}</td>
@@ -124,7 +132,7 @@
                                         </div>
 
                                         {{-- <--------------------------------------Active Agreements--------------------------------------------> --}}
-                                        <div class="tab-pane fade" id="activeAgreements"> <!-- Table for Occupied Shops -->
+                                        <div class="tab-pane fade show active" id="activeAgreements"> <!-- Table for Occupied Shops -->
                                             <table id="active-tab" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
@@ -132,6 +140,7 @@
                                                         <th>Agreement ID</th>
                                                         <th>Shop ID</th>
                                                         <th>Tenant ID</th>
+                                                        <th>Tenant Name </th>
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
@@ -149,6 +158,13 @@
                                                                 <td>{{ $agreement->agreement_id }}</td>
                                                                 <td>{{ $agreement->shop_id }}</td>
                                                                 <td>{{ $agreement->tenant_id }}</td>
+                                                                @forelse ($tenants as $tenant)
+                                                                    @if ($tenant->tenant_id === $agreement->tenant_id)
+                                                                        <td>{{ $tenant->full_name }}</td>
+                                                                    @endif
+                                                                @empty
+                                                                    <td> </td>
+                                                                @endforelse
                                                                 <td>{{ $agreement->with_effect_from }}</td>
                                                                 <td>{{ $agreement->valid_till }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
@@ -214,6 +230,7 @@
                                                         <th>Agreement ID</th>
                                                         <th>Shop ID</th>
                                                         <th>Tenant ID</th>
+                                                        <th>Tenant Name</th>
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
@@ -231,6 +248,13 @@
                                                                 <td>{{ $agreement->agreement_id }}</td>
                                                                 <td>{{ $agreement->shop_id }}</td>
                                                                 <td>{{ $agreement->tenant_id }}</td>
+                                                                @forelse ($tenants as $tenant)
+                                                                    @if ($tenant->tenant_id === $agreement->tenant_id)
+                                                                        <td>{{ $tenant->full_name }}</td>
+                                                                    @endif
+                                                                @empty
+                                                                    <td> </td>
+                                                                @endforelse
                                                                 <td>{{ $agreement->with_effect_from }}</td>
                                                                 <td>{{ $agreement->valid_till }}</td>
                                                                 <td>{{ $agreement->rent }}</td>

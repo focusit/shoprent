@@ -113,26 +113,20 @@ class BillController extends Controller
 
         return redirect()->route('bills.billsList', ['year' => $year, 'month' => $month])->with('success', 'Bills generated successfully.');
     }
-
-
-
-
-
-
-
-
     private function generateBillData($agreement_id, $year, $month)
     {
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
 
         try {
             $billingSettings = Bill::getBillingSettings();
-            $dueDate = Carbon::createFromFormat('Y-m-d', $billingSettings['due_date']);
-            $billDate = Carbon::createFromFormat('Y-m-d', $billingSettings['billing_date']);
-            $discountDate = Carbon::createFromFormat('Y-m-d', $billingSettings['discount_date']);
+            //print_r($billingSettings); print_r($_POST);
+            $datePrefix=$_POST['selectedYear'].'-'.$_POST['selectedMonth'].'-';
+            $dueDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['due_date']); //echo "Due date =" .$dueDate;
+            $billDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['billing_date']);// echo "Bill date =" .$billDate;
+            $discountDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['discount_date']);// echo "discount date =" .$discountDate;
 
         } catch (\Exception $e) {
-            dd('Error: ' . $e->getMessage() . 'check wether file exist or not or contact admin');
+            dd('Error: ' . $e->getMessage() . ' check wether file exist or not or contact admin');
         }
 
 
@@ -254,7 +248,18 @@ class BillController extends Controller
 
     public function print($id, $agreement_id)
     {
-        $bill = Bill::where('agreement_id', $agreement_id)->first();
+        //$bill = Bill::where('agreement_id', $agreement_id)->first();
+        $bill = Bill::where('id', $id)->first();
+        $settings=Bill::getBillingSettings();
+
+        //echo '<pre>'; print_r($bill); echo '</pre>';
+        
+        $bill->duration="From ". date('Y-m-01', strtotime($bill->bill_date)) ." to " . date('Y-m-t', strtotime($bill->bill_date));
+        $bill->tax= $bill->rent * ($settings['tax_rate']/100);
+
+
+        print_r($bill);
+
         return view('bills.print', compact('bill'));
     }
 

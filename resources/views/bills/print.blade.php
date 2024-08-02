@@ -59,15 +59,15 @@
                     <div class="col-8">
                         <div class="invoice p-3 mb-3">
                            <h4>
-                               <strong> Current Charges</strong><br>
-                               <small>01/01/2023 - 01/31/2024 </small>
+                               <strong> Current Charges</strong>
+                               <small> {{ $bill->duration }}</small>
                             </h4>
                             <div class="row">
                                 <div class="col-10"> 
                                     <address>
                                         <strong>  Description </strong> <br> 
                                         Current Bill-<br>
-                                        Discount-<br>
+                                       
                                         Tax-<br>
                                         Previous Balance-<br>
                                     </address>
@@ -76,8 +76,8 @@
                                     <strong class="float-right">  Amount </strong><br>
                                     <address class="float-right">                   
                                         {{ $bill->rent }}<br>
-                                        {{ $bill->discount }}<br>
-                                       ..8%<br>
+                                        
+                                        {{$bill->tax}}<br>
                                        522 
                                        <br>(total balance)<br>
                                     </address>

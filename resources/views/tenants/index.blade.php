@@ -46,6 +46,9 @@
                                     </thead>
                                     <tbody>
                                         @forelse($tenants as $tenant)
+                                        @forelse($agreements as $agreement)
+                                            @if ($tenant->tenant_id === $agreement->tenant_id)
+                                            @if ($agreement->status == 'active')
                                             <tr>
                                                 <td>{{ $tenant->id}}</td>
                                                 <td>{{ $tenant->tenant_id }}</td>
@@ -84,6 +87,13 @@
                                                     </form>
                                                 </td>
                                             </tr>
+                                            @endif
+                                            @endif
+                                        @empty
+                                            <tr>
+                                                <td colspan="7">No Active tenants found.</td>
+                                            </tr>
+                                        @endforelse
                                         @empty
                                             <tr>
                                                 <td colspan="7">No tenants found.</td>

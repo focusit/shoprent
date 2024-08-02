@@ -7,6 +7,7 @@
     <title>@yield('title')</title>
     <!-- /SHOPLIST/TENANT LIST -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -114,7 +115,7 @@
                         </li><br>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-building"></i>
+                                <i class="nav-icon fas fa-building"></i>
                                 <p>Shops
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
@@ -153,7 +154,13 @@
                                 <li class="nav-item pl-4">
                                     <a href="{{ route('tenants.index') }}" class="nav-link">
                                         <i class="fa fa-eye"></i>
-                                        <p class="pl-1"> View Tenants</p>
+                                        <p class="pl-1"> View Active Tenants</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pl-4">
+                                    <a href="{{  route('tenants.search') }}" class="nav-link">
+                                        <i class="fa fa-search"></i>
+                                        <p class="pl-1"> Search Tenants</p>
                                     </a>
                                 </li>
                             </ul>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tenant;
+use App\Models\Agreement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,8 @@ class TenantController extends Controller
     public function index()
     {
         $tenants = Tenant::paginate(200);
-        return view('tenants.index', compact('tenants'));
+        $agreements = Agreement::all();
+        return view('tenants.index', ['tenants' => $tenants, 'agreements'=> $agreements]);
     }
 
     /**
@@ -188,5 +190,14 @@ class TenantController extends Controller
         }
 
         return response()->json($result);
+    }
+    public function search()
+    {
+        return view('tenants.search');
+    }
+    public function searchTenant(Request $request)
+    {
+        $search = $request->input('search');
+        echo $search;
     }
 }

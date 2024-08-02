@@ -101,22 +101,24 @@ Route::group(['middleware' => ['admin_auth']], function () {
     // Tenant Routes
     Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
     Route::get('/tenants/create', [TenantController::class, 'create'])->name('tenants.create');
+    Route::get('/tenants/search', [TenantController::class, 'search'])->name('tenants.search');
     Route::post('/tenants/store', [TenantController::class, 'store'])->name('tenants.store');
     Route::get('/tenants/{tenant_id}', [TenantController::class, 'show'])->name('tenants.show');
     Route::get('/tenants/{tenant_id}/edit', [TenantController::class, 'edit'])->name('tenants.edit');
     Route::put('/tenants/{tenant_id}', [TenantController::class, 'update'])->name('tenants.update');
     Route::delete('/tenants/{tenant_id}', [TenantController::class, 'destroy'])->name('tenants.destroy');
     Route::post('/checkTenantId', [TenantController::class, 'checkTenantId'])->name('checkTenantId');
+    Route::post('/tenants/search', [TenantController::class, 'searchTenant'])->name('tenants.searchTenant');
 
     //Autocomplete
     Route::match(['get', 'post'], '/autocomplete-search', [ShopRentController::class, 'autocompleteSearch'])->name('autocomplete.search');
-    Route::match(['get', 'post'], '/autocomplete-tenants', [TenantController::class, 'autocompleteSearch'])
-        ->name('autocomplete.tenants');
+    Route::match(['get', 'post'], '/autocomplete-tenants', [TenantController::class, 'autocompleteSearch'])->name('autocomplete.tenants');
 
     //Property Allocation
     Route::get('/allocate-shop', [AgreementController::class, 'showAllocateShopForm'])->name('allocate.shop.form');
     Route::post('/allocate-shop', [AgreementController::class, 'allocateShop']);
     Route::get('/allocation-list', [AgreementController::class, 'allocationList'])->name('allocation.list');
+    Route::get('/allocation/{shop_id}' ,[AgreementController::class, 'allocatevacantShop'])->name('shop.index');
 
     // Agreement Routes
     Route::get('/agreements', [AgreementController::class, 'index'])->name('agreements.index');
