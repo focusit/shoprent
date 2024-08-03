@@ -114,13 +114,6 @@ class BillController extends Controller
         return redirect()->route('bills.billsList', ['year' => $year, 'month' => $month])->with('success', 'Bills generated successfully.');
     }
 
-
-
-
-
-
-
-
     private function generateBillData($agreement_id, $year, $month)
     {
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
@@ -134,8 +127,6 @@ class BillController extends Controller
         } catch (\Exception $e) {
             dd('Error: ' . $e->getMessage() . 'check wether file exist or not or contact admin');
         }
-
-
 
         if (!$billDate->isValid()) {
             $billDate = Carbon::now()->startOfMonth();
@@ -196,11 +187,6 @@ class BillController extends Controller
         return $uniqueTransactionNumber;
     }
 
-
-
-
-
-
     public function regenerate(Request $request, $transaction_number)
     {
         $existingBill = Bill::where('transaction_number', $transaction_number)
@@ -223,9 +209,6 @@ class BillController extends Controller
             return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement and transaction number.');
         }
     }
-
-
-
 
     public function update(Request $request, $id)
     {

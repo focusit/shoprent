@@ -14,7 +14,6 @@ class PaymentController extends Controller
         $bill = Bill::findOrFail($id);
         return view('payments.create', compact('bill'));
     }
-       
     
     public function store(Request $request, $id)
     {
@@ -24,9 +23,7 @@ class PaymentController extends Controller
             'payment_method' => 'nullable',
             'payment_date' => 'required|date',
         ]);
-
         $bill = Bill::findOrFail($id);
-
         $unpaidBills = Bill::where('tenant_id', $bill->tenant_id)
             ->where('status', 'unpaid')
             ->where('year', '<', $bill->year)
@@ -40,7 +37,6 @@ class PaymentController extends Controller
         foreach ($unpaidBills as $unpaidBill) {
             // dd($unpaidBill->rent);
             $penaltyAmount = $unpaidBill->rent * 0.05; 
-
             // dd($penaltyAmount);
             $penaltyPayment = new Payment([
                 'transaction_number' => $unpaidBill->transaction_number,
@@ -50,23 +46,17 @@ class PaymentController extends Controller
                 'tenant_id' => $unpaidBill->tenant_id,
                 'remark' => 'Penalty for unpaid bill',
             ]);
-
             $penaltyPayment->save();
-
             $unpaidBill->status = 'paid';
             $unpaidBill->save();
         }
-
         $totalPayments = $bill->payments->sum('amount');
         $billStatus = ($totalPayments + $request->input('amount')) >= $bill->amount ? 'paid' : 'unpaid';
-
         $transactionNumber = $bill->transaction_number;
         $tenant_id = $bill->tenant_id;
         $amount = $request->input('amount');
-
         $previousBalance =  $bill->rent-$totalPayments;
-
-        $payment = new Payment([
+        google$payment = new Payment([
             'transaction_number' => $transactionNumber,
             'amount' => $amount,
             'previous_balance' => $previousBalance,
@@ -75,7 +65,6 @@ class PaymentController extends Controller
             'tenant_id' => $tenant_id,
             'remark' => $request->input('remark'),
         ]);
-
         $transactionTable = Transaction::where('transaction_number', $transactionNumber)->first();
         if ($transactionTable) {
             $transactionTable->update([
@@ -83,13 +72,9 @@ class PaymentController extends Controller
                 'previous_balance' => $previousBalance,
             ]);
         }
-
         $payment->save();
-
         $bill->status = $billStatus;
         $bill->save();
-
         return redirect()->route('bills.show', ['id' => $id])->with('success', 'Payment made successfully.');
     }
-
 }

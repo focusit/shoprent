@@ -128,13 +128,9 @@ class TenantController extends Controller
 
         return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully.');
     }
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    
      public function destroy($tenant_id)
-{
+    {
         $tenant = Tenant::findOrFail($tenant_id);
 
     if (!empty($tenant->image)) {
@@ -149,7 +145,7 @@ class TenantController extends Controller
     }
     $tenant->delete();
     return redirect()->route('tenants.index')->with('success', 'Tenant deleted successfully.');
-}
+    }
 
     protected function validateTenants(Request $request, $tenant_id = null)
     {
