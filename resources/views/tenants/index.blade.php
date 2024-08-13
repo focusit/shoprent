@@ -15,7 +15,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -36,7 +35,7 @@
                                             <th>ID Number</th>
                                             <th>Full Name</th>
                                             <th>Contact</th>
-                                            <th >Address</th>
+                                            <th>Address</th>
                                             <th>Email</th>
                                             <th>Image</th>
                                             <th>GST No</th>
@@ -91,7 +90,7 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="7">No Active tenants found.</td>
+                                                <td colspan="7">No Active tenants found. </td>
                                             </tr>
                                         @endforelse
                                         @empty
@@ -101,18 +100,11 @@
                                         @endforelse
                                     </tbody>
                                 </table>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row -->
-            </div>
-            <!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+                            </div><!-- /.card-body -->
+                        </div><!-- /.card -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
 @endsection

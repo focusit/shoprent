@@ -54,8 +54,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>owner_name</th>
-                                                    <th>construction_year</th>
+                                                    <th>Owner Name</th>
+                                                    <th>Construction year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     <th>Status</th>
@@ -128,9 +128,9 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>Owner_name</th>
+                                                    <th>Owner Name</th>
                                                     <th>Tenant Name</th>
-                                                    <th>construction_year</th>
+                                                    <th>Construction year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     {{-- <th>Tenant ID</th> --}}
@@ -214,8 +214,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>owner_name</th>
-                                                    <th>construction_year</th>
+                                                    <th>Owner Name</th>
+                                                    <th>Construction Year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     {{-- <th>Tenant ID</th> --}}

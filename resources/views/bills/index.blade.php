@@ -15,9 +15,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-
-
-        
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -35,16 +32,13 @@
                                         <label for="year">Select Year:</label>
                                         <select id="year">
                                             {{-- <option value="Please select">Please select</option> --}}
-
                                             @for ($year = date('Y'); $year >= 2020; $year--)
                                                 <option value="{{ $year }}">{{ $year }}</option>
                                             @endfor
                                         </select>
-
                                         <label for="month">Select Month:</label>
                                         <select id="month">
                                             {{-- <option value="Please select">Please select</option> --}}
-
                                             @foreach (range(1, 12) as $month)
                                                 @php
                                                     $currentYear = date('Y');
@@ -53,9 +47,7 @@
                                                         $year == $currentYear && $month > $currentMonth
                                                             ? 'disabled'
                                                             : '';
-
                                                     // $disabled = $month == date('n') || $month == date('n') ? '' : 'disabled';
-
                                                 @endphp
                                                 <option value="{{ str_pad($month, 2, '0', STR_PAD_LEFT) }}"
                                                     {{ $disabled }}>
@@ -77,41 +69,32 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr class="bg-info">
-                                        <th>ID</th>
                                         <th>Agreement ID</th>
                                         <th>Shop ID</th>
                                         <th>Tenant ID</th>
                                         <th>Tenant Name</th>
                                         <th>Shop Address</th>
-                                        <th>Transaction Number</th>
                                         <th>Rent</th>
                                         <th>Status</th>
-                                        <th>Bill Date</th>
-                                        <th>Action</th>
-                                        <th>Print Bills</th>
-                                        <th>Pay Now</th>
+                                        <th class="d-print-none">Bill Date</th>
+                                        <th class="d-print-none">Action</th>
+                                        <th class="d-print-none">Print Bills</th>
+                                        <th class="d-print-none">Pay Now</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($bills as $bill)
                                         <tr>
-                                            <td>{{ $bill->id }}</td>
-                                            <td>
-                                                <a href="{{ route('agreements.show', $bill->agreement_id) }}">
-                                                    {{ $bill->agreement_id }}
-                                                </a>
-                                            </td>
-                                            
+                                            <td><a href="{{ route('agreements.show', $bill->agreement_id) }}">{{ $bill->agreement_id }}</a></td>
                                             <td>{{ $bill->shop_id }}</td>
                                             <td>{{ $bill->tenant_id }}</td>
                                             <td>{{ $bill->tenant_full_name }}</td>
                                             <td>{{ $bill->shop_address }}</td>
-                                            <td>{{ $bill->transaction_number }}</td>
                                             <td>{{ $bill->rent }}</td>
                                             <td>{{ $bill->status }}</td>
                                             <td>{{ $bill->bill_date }}</td>
                                             <td>
-                                                <form action="{{ route('bills.regenerate', $bill->transaction_number) }}"
+                                                <form action="{{ route('bills.regenerate', $bill->id) }}"
                                                     method="post">
                                                     @csrf
                                                     <input type="hidden" name="selectedYear" id="selectedYear"
@@ -127,7 +110,6 @@
                                                     <i class="fas fa-print"></i> Print Bill
                                                 </a>
                                             </td>
-
                                             <td>
                                                 @if ($bill->status !== 'paid')
                                                     <button type="button" class="btn btn-warning btn-sm">
@@ -149,18 +131,12 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-    </section>
-    <!-- /.content-wrapper -->
+                        </div><!-- /.card-body -->
+                    </div><!-- /.card -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+    </section><!-- /.content-wrapper -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Add event listeners for dropdown changes

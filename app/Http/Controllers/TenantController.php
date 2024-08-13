@@ -10,27 +10,17 @@ use Illuminate\Support\Facades\Storage;
 
 class TenantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index( $type=null)
     {
+        echo $type;
         $tenants = Tenant::paginate(200);
         $agreements = Agreement::all();
         return view('tenants.index', ['tenants' => $tenants, 'agreements'=> $agreements]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('tenants.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->validateTenants($request);
@@ -63,13 +53,8 @@ class TenantController extends Controller
         //     'tenant_id' => $request->input('tenant_id'),
         //     'is_admin' => 0,
         // ]);
-
         return redirect()->route('tenants.index')->with('success', 'Tenant created successfully.');
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($tenant_id)
     {
         $tenant = Tenant::findOrFail($tenant_id);
@@ -83,18 +68,11 @@ class TenantController extends Controller
 
         return response()->json(['exists' => $exists]);
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($tenant_id)
     {
         $tenant = Tenant::findOrFail($tenant_id);
         return view('tenants.edit', compact('tenant'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $tenant_id)
     {
         $validatedData = $request->validate([
@@ -130,15 +108,9 @@ class TenantController extends Controller
 
         return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully.');
     }
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-     public function destroy($tenant_id)
-{
+    public function destroy($tenant_id)
+    {
         $tenant = Tenant::findOrFail($tenant_id);
-
     if (!empty($tenant->image)) {
         $filePath = public_path('images/' . $tenant->image);
         if (file_exists($filePath) && is_file($filePath)) {
@@ -151,7 +123,7 @@ class TenantController extends Controller
     }
     $tenant->delete();
     return redirect()->route('tenants.index')->with('success', 'Tenant deleted successfully.');
-}
+    }
 
     protected function validateTenants(Request $request, $tenant_id = null)
     {
@@ -173,31 +145,48 @@ class TenantController extends Controller
 
     public function autocompleteSearch(Request $request)
     {
-
         $query = $request->input('query');
-
         $tenants = Tenant::where('tenant_id', 'like', '%' . $query . '%')->orderBy('tenant_id', 'asc')
             ->limit(100)
             ->get();
-
         $result = [];
-
         foreach ($tenants as $tenant) {
             $result[] = [
                 'label' => $tenant->tenant_id,
                 'value' => $tenant->tenant_id,
             ];
         }
-
         return response()->json($result);
     }
+
     public function search()
     {
         return view('tenants.search');
     }
+
     public function searchTenant(Request $request)
     {
         $search = $request->input('search');
-        echo $search;
+        $searchby = $request->input('searchby');
+        if($searchby =='full_name'){
+            $tenants =Tenant::where('full_name','LIKE','%'.$search.'%')->get();
+        }elseif($searchby ==='govt_id_number'){
+            $tenants =Tenant::where('govt_id_number','LIKE','LIKE','%'.$search.'%')->get();
+        }elseif($searchby ==='email'){
+            $tenants =Tenant::where('email', 'LIKE','%'.$search.'%')->get();
+        }elseif($searchby ==='contact'){
+            $tenants =Tenant::where('contact', 'LIKE','%'.$search.'%')->get();
+        }else{
+            $tenants="";
+        }  
+        //echo $search."<br>";
+        //echo $searchby."<br>";
+        //echo $tenants;
+        return view('tenants.search', compact('tenants'));
     }
+
+    public function tenantTranx(){
+        echo "Hello";
+    }
+
 }

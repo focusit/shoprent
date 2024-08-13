@@ -213,7 +213,8 @@ class AgreementController extends Controller
     }
     public function allocatevacantShop($shop_id){
         $shop = ShopRent::findOrFail($shop_id);
-        echo $shop;
+        //echo $shop;
+        
         return view('property-allocation.allocate_shop', compact('shop'));
     }
     
