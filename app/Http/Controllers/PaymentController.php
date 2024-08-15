@@ -17,7 +17,6 @@ class PaymentController extends Controller
         $bill = Bill::findOrFail($id);
         return view('payments.create', compact('bill'));
     }
-
     public function store(Request $request, $id)
     {
         $request->validate([
@@ -99,6 +98,7 @@ class PaymentController extends Controller
                 'remark' => 'Penalty for unpaid bill',
             ]);
             //$penaltyPayment->save();
+
             $unpaidBill->status = 'paid';
             //$unpaidBill->save();
         }
@@ -107,11 +107,12 @@ class PaymentController extends Controller
         $totalPayments = $bill->payments->sum('amount');
         //$billStatus = ($totalPayments + $request->input('amount')) >= $bill->amount ? 'paid' : 'unpaid';
         echo $totalPayments."<br>";
-       
+
         $transactionNumber = $bill->transaction_number;
         $tenant_id = $bill->tenant_id;
         $amount = $request->input('amount');
         $previousBalance =  $bill->rent-$totalPayments;
+        
         $payment = new Payment([
             'transaction_number' => $transactionNumber,
             'amount' => $amount,
@@ -121,7 +122,6 @@ class PaymentController extends Controller
             'tenant_id' => $tenant_id,
             'remark' => $request->input('remark'),
         ]);
-
         $transactionTable = Transaction::where('transaction_number', $transactionNumber)->first();
         if ($transactionTable) {
             $transactionTable->update([
@@ -171,4 +171,8 @@ class PaymentController extends Controller
         return view('payments.search', compact('bills'));
     }
 
+        $payment->save();
+        $bill->status = $billStatus;
+        $bill->save();
+        return redirect()->route('bills.show', ['id' => $id])->with('success', 'Payment made successfully.');
 }
