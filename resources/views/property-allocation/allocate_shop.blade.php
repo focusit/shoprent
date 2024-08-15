@@ -87,13 +87,15 @@
                                     <div class="form-group">
                                         <label for="shop_search">Search for a vacant shop:</label>
                                         <input type="text" id="shop_search" name="shop_search" class="form-control"
-                                            value="{{ old('shop_search', isset($agreement) ? $agreement->shop_id : '') }}"
+                                            value="{{ old('shop_search', 
+                                            isset($agreement) ? $agreement->shop_id : $shop->shop_id) }}"
                                             placeholder="Search for a vacant shop..." required>
                                         @error('shop_search')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                         <input type="hidden" id="shop_id" name="shop_id"
-                                            value="{{ old('shop_id', isset($agreement) ? $agreement->shop_id : '') }}">
+                                            value="{{ old('shop_id', 
+                                            isset($agreement) ? $agreement->shop_id : $shop->shop_id ) }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -129,7 +131,7 @@
                                         <label for="with_effect_from">With Effect From:</label>
                                         <input type="date" id="with_effect_from" name="with_effect_from"
                                             class="form-control"
-                                            value="{{ old('with_effect_from', isset($agreement) ? $agreement->with_effect_from : '') }}"
+                                            value="{{ old('with_effect_from', isset($agreement) ? $agreement->with_effect_from : now()->toDateString()) }}"
                                             required>
                                         @error('with_effect_from')
                                             <div class="text-danger">{{ $message }}</div>
@@ -154,7 +156,8 @@
                                         <label for="rent">Rent:</label>
                                         <input type="text" id="rent" name="rent" class="form-control"
                                             placeholder="Rent"
-                                            value="{{ old('rent', isset($agreement) ? $agreement->rent : '') }}" required>
+                                            value="{{ old('rent',
+                                            isset($agreement) ? $agreement->rent : $shop->rent) }}" required>
                                     </div>
                                     @error('rent')
                                         <div class="text-danger">{{ $message }}</div>
@@ -225,7 +228,7 @@
         // Initialize jQuery UI Autocomplete for Shop Search
         $('#shop_search').autocomplete({
             source: function(request, response) {
-                $.post('{{ route('autocomplete.search') }}', {
+                $.post('{{ route("autocomplete.search")}}', {
                     query: request.term,
                     _token: '{{ csrf_token() }}'
                 }, function(data) {
@@ -246,7 +249,7 @@
         //Initialize jQuery UI Autocomplete for Tenant Search
         $('#tenant_search').autocomplete({
             source: function(request, response) {
-                $.post('{{ route('autocomplete.tenants') }}', {
+                $.post('{{ route("autocomplete.tenants") }}', {
                     query: request.term,
                     _token: '{{ csrf_token() }}'
                 }, function(data) {

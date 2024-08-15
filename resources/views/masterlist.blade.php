@@ -7,6 +7,7 @@
     <title>@yield('title')</title>
     <!-- /SHOPLIST/TENANT LIST -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -15,6 +16,10 @@
     <link rel="stylesheet" href=" {{ asset('dashboard-asset/plugins/fontawesome-free/css/all.min.css') }}">
 
     <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet"
         href=" {{ asset('dashboard-asset/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
@@ -70,9 +75,7 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-0"
-        style="background-color:#0f59871f"
-        >
+        <aside class="main-sidebar elevation-0" style="background-color:#0f59871f">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 <span class="brand-text font-weight-light">@auth
@@ -114,7 +117,7 @@
                         </li><br>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-building"></i>
+                                <i class="nav-icon fas fa-building"></i>
                                 <p>Shops
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
@@ -152,8 +155,20 @@
                                 </li>
                                 <li class="nav-item pl-4">
                                     <a href="{{ route('tenants.index') }}" class="nav-link">
+                                        <i class="fa fa-list-alt"></i>
+                                        <p class="pl-1"> View Active Tenants</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pl-4">
+                                    <a href="{{ route('tenants.index') }}" class="nav-link">
                                         <i class="fa fa-eye"></i>
-                                        <p class="pl-1"> View Tenants</p>
+                                        <p class="pl-1"> All Tenants</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item pl-4">
+                                    <a href="{{  route('tenants.search') }}" class="nav-link">
+                                        <i class="fa fa-search"></i>
+                                        <p class="pl-1"> Search Tenants</p>
                                     </a>
                                 </li>
                             </ul>
@@ -174,7 +189,6 @@
                                         <p>Allocate Properties</p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item">
                                     <a href="{{ url('agreements') }}" class="nav-link">
                                         <i class="fa fa-eye"></i>
@@ -183,7 +197,29 @@
                                 </li>
                             </ul>
                         </li> 
-
+                        
+                        {{--<li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tasks"></i>
+                                <p>
+                                    Transaction <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=# class="nav-link">
+                                        <i class="fa fa-plus "></i>
+                                        <p>Tenant ID </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fa fa-eye"></i>
+                                        <p>All Agreements</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -206,14 +242,12 @@
                                         <p>Generate Bills</p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item">
                                     <a href="{{ url('bills/bills_list') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>view-latest bill</p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item">
                                     <a href="{{ url('bills') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -223,15 +257,45 @@
                             </ul>
                         </li>
 
-                        {{-- <li class="nav-item">
-                            <a href="{{ url('billpay') }}" class="nav-link">
+                        <li class="nav-item">
+                            <a href="{{  route('payments.search') }}" class="nav-link">
                                 <i class="nav-icon fas fa-credit-card"></i>
                                 <p>
                                     Payments
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
-                        </li> --}}
+                        </li> 
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-clipboard-list"></i>
+                                <p>
+                                    Reports
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('reports.monthwise') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Month wise Reports</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('reports.collection') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Collection Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Penalty Report</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> 
 
                         {{-- <li class="nav-item">
                             <a href="user" class="nav-link">
@@ -293,6 +357,7 @@
     <script src=" {{ asset('dashboard-asset/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src=" {{ asset('dashboard-asset/dist/js/adminlte.min.js') }}"></script>
+    
 
     <!-- Page specific script -->
     <script src="{{ asset('dashboard-asset/dist/js/list.js') }}"></script>

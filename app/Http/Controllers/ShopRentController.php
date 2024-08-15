@@ -12,7 +12,9 @@ class ShopRentController extends Controller
     public function index()
     {
         $shops = ShopRent::paginate(1000);
-        return view('shop.index', compact('shops'));
+        $tenants = Tenant::all();
+        $totalAgreements = Agreement::all();
+        return view('shop.index', ['shops'=> $shops, 'tenants'=>$tenants, 'agreements'=>$totalAgreements]);
     }
 
     public function create()
@@ -22,6 +24,7 @@ class ShopRentController extends Controller
 
     public function store(Request $request)
     {
+        
         $this->validateShop($request);
         if($request->hasFile('image')){
         $imageName = time() . '.' . $request->image->extension();
@@ -31,6 +34,7 @@ class ShopRentController extends Controller
         }
     }
         // dd($request->all());
+        
         ShopRent::create([
             'shop_id' => $request->input('shop_id'),
             'latitude' => $request->input('latitude'),

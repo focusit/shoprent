@@ -14,7 +14,8 @@ class AgreementController extends Controller
     public function index()
     {
         $agreements = Agreement::all();
-        return view('agreements.index', compact('agreements'));
+        $tenants = Tenant::all();
+        return view('agreements.index', ['agreements'=> $agreements, 'tenants' =>$tenants]);
     }
 
     public function showAllocateShopForm()
@@ -210,6 +211,13 @@ class AgreementController extends Controller
 
         return redirect()->route('agreements.index')->with('success', 'Agreement has been deleted successfully');
     }
+    public function allocatevacantShop($shop_id){
+        $shop = ShopRent::findOrFail($shop_id);
+        //echo $shop;
+        
+        return view('property-allocation.allocate_shop', compact('shop'));
+    }
+    
 }
 
 

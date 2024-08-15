@@ -15,7 +15,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -38,83 +37,117 @@
                                                     value="{{ old('payment_date', isset($agreement) ? $agreement->payment_date : now()->toDateString()) }}"
                                                     required>
                                             </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="agreement_id">Agreement ID:</label>
                                                 <input type="text" id="agreement_id" name="agreement_id"
                                                     class="form-control" value="{{ $bill->agreement_id }}" readonly>
 
                                             </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="bill_no">Bill No:</label>
                                                 <input type="text" id="bill_no" name="bill_no" class="form-control"
                                                     value="{{ $bill->id }}" readonly>
                                             </div>
-
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="payment_method">Mode:</label>
-                                                <select id="payment_method" name="payment_method" class="form-control">
-                                                    <option value="select" disabled selected>Select Mode</option>
-                                                    <option value="cash">Cash</option>
-                                                    <option value="cheque">Cheque</option>
-                                                    <option value="online">Online</option>
-                                                </select>
+                                                <label for="previousBalance">Previous Balance:</label>
+                                                <input type="text" id="previousBalance" name="previousBalance" class="form-control"
+                                                    value="{{  $bill->prevbal ? $bill->prevbal : 0 }}" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="amount">Amount:</label>
                                                 <input type="text" id="amount" name="amount" class="form-control"
-                                                    value="{{ $bill->rent }}" required>
+                                                    value="{{ $bill->total_bal > $bill->rent ? $bill->total_bal : $bill->rent }}" required>
 
                                             </div>
-                                           {{ $bill->previous_balance}}
+                                        </div>                                            
+                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="previousBalance">Previous Balance:</label>
-                                                <input type="text" id="previousBalance" name="previousBalance" class="form-control"
-                                                    value="{{  $bill->previous_balance ? $bill->previous_balance : 0 }}" readonly>
+                                                <label for="payment_method">Mode:</label>
+                                                <select id="payment_method" name="payment_method" class="form-control">
+                                                    <option value="select" disabled selected>Select Mode</option>
+                                                    <option value="cash">Cash</option>
+                                                    <option value="cheque">Cheque</option>
+                                                    <option value="upi">UPI</option>
+                                                    <option value="netbanking">Net Banking</option>
+                                                    <option value="card">Card</option>
+                                                </select>
                                             </div>
-                                            <div id="cheque_fields" style="display: none;">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="remark">Remark:</label>
+                                                <textarea id="remark" name="remark" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="cheque_fields" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="cheque_number">Cheque Number:</label>
                                                     <input type="text" id="cheque_number" name="cheque_number"
                                                         class="form-control">
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="cheque_date">Cheque Date:</label>
                                                     <input type="date" id="cheque_date" name="cheque_date"
                                                         class="form-control">
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="bank_name">Bank Name:</label>
                                                     <input type="text" id="bank_name" name="bank_name"
                                                         class="form-control">
                                                 </div>
                                             </div>
-                                            <div id="online_fields" style="display: none;">
-                                                <div class="form-group">
-                                                    <label for="online_method">Online Method:</label>
-                                                    <select id="online_method" name="online_method" class="form-control">
-                                                        <option value="select" disabled selected>Select Method</option>
-                                                        <option value="upi">UPI</option>
-                                                        <option value="netbanking">Net Banking</option>
-                                                        <option value="card">Card</option>
-                                                    </select>
-                                                </div>
+                                        </div>
+                                    </div>
+                                    <div id="online_fields" style="display: none;">
+                                        <div class="row">   
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="upi_id">UPI ID:</label>
                                                     <input type="text" id="upi_id" name="upi_id"
                                                         class="form-control">
                                                 </div>
                                             </div>
-
-                                            <div class="form-group">
-                                                <label for="remark">Remark:</label>
-                                                <textarea id="remark" name="remark" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div id="net_banking_utr" style="display: none;">
+                                        <div class="row">   
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="utr_no">UTR No:</label>
+                                                    <input type="text" id="utr_no" name="utr_no"
+                                                        class="form-control">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group justify-center">
-                                            <button type="submit" class="btn btn-success">Pay Now</button>
+                                    </div>
+                                    <div id="card_fields" style="display: none;">
+                                        <div class="row">   
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="card_no">Card's last four Digits:</label>
+                                                    <input type="text" id="card_no" name="card_no"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="form-group justify-center">
+                                        <button type="submit" class="btn btn-success">Pay Now</button>
                                     </div>
                                 </form>
                             </div>
@@ -136,11 +169,15 @@
             var paymentModeSelect = document.getElementById('payment_method');
             var chequeFields = document.getElementById('cheque_fields');
             var onlineFields = document.getElementById('online_fields');
+            var net_banking_utr = document.getElementById('net_banking_utr');
+            var card_fields = document.getElementById('card_fields');
 
             paymentModeSelect.addEventListener('change', function() {
                 // Show additional fields based on the selected payment mode
                 chequeFields.style.display = (paymentModeSelect.value === 'cheque') ? 'block' : 'none';
-                onlineFields.style.display = (paymentModeSelect.value === 'online') ? 'block' : 'none';
+                onlineFields.style.display = (paymentModeSelect.value === 'upi') ? 'block' : 'none';
+                net_banking_utr.style.display = (paymentModeSelect.value === 'netbanking') ? 'block' : 'none';
+                card_fields.style.display = (paymentModeSelect.value === 'card') ? 'block' : 'none';
             });
         });
     </script>

@@ -79,6 +79,7 @@ class AuthController extends Controller
             'password.confirmed' => 'The password confirmation does not match.',
             'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, and one number.',
         ];
+
         $request->validate($rules, $messages);
         User::create([
             'name' => $request->name,
@@ -101,7 +102,11 @@ class AuthController extends Controller
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             ],
         ]);
+
+
         $user = Auth::user();
+
+
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'The current password is incorrect.']);
         }
@@ -114,6 +119,8 @@ class AuthController extends Controller
         User::where('id', $user->id)->update([
             'password' => bcrypt($request->new_password),
         ]);
+
+
         return redirect()->route('profile')->with('success', 'Password updated successfully.');
     }
 }

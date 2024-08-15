@@ -13,17 +13,16 @@
                 <tr>
                     <th class="text-center table-success" colspan="2">Shop Details</th>
                 </tr>
-                <tr>
-                    <!-- Display the image if available -->
-                    @if ($tenant->image)
-                <tr>
-                    <td class="text-center" colspan="2">
-                        <figure>
-                            <img src="{{ asset('tenant-images/' . $tenant->image) }}" alt="Shop Image"
-                                style="max-width: 100%;">
-                        </figure>
-                    </td>
-                </tr>
+                <tr><!-- Display the image if available -->
+                @if ($tenant->image)
+                    <tr>
+                        <td class="text-center" colspan="2">
+                            <figure>
+                                <img src="{{ asset('tenant-images/' . $tenant->image) }}" alt="Shop Image"
+                                    style="max-width: 100%;">
+                            </figure>
+                        </td>
+                    </tr>
                 @endif
                 </tr>
                 <tr>

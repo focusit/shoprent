@@ -6,8 +6,9 @@
   "logo":"",
   "due_date": "20",
   "billing_date":"01",
-  "penalty": "10",
-  "discount": "8",
+  "tax_rate":18,
+  "penalty": 10,
+  "discount": 8,
   "discount_date": "10",
   "bank":{
     "bank_name": "State Bank of India",

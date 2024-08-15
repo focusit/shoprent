@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\indexController;
 use App\Http\Controllers\ShopRentController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\reportController;
 use App\Http\Controllers\TenantController;
 use Barryvdh\Debugbar\Facades\Debugbar;
 
@@ -101,22 +102,24 @@ Route::group(['middleware' => ['admin_auth']], function () {
     // Tenant Routes
     Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
     Route::get('/tenants/create', [TenantController::class, 'create'])->name('tenants.create');
+    Route::get('/tenants/search', [TenantController::class, 'search'])->name('tenants.search');
     Route::post('/tenants/store', [TenantController::class, 'store'])->name('tenants.store');
     Route::get('/tenants/{tenant_id}', [TenantController::class, 'show'])->name('tenants.show');
     Route::get('/tenants/{tenant_id}/edit', [TenantController::class, 'edit'])->name('tenants.edit');
     Route::put('/tenants/{tenant_id}', [TenantController::class, 'update'])->name('tenants.update');
     Route::delete('/tenants/{tenant_id}', [TenantController::class, 'destroy'])->name('tenants.destroy');
     Route::post('/checkTenantId', [TenantController::class, 'checkTenantId'])->name('checkTenantId');
+    Route::post('/tenants/searched', [TenantController::class, 'searchTenant'])->name('tenants.searchTenant');
 
     //Autocomplete
     Route::match(['get', 'post'], '/autocomplete-search', [ShopRentController::class, 'autocompleteSearch'])->name('autocomplete.search');
-    Route::match(['get', 'post'], '/autocomplete-tenants', [TenantController::class, 'autocompleteSearch'])
-        ->name('autocomplete.tenants');
+    Route::match(['get', 'post'], '/autocomplete-tenants', [TenantController::class, 'autocompleteSearch'])->name('autocomplete.tenants');
 
     //Property Allocation
     Route::get('/allocate-shop', [AgreementController::class, 'showAllocateShopForm'])->name('allocate.shop.form');
     Route::post('/allocate-shop', [AgreementController::class, 'allocateShop']);
     Route::get('/allocation-list', [AgreementController::class, 'allocationList'])->name('allocation.list');
+    Route::get('/allocation/{shop_id}' ,[AgreementController::class, 'allocatevacantShop'])->name('shop.index');
 
     // Agreement Routes
     Route::get('/agreements', [AgreementController::class, 'index'])->name('agreements.index');
@@ -139,22 +142,30 @@ Route::group(['middleware' => ['admin_auth']], function () {
     Route::get('/bills/{agreement_id}/edit', [BillController::class, 'edit'])->name('bills.edit');
     Route::put('/bills/{agreement_id}', [BillController::class, 'update'])->name('bills.update');
     Route::delete('/bills/{agreement_id}', [BillController::class, 'destroy'])->name('bills.destroy');
+    Route::get('/bills/paid' , [BillController::class, 'paidBills'])->name('bills.paid');
     ///genrate bill
     Route::post('/bills/generate/{year?}/{month?}', [BillController::class, 'generate'])->name('bills.generate');
     Route::post('/bills/regenerate/{transaction_number}/{year?}/{month?}', [BillController::class, 'regenerate'])->name('bills.regenerate');
     Route::get('/bills/print/{id}/{agreement_id}', [BillController::class, 'print'])->name('bills.print');
-
 
     // Bill Routes
     // Route::get('/bill_list', [BillController::class, 'index'])->name('bill_list');
     // Payment routes
     Route::get('/payments/create/{bill_id}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('/payments/store/{bill_id}', [PaymentController::class, 'store'])->name('payments.store');
+    Route::get('/payments/search', [PaymentController::class, 'search'])->name('payments.search');
+    Route::post('/payments/searched', [PaymentController::class, 'searchBy'])->name('payments.searchBy');
+
+
+    //Reports
+    Route::get('/reports/monthwise', [reportController::class , 'monthReport'])->name('reports.monthwise');
+    Route::get('/reports/monthwise/{year?}/{month?}', [reportController::class , 'monthReport'])->name('reports.monthswise');
+    Route::get('/reports/collection', [reportController::class, 'collectionReport'])->name('reports.collection');
 
     Route::get('/generate_bill', function () {
         return view('generate_bill');
     });
-    Route::get('/payments', function () {
+    Route::get('/payments', function (){
         return view('payment');
     });
 

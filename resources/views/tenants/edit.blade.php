@@ -21,4 +21,5 @@
         @method('PUT')
         @include('tenants._form')
     </form>
+</div>
 @endsection

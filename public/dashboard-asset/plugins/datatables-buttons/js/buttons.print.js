@@ -86,7 +86,7 @@ DataTable.ext.buttons.print = {
 		return dt.i18n( 'buttons.print', 'Print' );
 	},
 
-	action: function ( e, dt, button, config ) {
+	action: function ( e, dt, button, config ) { 
 		var data = dt.buttons.exportData(
 			$.extend( {decodeEntities: false}, config.exportOptions ) // XSS protection
 		);
