@@ -488,11 +488,9 @@ class BillController extends Controller
             ];
             $data[]=$printdata;
         }
-        //echo "<pre>";print_r($data);echo "</pre>";
         $pdf = Pdf::loadview('bills/printbills', compact('data'));
         //return $pdf->stream();
         return $pdf->download('bills.pdf');
-        //return view('bills/printbills', compact('data'));
     }
 
 }
