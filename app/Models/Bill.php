@@ -33,6 +33,7 @@ class Bill extends Model
         'due_date',
         'penalty',
         'tax',
+        'user_id',
         'prevbal',
         'total_bal',
         'discount',

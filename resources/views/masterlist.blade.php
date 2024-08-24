@@ -249,7 +249,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('bills') }}" class="nav-link">
+                                    <a href="{{ route('billsPaid') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Paid Bills</p>
                                     </a>
@@ -258,13 +258,27 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{  route('payments.search') }}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-credit-card"></i>
                                 <p>
                                     Payments
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                {{--<li class="nav-item">
+                                    <a href="{{ route('payments.pay') }}" class="nav-link">
+                                        <i class="fas fa-rupee-sign nav-icon"></i>
+                                        <p>Pay Now</p>
+                                    </a>
+                                </li>--}}
+                                <li class="nav-item">
+                                    <a href="{{ route('payments.search') }}" class="nav-link">
+                                        <i class="fa fa-search nav-icon"></i>
+                                        <p>Payment Search</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li> 
 
                         <li class="nav-item">
@@ -286,12 +300,6 @@
                                     <a href="{{route('reports.collection') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Collection Report</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Penalty Report</p>
                                     </a>
                                 </li>
                             </ul>

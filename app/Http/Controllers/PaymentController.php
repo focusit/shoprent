@@ -12,14 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
-    public function create($id)
+    public function create($id=null)
     {
         $bill = Bill::findOrFail($id);
-        return view('payments.create', compact('bill'));
+        $transactions =Transaction::where('agreement_id',$bill->agreement_id)->get();
+        $amount='0';
+        foreach($transactions as $trans){
+            $amount +=$trans->amount;
+        }
+        return view('payments.create', compact('bill','amount'));
     }
 
     public function store(Request $request, $id)
     {
+        session_start();
         $request->validate([
             'amount' => 'required|numeric|min:0',
             'payment_method' => 'nullable',
@@ -30,8 +36,10 @@ class PaymentController extends Controller
         $payment_method = $request->input('payment_method');
         $bill = Bill::findOrFail($id);
         $agreement = Agreement::where('agreement_id',$bill->agreement_id)->first();
-        $transactions= Transaction::where('agreement_id',$bill->agreement_id)->get();
-        //echo $bill."<br>";
+        $transactions= Transaction::where('agreement_id',$bill->agreement_id)
+                    ->where('type','payment')
+                    ->orderBy('id','desc')
+                    ->first();
         $data=[];
         //echo $transactions."<br>";
         if($payment_method=="cheque"){
@@ -54,10 +62,12 @@ class PaymentController extends Controller
             ];
         }else{
             $data=[
-                'method'=>$payment_method,
+                'method'=>'cash',
             ];
         }
+        
         $trans=Transaction::create([
+            'bill_no' => $bill->id,
             'transaction_date' => $payment_date,
             'agreement_id' => $agreement->agreement_id,
             'tenant_id' =>  $agreement->tenant_id,
@@ -68,14 +78,25 @@ class PaymentController extends Controller
             'month' => date('m'),
             'year' => date('Y'),
             'payment_method' => $payment_method,
+            'user_id'=>$_SESSION['user_id'],
             'remarks' =>json_encode($data),
         ]);//create
         
-        $billdata=[
-            'status'=>'paid',
-            //id from transaction table
-        ];//update
+        if($bill->total_bal > $amount){
+            $billdata=[
+                'status'=>'partial paid',
+                'user_id'=>$_SESSION['user_id'],
+            ];
+        } else{
+            $billdata=[
+                'status'=>'paid',
+                'user_id'=>$_SESSION['user_id'],
+                //id from transaction table
+            ];
+        }
+        //update
         $billl=Bill::where('id',$id)->update($billdata);
+
         /*
         $unpaidBills = Bill::where('tenant_id', $bill->tenant_id)
             ->where('status', 'unpaid')
@@ -147,27 +168,34 @@ class PaymentController extends Controller
         //echo $search."<br>";
         //echo $searchby."<br>";
         if($searchby =='full_name'){
-            $bills =Bill::where('tenant_full_name','LIKE','%'.$search.'%')->get();
+            $b =Bill::where('tenant_full_name','LIKE','%'.$search.'%')->get();
         }elseif($searchby ==='govt_id_number'){
-            $tenant =Tenant::where('govt_id_number', $search)->get();
-            $bills=Bill::where('tenant_id',$tenant[0]->tenant_id)->get();
+            $tenant =Tenant::where('govt_id_number', $search)->first();
+            $b=Bill::where('tenant_id',$tenant->tenant_id)->get();
         }elseif($searchby ==='email'){
-            $tenant =Tenant::where('email', $search)->get();
-            $bills=Bill::where('tenant_id',$tenant[0]->tenant_id)->get();
+            $tenant =Tenant::where('email', $search)->first();
+            $b=Bill::where('tenant_id',$tenant->tenant_id)->get();
         }elseif($searchby ==='contact'){
-            $tenant =Tenant::where('contact' ,$search)->get();
-            $bills=Bill::where('tenant_id',$tenant[0]->tenant_id)->get();
+            $tenant =Tenant::where('contact' ,$search)->first();
+            $b=Bill::where('tenant_id',$tenant->tenant_id)->get();
         }elseif($searchby ==='agreement_id'){
-            $bills =Bill::where('agreement_id', $search)->get();
+            $b =Bill::where('agreement_id', $search)->get();
         }elseif($searchby ==='tenant_id'){
-            $bills =Bill::where('tenant_id', $search)->get();
+            $b =Bill::where('tenant_id', $search)->get();
         }elseif($searchby ==='shop_id'){ 
-            $bills =Bill::where('shop_id', $search)->get();
+            $b =Bill::where('shop_id', $search)->get();
+        }elseif($searchby ==='bill_id'){ 
+            $b =Bill::where('id', $search)->get();
         }else{
-            $bills="";
+            $b="";
         }  
         //$bill = Bill::findOrFail($bills[0]->id);//only first bills id 
-        //echo $bills;
+        foreach($b as $bill){
+            if($bill->status=="unpaid"){
+                $bills[]=$bill;
+            }
+        }
+        //print_r($bills);
         return view('payments.search', compact('bills'));
     }
 

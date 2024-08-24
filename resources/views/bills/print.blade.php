@@ -13,12 +13,13 @@
                 <h1><strong> Invoice </strong></h1>
             </div>
             <?php
+                $prev_bal= $lastbill->total_bal ;
                 $lpay=$transaction !=null?(
-                    $transaction->amount < 0 ? -1*($transaction->amount):$transaction->amount
-                ) :'0.00';//last payment
-                $bal=$bill->prevbal-$lpay ;//balance
-                $penalty=$bal*($billingSettings['penalty']/100);//penalty
-                $total_bal=$bal+$penalty;
+                    $lastamt < 0 ? -1*($lastamt):$lastamt) :'0';//last payment
+                $balance=$prev_bal-$lpay ;
+                $bal=$prev_bal<$lpay ? 0 :$balance;//balance
+                $penalty=$prev_bal<$lpay ? 0 :$bill->penalty;//penalty
+                $total_bal=$penalty + $balance;
             ?>
         </section>
         <section class="content">
@@ -26,15 +27,15 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="invoice p-3 mb-3">
-                            <h4><i class="fas fa-globe"></i> <strong>Shop Rent Bill</strong> </h4><br>
+                            <h4 style="text-align:left"><i class="fas fa-globe"></i> <strong>Shop Rent Bill</strong> </h4><br>
                             <div class="row">
                                 <div class="col-4"> 
-                                    <h5>
-                                        <small class="float-left">{{ $billingSettings['mc_name'] }} </small><br>
-                                        <small class="float-left">{{ $billingSettings['mc_address'] }}</small><br>
-                                        <small class="float-left">{{ $billingSettings['mc_phone'] }}</small><br>
-                                        <small class="float-left">{{ $billingSettings['mc_email'] }}</small> 
-                                    </h5>
+                                    <address class="float-left">
+                                        <strong>MC Name : </strong> {{ $billingSettings['mc_name'] }} <br>
+                                        <strong>MC Address : </strong> {{ $billingSettings['mc_address'] }}<br> 
+                                        <strong>MC Phone : </strong>{{ $billingSettings['mc_phone'] }}<br>
+                                        <strong>MC Email : </strong>{{ $billingSettings['mc_email'] }} 
+                                    </address>
                                 </div>
                                 <div class="col-4">
                                     <address class="float-center">
@@ -45,16 +46,13 @@
                                </div>
                                <div class="col-4"> 
                                     <address class="float-left">
-                                        <strong>Bill Number:</strong>
-                                        {{ $bill->id }}<br>
-                                        <strong>Bill date:</strong>
-                                        {{ $bill->bill_date }}<br>
-                                        <strong>Bill Month:</strong>{{ $bill->month }}<br>
+                                        <strong>Bill Number:</strong>{{ $bill->id }}<br>
+                                        <strong>Bill date:</strong>{{ $bill->bill_date }}<br>
+                                        <strong>Bill Month:</strong>{{ date("F",strtotime($bill->bill_date ))}}<br>
                                     <strong>Bill Validity:</strong>{{ $bill->due_date }}<br>
                                     <strong>Agreement ID:</strong>{{ $bill->agreement_id }}
                                     </address>
                                </div>
-
                            </div>
                         </div>
                     </div>
@@ -78,9 +76,9 @@
                                 <div class="col-2"> 
                                     <strong class="float-right">  Amount </strong><br>
                                     <address>                   
-                                        <span class="float-right">{{ $bill->rent }}</span><br>
-                                        <span class="float-right">{{ $bill->tax}}</span><br>
-                                        <span class="float-right">{{ $total_bal}}</span><br>
+                                        <span class="float-right">{{ (int)$bill->rent }}</span><br>
+                                        <span class="float-right">{{ (int)$bill->tax }}</span><br>
+                                        <span class="float-right">{{ $total_bal }}</span><br>
                                     </address>
                                 </div>
                                 <div class="col-1"></div> 
@@ -90,7 +88,7 @@
                                     <strong>Total</strong>
                                 </div>
                                 <div class="col-2">
-                                    <strong class="float-right">{{ $total =$bill->rent + $bill->tax +$total_bal}}</strong>
+                                    <strong class="float-right">{{ $total = round($total_bal,2) +round(($bill->rent + $bill->tax),2)}}</strong>
                                 </div>
                                 <div class="col-1"></div>
                             </div></h4>
@@ -102,7 +100,7 @@
                                 </div>
                                 <div class="col-2">
                                     <strong class="float-right">{{$total}}</strong></br>
-                                    <strong class="float-right">{{$total+$total*($billingSettings['penalty']/100)}}</strong></br>
+                                    <strong class="float-right">{{ round($total+$total*($billingSettings['penalty']/100))}}</strong></br>
                                 </div>
                                 <div class="col-1"></div>
                             </div>
@@ -118,17 +116,17 @@
                                         <div class="col-8"> 
                                             <strong>  Description </strong> <br>
                                                 Previous Bill Amount:<br>
-                                                Last Payment:<br>
+                                                Payment/s Received:<br>
                                                 Balance:<br>
                                                 Penalty (late fee)-<br>
                                         </div>
                                         <div class="col-4"> 
                                             <strong class="float-right"> Amount </strong><br>
                                             <address class="float-right">
-                                                {{ $prev_bal= $bill->prevbal}}<br>
-                                                {{ $lpay}}<br>
-                                                {{ $bal }}<br>
-                                                {{ $penalty }}<br>
+                                                <span class="float-right">{{ $prev_bal}}</span><br>
+                                                <span class="float-right">{{ $lpay}}</span><br>
+                                                <span class="float-right">{{ $bal }}</span><br>
+                                                <span class="float-right">{{ (int)$penalty }}</span><br>
                                             </address>
                                         </div>
                                     </div>

@@ -20,6 +20,7 @@ class Agreement extends Model
         'rent',
         'status',
         'remark',
+        'user_id',
         'document_field',
     ];
 

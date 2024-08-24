@@ -64,8 +64,6 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
-                                                        <th>Status</th>
-                                                        <th>Remarks</th>
                                                         <th>Document</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -87,8 +85,6 @@
                                                             <td>{{ $agreement->with_effect_from }}</td>
                                                             <td>{{ $agreement->valid_till }}</td>
                                                             <td>{{ $agreement->rent }}</td>
-                                                            <td>{{ $agreement->status }}</td>
-                                                            <td>{{ $agreement->remark }}</td>
                                                             <td>
                                                                 @if ($agreement->document_field)
                                                                     @php
@@ -114,10 +110,10 @@
                                                                 @endif
                                                             </td>
                                                             <td class="px-2">
-                                                                <a href="{{ route('agreements.edit', $agreement->agreement_id) }}"
+                                                                <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                     class="btn btn-info btn-sm"><i
                                                                         class="fas fa-edit"></i></a>
-                                                                <a href="{{ route('agreements.show', $agreement->agreement_id) }}"
+                                                                <a title="Show Details" href="{{ route('agreements.show', $agreement->agreement_id) }}"
                                                                     class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                         aria-hidden="true"></i></a>
                                                             </td>
@@ -144,15 +140,14 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
-                                                        <th>Status</th>
-                                                        <th>Remarks</th>
                                                         <th>Document</th>
                                                         <th>Action</th>
+                                                        <th>Generate Bill</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @forelse($agreements as $agreement)
-                                                        @if ($agreement->status == 'active')
+                                                        @if ($agreement->status === 'active')
                                                             <tr class="text-center">
                                                                 <td>{{ $agreement->id }}</td>
                                                                 <td>{{ $agreement->agreement_id }}</td>
@@ -168,8 +163,6 @@
                                                                 <td>{{ $agreement->with_effect_from }}</td>
                                                                 <td>{{ $agreement->valid_till }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
-                                                                <td>{{ $agreement->status }}</td>
-                                                                <td>{{ $agreement->remark }}</td>
                                                                 <td>
                                                                     @if ($agreement->document_field)
                                                                         @php
@@ -195,21 +188,27 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="px-2">
-                                                                    <a href="{{ route('agreements.edit', $agreement->agreement_id) }}"
+                                                                    <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                         class="btn btn-info btn-sm"><i
                                                                             class="fas fa-edit"></i></a>
-                                                                    <a href="{{ route('agreements.show', $agreement->agreement_id) }}"
+                                                                    <a title="Show Details" href="{{ route('agreements.show', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a>
                                                                     {{-- <form action="" method="post" class="d-inline">
                                                                         @csrf
                                                                         @method('DELETE')
-                                                                        <button type="submit" class="btn btn-app btn-danger btn-sm"
+                                                                        <button type="submit" title="Delete Agreement" class="btn btn-app btn-danger btn-sm"
                                                                             onclick="return confirm('Are you sure?')"><i class="fa fa-trash"
                                                                                 aria-hidden="true"></i>
                                                                         </button>
                                                                     </form> --}}
+                                                                </td>
+                                                                <td>
+                                                                    <a title="Generate Bill for Next Month" href="{{ route('bills.billGenerate', $agreement->agreement_id) }}" 
+                                                                    class="btn btn-warning btn-sm">Generate</a>
+                                                                    <a title="Show last Bill" href= "{{ route('bills.show', $agreement->agreement_id )}}"
+                                                                    class="btn btn-primary btn-sm">Last Bill</a>
                                                                 </td>
                                                             </tr>
                                                         @endif
@@ -234,8 +233,6 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
-                                                        <th>Status</th>
-                                                        {{-- <th>Remarks</th> --}}
                                                         <th>Document</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -258,8 +255,6 @@
                                                                 <td>{{ $agreement->with_effect_from }}</td>
                                                                 <td>{{ $agreement->valid_till }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
-                                                                <td>{{ $agreement->status }}</td>
-                                                                {{-- <td>{{ $agreement->remark }}</td> --}}
                                                                 <td>
                                                                     @if ($agreement->document_field)
                                                                         @php
@@ -285,14 +280,14 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="px-2">
-                                                                    <a href="{{ route('agreements.edit', $agreement->agreement_id) }}"
+                                                                    <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                         class="btn btn-info btn-sm"><i
                                                                             class="fas fa-edit"></i></a>
-                                                                    <a href="{{ route('agreements.show', $agreement->agreement_id) }}"
+                                                                    <a title="Show Details" href="{{ route('agreements.show', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a>
-                                                                    {{-- <a href="{{ route('agreements.destroy', $agreement->agreement_id) }}"
+                                                                    {{-- <a title="Delete Agreement" href="{{ route('agreements.destroy', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a> --}}

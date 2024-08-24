@@ -12,24 +12,15 @@
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <label for="year" class="form-label">Select Year:</label>
-                        <select id="year" name="year" class="form-select" >
-                            @for ($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }} {{ $selectedYear == $year ? 'selected' : '' }}">
-                                    {{ $year }}
-                                </option>
-                            @endfor
-                        </select>
+                        <label for="start" class="form-label">From :</label>
+                        <input  type="date" id="start" name="start" class="form-control" 
+                        value="{{old('$start',isset($start) ? $start : now()->toDateString()) }}">
                     </div>
                     <div class="col-md-4">
-                        <label for="month" class="form-label">Select Month:</label>
-                        <select id="month" name="month" class="form-select">
-                            @for ($month = 1; $month <= 12; $month++)
-                                <option value="{{ $month }} {{ $selectedMonth == $month ? 'selected' : '' }}">
-                                    {{ date('F', mktime(0, 0, 0, $month, 1)) }}
-                                </option>
-                            @endfor
-                        </select>
+                        <label for="end" class="form-label">TO :</label>
+                        <input type="date" id="end" name="end" class="form-control" 
+                        value="{{old('$end',isset($end) ? $end : now()->toDateString()) }}">
+                        <span id="date-error" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn btn-info" id="search" >
@@ -45,28 +36,25 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="text-center"><b> Monthly Report of {{ $selectedMonth !=0 ?$selectedMonth :date('M')}} ,
-                                {{ $selectedYear !=0 ?$selectedYear :date('Y')}} </b>(Summary)</h4>
+                                <h4 class="text-center"><b> Collection Report {{$data['duration']}}</b></h4>
                             </div>
                             <div class="card-body row">
                                 <div class="col-md-2"></div>
                                 <div class="col-md-4">
-                                    <span>Total Shop</span><br>
-                                    <span>Active Agreement</span><br>
-                                    <span>Total Rent</span><br>
-                                    <span>Total Tax</span><br>
-                                    <span>Total Previous Balance</span><br>
-                                    <span>Total Penalty</span><br>
-                                    <b>Total Total Amount</b><br>
+                                    <span>Total Receipts</span><br>
+                                    <b>Payment Receipts</b><br>
+                                    <span>Rent</span><br>
+                                    <span>Tax</span><br>
+                                    <span>Penalty</span><br>
+                                    <span>Recovery/Previous Balance</span><br>
                                 </div>
                                 <div class="col-md-4">
-                                   {{-- <span class="float-right">{{$data['shop']}}</span><br>
-                                    <span class="float-right">{{$data['agreement']}}</span><br>
+                                    <span class="float-right">{{$data['count']}}</span><br>
+                                    <b class="float-right">{{-1*$data['payment']}}</b><br>
                                     <span class="float-right">{{$data['rent']}}</span><br>
                                     <span class="float-right">{{$data['tax']}}</span><br>
-                                    <span class="float-right">{{$data['prevbal']}}</span><br>
                                     <span class="float-right">{{$data['penalty']}}</span><br>
-                                    <b class="float-right">{{$data['total_amt']}}</b><br>--}}
+                                    <span class="float-right">{{$data['prevbal']}}</span><br>
                                 </div>
                                 <div class="col-md-2"></div>
                             </div>
@@ -99,26 +87,27 @@
                         @foreach ($bills as $bill)
                             <tr>
                                 <td>
-                                    <a href="{{ route('agreements.show', $bill->agreement_id) }}">
-                                        {{ $bill->agreement_id }}
+                                    <a href="{{ route('agreements.show', $bill['agreement_id']) }}">
+                                        {{ $bill['agreement_id'] }}
                                     </a>
                                 </td>
-                                <td>{{ $bill->shop_id }}</td>
-                                <td>{{ $bill->tenant_id }}</td>
-                                <td>{{ $bill->tenant_full_name }}</td>
-                                <td>{{ $bill->shop_address }}</td>
-                                <td>{{ $bill->rent }}</td>
-                                <td>{{ $bill->tax }}</td>
-                                <td>{{ $bill->penalty }}</td>
-                                <td>{{ $bill->prevbal }}</td>
-                                <td>{{ $bill->total_bal }}</td>
+                                <td>{{ $bill['shop_id'] }}</td>
+                                <td>{{ $bill['tenant_id'] }}</td>
+                                <td>{{ $bill['tenant_full_name'] }}</td>
+                                <td>{{ $bill['shop_address'] }}</td>
+                                <td>{{ $bill['rent'] }}</td>
+                                <td>{{ $bill['tax'] }}</td>
+                                <td>{{ $bill['penalty'] }}</td>
+                                <td>{{ $bill['prevbal'] }}</td>
+                                <td>{{ $bill['total_bal'] }}</td>
                             </tr>
                         @endforeach
-                        @if ($bills->isEmpty())
+                        @if ($bills==null)
                             <tr>
                                 <td colspan="12">No bills found.</td>
                             </tr>
                         @endif
+
                     </tbody>
                 </table>
             </div>
@@ -129,9 +118,10 @@
     <script>
     $(document).ready(function(){
         $('#search').click(function(){
-            var year = $('#year').val();
-            var month = $('#month').val();
-            window.location.href = "{{ route('reports.monthswise') }}/" + year + "/" + month;
+            var start = $('#start').val();
+            console.log(start);
+            var end = $('#end').val();
+            window.location.href = "{{ route('reports.collections') }}/" + start + "/" + end;
 
         });
         $('#change').click(function(){
@@ -141,15 +131,24 @@
             var change = document.getElementById('change');
             if (details.style.display === 'none') {
                 details.style.display = 'block';
-                summary.style.display = 'none';
-                change.innerHTML = 'Summary';
+                //summary.style.display = 'none';
             } else {
-                summary.style.display = 'block';
+                //summary.style.display = 'block';
                 details.style.display = 'none';
-                change.innerHTML = 'Details';
             }
-            
-
+        });
+        document.getElementById('end').addEventListener('change', function() {
+            var start = document.getElementById('start').value;
+            var end = this.value;
+            if (start && end && start > end) {
+                document.getElementById('date-error').innerText =
+                    'End date should not be less than Start date.';
+                this.value = start; // Reset the input value
+                document.getElementById("search").disabled = true;
+            } else {
+                document.getElementById('date-error').innerText = '';
+                document.getElementById("search").disabled = false;
+            }
         });
     });
 

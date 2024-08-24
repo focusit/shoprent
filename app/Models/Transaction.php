@@ -16,6 +16,7 @@ class Transaction extends Model
         'payment_method',
         'agreement_id',
         'shop_id',
+        'bill_no',
         'amount',
         'tenant_id',
         'tenant_name',
@@ -23,6 +24,7 @@ class Transaction extends Model
         'year',
         'type',
         'remarks',
+        'user_id',
     ];
     public function bills()
     {

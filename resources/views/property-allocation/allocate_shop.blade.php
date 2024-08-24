@@ -8,8 +8,6 @@
             .ui-autocomplete {
                 position: absolute;
                 top: 100%;
-                left: 0;
-                height: 300px;
                 z-index: 1000;
                 float: left;
                 display: none;
@@ -88,14 +86,14 @@
                                         <label for="shop_search">Search for a vacant shop:</label>
                                         <input type="text" id="shop_search" name="shop_search" class="form-control"
                                             value="{{ old('shop_search', 
-                                            isset($agreement) ? $agreement->shop_id : $shop->shop_id) }}"
+                                            isset($agreement) ? $agreement->shop_id :( isset($shop) ? $shop->shop_id :'')) }}"
                                             placeholder="Search for a vacant shop..." required>
                                         @error('shop_search')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                         <input type="hidden" id="shop_id" name="shop_id"
                                             value="{{ old('shop_id', 
-                                            isset($agreement) ? $agreement->shop_id : $shop->shop_id ) }}">
+                                            isset($agreement) ? $agreement->shop_id : ( isset($shop) ? $shop->shop_id :'') ) }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -147,8 +145,9 @@
                                             value="{{ old('valid_till', isset($agreement) ? $agreement->valid_till : '') }}"
                                             required>
                                         @error('valid_till')
-                                            <div class="text-danger">{{ $message }}</div>
+                                            <div class="text-danger" >{{ $message }}</div>
                                         @enderror
+                                        <span id="date-error" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -157,7 +156,7 @@
                                         <input type="text" id="rent" name="rent" class="form-control"
                                             placeholder="Rent"
                                             value="{{ old('rent',
-                                            isset($agreement) ? $agreement->rent : $shop->rent) }}" required>
+                                            isset($agreement) ? $agreement->rent : (isset($shop) ? $shop->rent :('' ) )) }}" required>
                                     </div>
                                     @error('rent')
                                         <div class="text-danger">{{ $message }}</div>
@@ -201,7 +200,8 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-danger toastsDefaultDefault">Allocate</button>
+                            <button type="button" class="btn btn-danger" id="button" data-toggle="modal" data-target="#alertModel">Allocate</button>
+                            <button type="button" class="btn btn-primary" id="save" hidden>Allocate</button>
                         </form>
                     </div>
                 </div>
@@ -209,9 +209,61 @@
         </div>
     </div>
 
+<!-- Modal -->
+<div class="modal fade" id="alertModel" role="dialog">
+    <div class="modal-dialog">
+  
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+                <h4 class="modal-title">Are you sure you want to {{ isset($shop) ? 'Update ' : 'Create ' }} </h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <span>Shop ID</span><br>
+                    <span>Tenant ID</span><br>
+                    <span>Agreement ID</span><br>
+                    <span>With Effect from </span><br>
+                    <span>Valid Till</span><br>
+                    <span>Rent </span><br>
+                </div>
+                <div class="col-md-6">
+                    <span id="data1"></span><br>
+                    <span id="data2"></span><br>
+                    <span id="data3"></span><br>
+                    <span id="data4"></span><br>
+                    <span id="data5"></span><br>
+                    <span id="data6"></span><br>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="submit" value="submit">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
+        $(document).ready(function() {
+            document.getElementById("data1").innerText = $('#shop_id').val();
+            $('#button').click(function(){
+                document.getElementById("data1").innerText = $('#shop_id').val();
+                document.getElementById("data2").innerText = $('#tenant_id').val();
+                document.getElementById("data3").innerText = $('#agreement_id').val();
+                document.getElementById("data4").innerText = $('#with_effect_from').val();
+                document.getElementById("data5").innerText = $('#valid_till').val();
+                document.getElementById("data6").innerText = $('#rent').val();
+            });
+            $('#submit').click(function(){
+                $('#save').trigger('click');
+            });
+        });
+    
         //date validation 
         document.getElementById('valid_till').addEventListener('change', function() {
             var withEffectFrom = document.getElementById('with_effect_from').value;
@@ -220,9 +272,9 @@
             if (withEffectFrom && validTill && withEffectFrom > validTill) {
                 document.getElementById('date-error').innerText =
                     'Valid Till date should not be less than With Effect From date.';
-                this.value = ''; // Reset the input value
+                this.value = withEffectFrom; // Reset the input value
             } else {
-                document.getElementById('date-error').innerText = 'invalid';
+                document.getElementById('date-error').innerText = '';
             }
         });
         // Initialize jQuery UI Autocomplete for Shop Search
@@ -236,15 +288,20 @@
                         return {
                             label: item.shop_id,
                             value: item.shop_id,
-                        };
+                            rent: item.rent,
+                        }; 
+                        
                     }));
                 });
             },
             minLength: 0,
             select: function(event, ui) {
                 console.log(ui.item.value);
-                $('#shop_id').val(ui.item.value);
+              
+                var shop = $('#shop_id').val(ui.item.value);
+                var rent = $('#rent').val(ui.item.rent);
             }
+
         });
         //Initialize jQuery UI Autocomplete for Tenant Search
         $('#tenant_search').autocomplete({

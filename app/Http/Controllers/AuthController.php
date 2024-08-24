@@ -29,6 +29,8 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Unauthorized. Please login as an admin.'])->onlyInput('email');
             }
             // toastr()->addSuccess('Your account has been restored.');
+            session_start();
+            $_SESSION['user_id']= Auth::user()->id;
             return redirect()->route('dashboard')->with('info', 'You have successfully logged in as an admin.');
         }
 
@@ -93,6 +95,7 @@ class AuthController extends Controller
     }
     public function updatePassword(Request $request)
     {
+        session_start();
         $request->validate([
             'current_password' => ['required', 'string'],
             'new_password' => [
@@ -117,9 +120,8 @@ class AuthController extends Controller
         $user->password = bcrypt($request->new_password);
         User::where('id', $user->id)->update([
             'password' => bcrypt($request->new_password),
+            'user_id'=>$_SESSION['user_id'],
         ]);
-
-
         return redirect()->route('profile')->with('success', 'Password updated successfully.');
     }
 }

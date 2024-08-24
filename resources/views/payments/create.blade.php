@@ -64,16 +64,16 @@
                                             <div class="form-group">
                                                 <label for="amount">Amount:</label>
                                                 <input type="text" id="amount" name="amount" class="form-control"
-                                                    value="{{ $bill->total_bal > $bill->rent ? $bill->total_bal : $bill->rent }}" required>
+                                                    value="{{ $bill->total_bal >= $amount ? $amount : $bill->total_bal }}" required>
 
                                             </div>
                                         </div>                                            
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="payment_method">Mode:</label>
-                                                <select id="payment_method" name="payment_method" class="form-control">
+                                                <select id="payment_method" name="payment_method" class="form-control" required>
                                                     <option value="select" disabled selected>Select Mode</option>
-                                                    <option value="cash">Cash</option>
+                                                    <option value="cash" selected>Cash</option>
                                                     <option value="cheque">Cheque</option>
                                                     <option value="upi">UPI</option>
                                                     <option value="netbanking">Net Banking</option>

@@ -15,7 +15,7 @@
                         <label for="year" class="form-label">Select Year:</label>
                         <select id="year" name="year" class="form-select" >
                             @for ($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }} {{ $selectedYear == $year ? 'selected' : '' }}">
+                                <option value="{{ $year }} {{ $selectedYear == $year ? ' ' : '' }}">
                                     {{ $year }}
                                 </option>
                             @endfor
@@ -25,7 +25,7 @@
                         <label for="month" class="form-label">Select Month:</label>
                         <select id="month" name="month" class="form-select">
                             @for ($month = 1; $month <= 12; $month++)
-                                <option value="{{ $month }} {{ $selectedMonth == $month ? 'selected' : '' }}">
+                                <option value="{{ $month }} {{ $selectedMonth == $month ? ' ' : '' }}">
                                     {{ date('F', mktime(0, 0, 0, $month, 1)) }}
                                 </option>
                             @endfor
@@ -45,7 +45,7 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="text-center"><b> Monthly Report of {{ $selectedMonth !=0 ?$selectedMonth :date('M')}} ,
+                                <h4 class="text-center"><b> Monthly Report of {{ $selectedMonth !=0 ? $selectedMonth :date('M')}} ,
                                 {{ $selectedYear !=0 ?$selectedYear :date('Y')}} </b>(Summary)</h4>
                             </div>
                             <div class="card-body row">

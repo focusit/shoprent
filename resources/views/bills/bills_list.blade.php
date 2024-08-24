@@ -7,7 +7,7 @@
     <div class="content-wrapper">
         <div class="card p-3">
             <div class="card-header">
-                <h3 class="card-title">Bills Month-wise</h3>
+                <h2 class="card-title">{{ isset($var) ? "Month-wise Bills" :"Paid Bills"}} </h2>
             </div>
             <div class="card-body">
                 <div class="row mb-3">
@@ -49,7 +49,11 @@
                         <th>Amount</th>
                         <th>Bill Date</th>
                         <th>Print Bills</th>
-                        <th>Payment Status</th>
+                        @if(isset($var))
+                            @if($paybill=="enable")
+                                <th>Payment Status</th>
+                            @endif
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -68,22 +72,26 @@
                                 <td>{{ $bill->total_bal >$bill->rent? $bill->total_bal:$bill->rent }}</td>
                                 <td>{{ $bill->bill_date }}</td>
                                 <td>
-                                    <a href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
+                                    <a title="Print Bill" href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
                                         target="_blank" class="btn btn-info btn-sm">
                                         <i class="fas fa-print"></i> Print Bill
                                     </a>
                                 </td>
-                                <td>
-                                    @if ($bill->status !== 'paid')
-                                        <button type="button" class="btn btn-warning btn-sm">
-                                            <a href="{{ route('payments.create', $bill->id) }}">Pay Now</a>
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn btn-info btn-danger" disabled>
-                                            Paid
-                                        </button>
+                                @if(isset($var))
+                                    @if($paybill=="enable")
+                                        <td>
+                                            @if ($bill->status !== 'paid')
+                                                <button title="Pay Bill" type="button" class="btn btn-warning btn-sm">
+                                                    <a href="{{ route('payments.create', $bill->id) }}">Pay Now</a>
+                                                </button>
+                                            @else
+                                                <button title="Bill Paid" type="button" class="btn btn-info btn-danger" disabled>
+                                                    Paid
+                                                </button>
+                                            @endif
+                                        </td>
                                     @endif
-                                </td>
+                                @endif
                             </tr>
                         @endforeach
                     @endforeach

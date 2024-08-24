@@ -24,6 +24,7 @@ class ShopRent extends Model
         'rent',
         'status',
         'image',
+        'user_id',
         // 'tenant_id'
     ];
 

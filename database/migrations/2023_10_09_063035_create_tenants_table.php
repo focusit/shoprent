@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('gst_number')->unique()->nullable();
             $table->string('gender')->nullable();
+            $table->int('user_id');
             $table->timestamps();
         });
     }

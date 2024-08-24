@@ -22,13 +22,14 @@
                     <div class="col-12">
                         <div class="card card-success">
                             <div class="card-header">
-                                <h3 class="card-title">Recently Generated Bills </h3>
+                                <h3 class="card-title"> Generate Bills{{ isset($bills) ? ' ':'' }}</h3>
                             </div>
                             <!-- /.card-header -->
-                            <div class="  pl-4 mt-4">
+                            <div class="pl-4 mt-4">
                                 <form action="{{ route('bills.generate') }}" method="post" id="generateForm">
                                     @csrf
-                                    <div class="mb-4">
+                                
+                                    <div class="mb-4" hidden>
                                         <label for="year">Select Year:</label>
                                         <select id="year">
                                             {{-- <option value="Please select">Please select</option> --}}
@@ -60,9 +61,19 @@
                                         <input type="hidden" name="selectedMonth" id="selectedMonth"
                                             value="{{ date('m') }}">
                                     </div>
-                                    <div class="card-card-default mb-4">
-                                        <button type="submit" class="btn btn-success" id="generateButton">Generate
-                                            Bills</button>
+                                    <div class="row">
+                                        <div class="card-card-default mb-4 col-6 ">
+                                            <button type="submit" title="Generate Bills for this Month" class="btn btn-success" id="generateButton">Generate
+                                                Bills</button>
+                                        </div>
+                                        <div class="card-card-default mb-4 col-5 d-flex justify-content-end ">
+                                            <button title="Export all Bills Pdf" type="button" class="btn btn-success " >
+                                                <a class="text-light" href="{{ route('bills.printBills') }}" target="_blank">
+                                                    Export Bills
+                                                </a>
+                                            </button>
+                                        </div>
+                                        <div class="col-1"></div>
                                     </div>
                                 </form>
                             </div>
@@ -79,7 +90,9 @@
                                         <th class="d-print-none">Bill Date</th>
                                         <th class="d-print-none">Action</th>
                                         <th class="d-print-none">Print Bills</th>
-                                        <th class="d-print-none">Pay Now</th>
+                                        @if($paybill="enable")
+                                            <th class="d-print-none">Pay Now</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -101,28 +114,30 @@
                                                         value="{{ date('Y') }}">
                                                     <input type="hidden" name="selectedMonth" id="selectedMonth"
                                                         value="{{ date('m') }}">
-                                                    <button type="submit" class="btn btn-warning">Regenerate</button>
+                                                    <button type="submit" title="Regenerate This Bill" class="btn btn-warning">Regenerate</button>
                                                 </form>
                                             </td>
                                             <td>
                                                 <a href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
-                                                    target="_blank" class="btn btn-info btn-sm">
+                                                    title="Print Bill" class="btn btn-info btn-sm">
                                                     <i class="fas fa-print"></i> Print Bill
                                                 </a>
                                             </td>
+                                            @if($paybill="enable")
                                             <td>
                                                 @if ($bill->status !== 'paid')
-                                                    <button type="button" class="btn btn-warning btn-sm">
+                                                    <button type="button" class="btn btn-warning btn-sm" title="Pay Bill">
                                                         <a href="{{ route('payments.create', $bill->id) }}">
                                                             Pay Now
                                                         </a>
                                                     </button>
                                                 @else
-                                                    <button type="button" class="btn btn-info btn-danger" disabled>
+                                                    <button type="button" class="btn btn-info btn-danger" title="Bill Paid" disabled>
                                                         Paid
                                                     </button>
                                                 @endif
                                             </td>
+                                            @endif
                                         </tr>
                                     @empty
                                         <tr>

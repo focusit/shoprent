@@ -13,7 +13,7 @@ class TenantController extends Controller
     public function index( $type=null)
     {
         echo $type;
-        $tenants = Tenant::paginate(200);
+        $tenants = Tenant::get();
         $agreements = Agreement::all();
         return view('tenants.index', ['tenants' => $tenants, 'agreements'=> $agreements]);
     }
@@ -23,6 +23,7 @@ class TenantController extends Controller
     }
     public function store(Request $request)
     {
+        session_start();
         $this->validateTenants($request);
         if($request->hasFile('image')){
             $imageName = time() . '.' . $request->image->extension();
@@ -44,6 +45,7 @@ class TenantController extends Controller
             'password' => $request->input('password'),
             'image' => $imageName ??"",
             'gender'=> $request->input('gender'),
+            'user_id'=>$_SESSION['user_id'],
         ]);
         // dd($request);
         // User::create([
