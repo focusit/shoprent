@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\Agreement;
 use App\Models\Bill;
+use App\Models\User;
 use App\Models\Tenant;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -53,13 +54,11 @@ class BillController extends Controller
             });
         $billingSettings = Bill::getBillingSettings();
         $paybill='';
-        if($billingSettings['month']==$selectedMonth && $billingSettings['year']==$selectedYear){
+        if($billingSettings['month'] == $selectedMonth && $billingSettings['year']==$selectedYear){
             $paybill="enable";
         }else{
             $paybill="disable";
         }
-        //$transaction=Transaction::All();
-        //echo $transaction;               
         return view('bills.bills_list', compact('billsByMonth','var','paybill' ,'selectedYear', 'selectedMonth'));
     }
 
@@ -74,7 +73,7 @@ class BillController extends Controller
             ->groupBy(function ($bill) {
                 return Carbon::createFromDate($bill->year, $bill->month, 1)->format('F Y');
             });
-        //$transaction=Transaction::All();  
+          
         return view('bills.bills_list', compact('billsByMonth','selectedYear', 'selectedMonth'));
     }
 
@@ -97,13 +96,9 @@ class BillController extends Controller
     }
 
     public function singlebillGen($agreement_id){
-        //session_start();
-        //echo $_SESSION['user_id'];
-        $agreements = Agreement::all();
-        $tenants = Tenant::all();
+        session_start();
         $year=date('Y');
         $month=date('m');
-        //echo $year ."<br>".$month;
         $lastBill=Bill::where('agreement_id',$agreement_id)
                             ->orderby('id','desc')
                             ->first();
@@ -116,76 +111,77 @@ class BillController extends Controller
             $month=$billingSettings['month']+1;
             $year =$billingSettings['year'];
         }
-        //echo $year ."<br>".$month;
-        $existingTnx = Transaction::where('agreement_id', $agreement_id)//->get();
+        $existingTnx = Transaction::where('agreement_id', $agreement_id)
                 ->where('year', $year)
                 ->where('month', $month)
                 ->first();
         if(!$existingTnx) {
-            //echo "Generate";
             $data = $this->generateBillData($agreement_id, $year, $month,$bill_id);
+            if($data!=null){
+                return redirect()->route('agreements.index')->with('success', 'Bill Generated successfully!');
+            }else{
+                return redirect()->route('agreements.index')->with('Warning', 'Bill can/t be Generated!');
+            }
+        }else{
+            return redirect()->route('agreements.index')->with('info', 'Bill Already Generated!');
         }
-        return redirect()->route('agreements.index',['agreements'=> $agreements, 'tenants' =>$tenants])
-        ->with('success', 'Bill Generated successfully!');
     }
 
     public function generate(Request $request, $year = null, $month = null)
     {
+        session_start();
         $year = $request->input('selectedYear') ?? date('Y');
         $month = $request->input('selectedMonth') ?? date('m');
-        $activeAgreements = Agreement::where('status', 'active')->get();
+        $activeAgreements = Agreement::all();
         foreach ($activeAgreements as $agreement) {
             $lastBill=Bill::where('agreement_id',$agreement->agreement_id)
                             ->orderby('id','desc')
                             ->first();
             $bill_id=$lastBill->id;
-            $existingTnx = Transaction::where('agreement_id', $agreement->agreement_id)//->get();
+            $existingTnx = Transaction::where('agreement_id', $agreement->agreement_id)
                 ->where('year', $year)
                 ->where('month', $month)
                 ->first();
-                //echo $existingTnx."<br>";
             if (!$existingTnx) {
                 $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month,$bill_id);
-                //print_r($billAndTransactionData);
-                //break;
-                /*if ($billAndTransactionData && $billAndTransactionData['transactionData']) {
-                    $transactionData = $billAndTransactionData['transactionData'];
-                    logger('Transaction Data:', $transactionData);
-                    try {
-                        $createdTransaction = Transaction::create($transactionData);
-                        //Entry in Transaction Table
-                        if ($createdTransaction) {
-                            Bill::create($billAndTransactionData['billData']);
-                        } else {
-                            logger('Transaction creation failed:', ['agreement_id' => $agreement->agreement_id]);
-                        }
-                    } catch (\Exception $e) {
-                        // Log the exception
-                        logger('Error creating transaction:', ['error' => $e->getMessage(), 'agreement_id' => $agreement->agreement_id]);
-                    }
-                }*/
             }
         }
+        $billingSettings = Bill::getBillingSettings();
         $billingSettings['month'] = date('m');
         $billingSettings['year'] = date('Y');
         $newJsonString = json_encode($billingSettings);
-        file_put_contents('billing_settings.json', $newJsonString);
-        //echo "DONE";
+        file_put_contents(public_path('billing_settings.json'), $newJsonString);
         return redirect()->route('bills.billsList', ['year' => $year, 'month' => $month])->with('success', 'Bills generated successfully.');
         
     }
     private function generateBillData($agreement_id, $year, $month, $bill_id)
     {
-        session_start();
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
         $transactions =Transaction::where('agreement_id',$agreement_id)->get();
+        $rent=0;
+        if($agreement->status =='active'){
+            $rent=$agreement->rent;
+            $m =date('m',strtotime($agreement->with_effect_from));
+            $y=date('Y',strtotime($agreement->with_effect_from));
+            if($month =="1"){
+                if($m=="12" && $y==$year-1){
+                    $rent=$agreement->rent *(date('d',strtotime($agreement->with_effect_from))/date('t', strtotime(now())));
+                }
+            }else{
+                if($m==$month-1 && $y==$year){
+                    $rent=$agreement->rent *(date('d',strtotime($agreement->with_effect_from))/date('t', strtotime(now())));
+                }
+            }//check from starting date
+        }elseif($month==date('m',strtotime($agreement->valid_till)) && $year==date('Y',strtotime($agreement->valid_till))){
+            $rent=$agreement->rent * (date('d',strtotime($agreement->valid_till))/date('t', strtotime(now())));
+            //check from valid till
+        }
         try {
             $billingSettings = Bill::getBillingSettings();
-            //print_r($billingSettings); print_r($_POST);
             $datePrefix=$year.'-'.$month.'-';
             $dueDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['due_date']); //echo "Due date =" .$dueDate;
             $billDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['billing_date']);// echo "Bill date =" .$billDate;
-            $discountDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['discount_date']);// echo "discount date =" .$discountDate;
+            //$discountDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['discount_date']);// echo "discount date =" .$discountDate;
         } catch (\Exception $e) {
             dd('Error: ' . $e->getMessage() . ' check whether file exist or not or contact admin');
         }
@@ -195,8 +191,6 @@ class BillController extends Controller
         $uniqueTransactionNumber = $this->generateUniqueTransactionNumber();
         Log::info('Generated Transaction Number:', ['transaction_number' => $uniqueTransactionNumber]);
         $prevbal= 0;
-        //$bill=null;
-        //$transaction=null;
         foreach($transactions as $tranx){
             if ($tranx->month >= $month && $tranx->year >= $year){
                 //echo "NO PENELTY year".$tranx->year  ." month ".$tranx->month."<br>";
@@ -204,8 +198,6 @@ class BillController extends Controller
                 //echo "NO PENELTY year".$tranx->year  ." month ".$tranx->month."<br>";
             }else{
                 $prevbal +=$tranx->amount;
-                //$tnxMonth =$tranx->month;
-                //$tnxYear =$tranx->year;
                 //echo $tranx."<br>";
             }
         }
@@ -213,88 +205,80 @@ class BillController extends Controller
         if($prevbal >0){
             $penalty =$prevbal*($billingSettings['penalty']/100);
         }
-        $tax = $agreement->rent*($billingSettings['tax_rate']/100);//Tax on rent
-        $total_bal=$agreement->rent +$tax +$prevbal+$penalty;//total balance
-
-                if($prevbal > 0){
-                    $data=Transaction::create([
-                        'bill_id'=>$bill_id,
-                        'transaction_number' => null,
-                        'agreement_id' => $agreement->agreement_id,
-                        'tenant_id' => $agreement->tenant->tenant_id,
-                        'shop_id' =>$agreement->shop_id,
-                        'tenant_name' => $agreement->tenant->full_name,
-                        'amount' =>round($penalty),
-                        'type' => 'Penelty',
-                        'transaction_date' => Carbon::now()->toDateString(),
-                        'year' => $year,
-                        'month' => $month,
-                        'user_id'=>$_SESSION['user_id'],
-                        'remarks' =>' ',
-                    ]);
-                }
-                $transaction = Transaction::create([
-                    'bill_id'=>$bill_id,
+        $tax = $rent*($billingSettings['tax_rate']/100);//Tax on rent
+        $total_bal=$rent +$tax +$prevbal+$penalty;//total balance
+        if($rent != 0){
+            if($prevbal > 0){
+                $data=Transaction::create([
+                    'bill_no'=>$bill_id,
                     'transaction_number' => null,
                     'agreement_id' => $agreement->agreement_id,
                     'tenant_id' => $agreement->tenant->tenant_id,
                     'shop_id' =>$agreement->shop_id,
                     'tenant_name' => $agreement->tenant->full_name,
-                    'amount' => round($agreement->rent + $tax),
-                    'type' => 'Rent',
+                    'amount' =>round($penalty),
+                    'type' => 'Penelty',
                     'transaction_date' => Carbon::now()->toDateString(),
                     'year' => $year,
                     'month' => $month,
                     'user_id'=>$_SESSION['user_id'],
                     'remarks' =>' ',
                 ]);
-                $bill = Bill::create([
-                    'agreement_id' => $agreement->agreement_id,
-                    'shop_id' => $agreement->shop->shop_id,
-                    'tenant_id' => $agreement->tenant->tenant_id,
-                    'tenant_full_name' => $agreement->tenant->full_name,
-                    'shop_address' => $agreement->shop->address,
-                    'rent' => round($agreement->rent),
-                    'year' => $year,
-                    'month' => $month,
-                    'bill_date' => $billDate->toDateString(),
-                    'due_date' => $dueDate->toDateString(),
-                    //'discount_date'=> $discountDate->toDateString(),
-                    'status' => 'unpaid',
-                    'penalty' => round($penalty),
-                    'tax' => (int)($tax),
-                    'prevbal' => round($prevbal),
-                    'total_bal' => round($total_bal),
-                    //'discount' => $discount,
-                    'transaction_number' => null,
+            }
+            $transaction = Transaction::create([
+                'bill_no'=>$bill_id,
+                'transaction_number' => null,
+                'agreement_id' => $agreement->agreement_id,
+                'tenant_id' => $agreement->tenant->tenant_id,
+                'shop_id' =>$agreement->shop_id,
+                'tenant_name' => $agreement->tenant->full_name,
+                'amount' => round($rent + $tax),
+                'type' => 'Rent',
+                'transaction_date' => Carbon::now()->toDateString(),
+                'year' => $year,
+                'month' => $month,
+                'user_id'=>$_SESSION['user_id'],
+                'remarks' =>' ',
+            ]);
+            $bill = Bill::create([
+                'agreement_id' => $agreement->agreement_id,
+                'shop_id' => $agreement->shop->shop_id,
+                'tenant_id' => $agreement->tenant->tenant_id,
+                'tenant_full_name' => $agreement->tenant->full_name,
+                'shop_address' => $agreement->shop->address,
+                'rent' => round($rent),
+                'year' => $year,
+                'month' => $month,
+                'bill_date' => $billDate->toDateString(),
+                'due_date' => $dueDate->toDateString(),
+                //'discount_date'=> $discountDate->toDateString(),
+                'status' => 'unpaid',
+                'penalty' => round($penalty),
+                'tax' => (int)($tax),
+                'prevbal' => round($prevbal),
+                'total_bal' => round($total_bal),
+                //'discount' => $discount,
+                'transaction_number' => null,
+                'user_id'=>$_SESSION['user_id'],
+            ]); 
+            $lastB = Bill::where('id',$bill_id)->first();
+            if($lastB->status =='unpaid'){
+                $billdata=[
+                    'status'=>'Carried Forward',
                     'user_id'=>$_SESSION['user_id'],
-                ]);    
-            
-        $lastB = Bill::where('id',$bill_id)->first();
-        if($lastB->status =='unpaid'){
-            $billdata=[
-                'status'=>'Carried Forward',
-                'user_id'=>$_SESSION['user_id'],
-            ];
-            Bill::where('id',$bill_id)->update($billdata);
+                ];
+                Bill::where('id',$bill_id)->update($billdata);
+            }elseif($lastB->status =='partial paid'){
+                $billdata=[
+                    'status'=>'Partialy paid Carried Forward',
+                    'user_id'=>$_SESSION['user_id'],
+                ];
+                Bill::where('id',$bill_id)->update($billdata);
+            }
+            return ['billData' => $bill, 'transactionData' => $transaction];//->toArray()
+        }else{
+            return ['billData' => null, 'transactionData' => null];//->toArray()
         }
-        if($lastB->status =='partial paid'){
-            $billdata=[
-                'status'=>'Partialy paid Carried Forward',
-                'user_id'=>$_SESSION['user_id'],
-            ];
-            Bill::where('id',$bill_id)->update($billdata);
-        }
-        
-        /*if($billingSettings['month'] < $month && $billingSettings['year']<=$month ){
-            $billingSettings['month'] = $month;
-            $billingSettings['year'] = $year;
-            $newJsonString = json_encode($billingSettings);
-            file_put_contents('billing_settings.json', $newJsonString);
-        }*/
-        
-        return ['billData' => $bill, 'transactionData' => $transaction];//->toArray()
-        
     }
 
     private function generateUniqueTransactionNumber()
@@ -314,7 +298,6 @@ class BillController extends Controller
         $transactions =Transaction::where('agreement_id',$bills->agreement_id)->get();
         try {
             $billingSettings = Bill::getBillingSettings();
-            //print_r($billingSettings); print_r($_POST);
             $datePrefix=$_POST['selectedYear'].'-'.$_POST['selectedMonth'].'-';
             $dueDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['due_date']); //echo "Due date =" .$dueDate;
             $billDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['billing_date']);// echo "Bill date =" .$billDate;
@@ -389,7 +372,6 @@ class BillController extends Controller
 
     public function print($id, $agreement_id)
     {
-        //$bill = Bill::where('agreement_id', $agreement_id)->first();
         $bill = Bill::where('id', $id)->first();
         $billingSettings=Bill::getBillingSettings();
         $transactions =Transaction::where('agreement_id',$agreement_id)->where('type','payment')->get();
@@ -425,7 +407,7 @@ class BillController extends Controller
         }
         return view('bills.print',['bill'=>$bill ,'lastbill'=>$lastbill], compact('billingSettings','lastamt','transaction'));
     }
-    
+
     public function showLastbill($agreement_id){
         $bills =Bill::where('agreement_id', $agreement_id)->orderBy('id','desc')->first();
         return $this->print($bills->id, $agreement_id);

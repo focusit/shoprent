@@ -142,7 +142,7 @@ Route::group(['middleware' => ['admin_auth']], function () {
     Route::get('/bills/{agreement_id}/edit', [BillController::class, 'edit'])->name('bills.edit');
     Route::put('/bills/{agreement_id}', [BillController::class, 'update'])->name('bills.update');
     Route::delete('/bills/{agreement_id}', [BillController::class, 'destroy'])->name('bills.destroy');
-    //Route::get('/bills/paid', [BillController::class, 'paidBills'])->name('bills.paid');
+    Route::get('/bills/paid/{year?}/{month?}', [BillController::class, 'paidBills'])->name('bills.paid');
     Route::get('/billpay', [BillController::class, 'paidBills'])->name('billsPaid');
     Route::get('/bills/billGenerate/{agreement_id}' ,[BillController::class, 'singlebillGen'])->name('bills.billGenerate');
     ///genrate bill

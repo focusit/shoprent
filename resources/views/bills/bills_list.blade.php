@@ -15,7 +15,7 @@
                         <label for="year" class="form-label">Select Year:</label>
                         <select id="year" name="year" class="form-select" >
                             @for ($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }} {{ $selectedYear == $year ? 'selected' : '' }}">
+                                <option value="{{$year}}"{{ $selectedYear == $year ? 'selected' : '' }}>
                                     {{ $year }}
                                 </option>
                             @endfor
@@ -25,7 +25,7 @@
                         <label for="month" class="form-label">Select Month:</label>
                         <select id="month" name="month" class="form-select">
                             @for ($month = 1; $month <= 12; $month++)
-                                <option value="{{ $month }} {{ $selectedMonth == $month ? 'selected' : '' }}">
+                                <option value="{{ $month }}" {{ $selectedMonth == $month ? 'selected' : '' }}>
                                     {{ date('F', mktime(0, 0, 0, $month, 1)) }}
                                 </option>
                             @endfor
@@ -108,9 +108,15 @@
     
     <script>
         $('#search').click(function(){
+            check ="<?php if(isset($var)){ echo $var;} else{ echo "paid";} ?>";
             var year = $('#year').val();
             var month = $('#month').val();
-            window.location.href = "{{ route('bills.billsList') }}/" + year + "/" + month;
+            if(check =='all'){
+                window.location.href = "{{ route('bills.billsList') }}/" + year + "/" + month;
+            }else{
+                window,location.href = "{{ route('bills.paid') }}/" + year + "/" +month; 
+            }
+            
         });
 
     </script>

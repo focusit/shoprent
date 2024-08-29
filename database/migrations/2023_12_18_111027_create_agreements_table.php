@@ -15,12 +15,12 @@ class CreateAgreementsTable extends Migration
             $table->string('tenant_id');
             $table->date('with_effect_from');
             $table->date('valid_till');
-            $table->int('rent');
+            $table->integer('rent');
             $table->string('status');
             $table->text('remark')->nullable();
             $table->string('document_field')->nullable();
             $table->timestamps();
-            $table->int('user_id');
+            $table->integer('user_id');
             // Indexing shop_id and tenant_id for better performance
             $table->index('shop_id');
             $table->index('tenant_id');

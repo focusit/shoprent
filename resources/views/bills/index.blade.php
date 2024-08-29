@@ -34,7 +34,7 @@
                                         <select id="year">
                                             {{-- <option value="Please select">Please select</option> --}}
                                             @for ($year = date('Y'); $year >= 2020; $year--)
-                                                <option value="{{ $year }}">{{ $year }}</option>
+                                                <option value="{{$year}}">{{ $year }}</option>
                                             @endfor
                                         </select>
                                         <label for="month">Select Month:</label>
@@ -48,9 +48,9 @@
                                                         $year == $currentYear && $month > $currentMonth
                                                             ? 'disabled'
                                                             : '';
-                                                    // $disabled = $month == date('n') || $month == date('n') ? '' : 'disabled';
+                                                    // $disabled = $month == date('n')||$month==date('n')?'':'disabled';
                                                 @endphp
-                                                <option value="{{ str_pad($month, 2, '0', STR_PAD_LEFT) }}"
+                                                <option value="{{ str_pad($month,2,'0',STR_PAD_LEFT) }}"
                                                     {{ $disabled }}>
                                                     {{ date('F', mktime(0, 0, 0, $month, 1)) }}
                                                 </option>

@@ -30,7 +30,8 @@ class AuthController extends Controller
             }
             // toastr()->addSuccess('Your account has been restored.');
             session_start();
-            $_SESSION['user_id']= Auth::user()->id;
+            $user=User::where('email',$request->input('email'))->first();
+            $_SESSION['user_id']= $user->id;
             return redirect()->route('dashboard')->with('info', 'You have successfully logged in as an admin.');
         }
 

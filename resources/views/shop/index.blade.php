@@ -54,7 +54,6 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>Owner Name</th>
                                                     <th>Construction year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
@@ -72,7 +71,6 @@
                                                         <td>{{ $shop->address }}</td>
                                                         <td>{{ $shop->latitude }}</td>
                                                         <td>{{ $shop->longitude }}</td>
-                                                        <td>{{ $shop->owner_name }}</td>
                                                         <td>{{ $shop->construction_year}}</td>
                                                         <td>{{ $shop->pincode }}</td>
                                                         <td>{{ $shop->rent }}</td>
@@ -128,7 +126,6 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>Owner Name</th>
                                                     <th>Tenant Name</th>
                                                     <th>Construction year</th>
                                                     <th>Pincode</th>
@@ -147,7 +144,6 @@
                                                             <td>{{ $shop->address }}</td>
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
-                                                            <td>{{ $shop->owner_name }}</td>
                                                             <!-- tenant name from shop_id -->
                                                             @forelse($agreements as $agreement)
                                                                 @if($agreement->shop_id === $shop->shop_id)
@@ -216,7 +212,6 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>Owner Name</th>
                                                     <th>Construction Year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
@@ -234,7 +229,6 @@
                                                             <td>{{ $shop->address }}</td>
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
-                                                            <td>{{ $shop->owner_name }}</td>
                                                             <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>

@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->int('bill_no');
-            $table->int('user_id');
+            $table->integer('bill_no');
+            $table->integer('user_id');
             $table->string('transaction_number')->unique();
             $table->date('transaction_date');
             $table->string('agreemnet_id');
             $table->string('tenant_name');
             $table->string('shop_id');
             $table->string('tenant_id');
-            $table->int('amount')->default(0);
+            $table->integer('amount')->default(0);
             $table->string('type');
             $table->unsignedSmallInteger('month')->default(now()->month);
             $table->unsignedSmallInteger('year')->default(now()->year);

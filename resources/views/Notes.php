@@ -1,10 +1,15 @@
 Transaction Table 
     property_type == agreement_id  (change name)
+    previous_balance == amount (change name)
+    transaction_number can be null
     shop_id  (added)
     bill_no (added)
 
 Bills Table
     ADD  tax(float) , prevbal(float) ,total_bal(float)
+
+billingsetting.json
+    "month":"08","year":"2024","billcycle":"monthly",(add)
 
 17 August,2024
     -at login alert admin if now()>=billing_data
@@ -76,7 +81,7 @@ Bills Table
                     </div>
                 </div>
             </div>
-
+<script>
 
 function selectElementContents(el) {
         var body = document.body, range, sel;
@@ -203,3 +208,4 @@ function searchTable() {
        }
    }
 }//search
+</script>
