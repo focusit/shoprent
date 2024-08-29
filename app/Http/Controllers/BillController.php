@@ -154,7 +154,15 @@ class BillController extends Controller
         return redirect()->route('bills.billsList', ['year' => $year, 'month' => $month])->with('success', 'Bills generated successfully.');
         
     }
-    private function generateBillData($agreement_id, $year, $month, $bill_id)
+
+
+
+
+
+
+
+
+    private function generateBillData($agreement_id, $year, $month)
     {
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
         $transactions =Transaction::where('agreement_id',$agreement_id)->get();
@@ -185,6 +193,9 @@ class BillController extends Controller
         } catch (\Exception $e) {
             dd('Error: ' . $e->getMessage() . ' check whether file exist or not or contact admin');
         }
+
+
+
         if (!$billDate->isValid()) {
             $billDate = Carbon::now()->startOfMonth();
         }
@@ -290,59 +301,36 @@ class BillController extends Controller
         return $uniqueTransactionNumber;
     }
 
-    public function regenerate(Request $request, $bill_no)
-    {   
-        $bills =Bill::where('id',$bill_no)->first();
-        session_start();
-        $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $bills->agreement_id)->first();
-        $transactions =Transaction::where('agreement_id',$bills->agreement_id)->get();
-        try {
+
+
+
+
+
+    public function regenerate(Request $request, $transaction_number)
+    {
+        $existingBill = Bill::where('transaction_number', $transaction_number)
+            ->first();
+
+        if ($existingBill) {
+            $year = $existingBill->year;
+            $month = $existingBill->month;
+
             $billingSettings = Bill::getBillingSettings();
-            $datePrefix=$_POST['selectedYear'].'-'.$_POST['selectedMonth'].'-';
-            $dueDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['due_date']); //echo "Due date =" .$dueDate;
-            $billDate = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['billing_date']);// echo "Bill date =" .$billDate;
-        } catch (\Exception $e) {
-            dd('Error: ' . $e->getMessage() . ' check whether file exist or not or contact admin');
+
+            $existingBill->update([
+                'bill_date' => $billingSettings['billing_date'],
+                'due_date' => $billingSettings['due_date'],
+
+            ]);
+
+            return redirect()->route('bills.index')->with('success', "Bill for {$year}-{$month} regenerated successfully.");
+        } else {
+            return redirect()->route('bills.index')->with('error', 'No bill found for the specified agreement and transaction number.');
         }
-        if (!$billDate->isValid()) {
-            $billDate = Carbon::now()->startOfMonth();
-        }
-        $prevbal= 0;
-        foreach($transactions as $tranx){
-            if ($tranx->month >= $billingSettings['month'] && $tranx->year >= $billingSettings['year']){
-                //echo "NO PENELTY year".$tranx->year  ." month ".$tranx->month."<br>";
-            }elseif($tranx->month < $billingSettings['month'] && $tranx->year >$billingSettings['year']){
-                //echo "NO PENELTY year".$tranx->year  ." month ".$tranx->month."<br>";
-            }else{
-                $prevbal +=$tranx->amount;
-                //$tnxMonth =$tranx->month;
-                //$tnxYear =$tranx->year;
-                //echo $tranx."<br>";
-            }
-        }
-        $penalty=0;
-        if($prevbal >0){
-            $penalty =$prevbal*($billingSettings['penalty']/100);
-        }
-        $tax = $agreement->rent*($billingSettings['tax_rate']/100);//Tax on rent
-        $total_bal=$agreement->rent +$tax +$prevbal+$penalty;//total balance
-        echo $prevbal ." ".round($penalty)." ".$tax." ".$total_bal."<br>";
-        $billdata =[
-            'rent' => round($agreement->rent),
-            'year' => $billingSettings['year'],
-            'month' => $billingSettings['month'],
-            'bill_date' => $billDate->toDateString(),
-            'due_date' => $dueDate->toDateString(),
-            'status' => 'unpaid',
-            'penalty' => round($penalty),
-            'tax' => (int)($tax),
-            'prevbal' => round($prevbal),
-            'total_bal' => round($total_bal),
-            'user_id'=>$_SESSION['user_id'],
-        ];
-        Bill::where('id',$bill_no)->update($billdata);
-        return redirect()->route('bills.index')->with('success', "Bill regenerated successfully.");
     }
+
+
+
 
     public function update(Request $request, $id)
     {

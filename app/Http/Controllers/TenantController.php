@@ -110,7 +110,8 @@ class TenantController extends Controller
 
         return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully.');
     }
-    public function destroy($tenant_id)
+    
+     public function destroy($tenant_id)
     {
         $tenant = Tenant::findOrFail($tenant_id);
     if (!empty($tenant->image)) {
