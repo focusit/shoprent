@@ -6,7 +6,7 @@
                 <div class="login100-pic js-tilt" data-tilt>
                     <img src="{{ asset('login-asset/images/img-01.png') }}" alt="IMG">
                 </div>
-                <form method="POST" action="{{ route('login') }}" class="login100-form validate-form">
+                <form autocomplete="off" method="POST" action="{{ route('login') }}" class="login100-form validate-form">
                     @csrf
                     <span class="login100-form-title">
                         Admin Login

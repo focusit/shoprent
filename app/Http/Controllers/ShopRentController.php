@@ -11,8 +11,10 @@ class ShopRentController extends Controller
 {
     public function index()
     {
-        $shops = ShopRent::paginate(1000);
-        return view('shop.index', compact('shops'));
+        $shops = ShopRent::all();
+        $tenants = Tenant::all();
+        $totalAgreements = Agreement::all();
+        return view('shop.index', ['shops'=> $shops, 'tenants'=>$tenants, 'agreements'=>$totalAgreements]);
     }
 
     public function create()
@@ -22,15 +24,17 @@ class ShopRentController extends Controller
 
     public function store(Request $request)
     {
+        session_start();
         $this->validateShop($request);
         if($request->hasFile('image')){
-        $imageName = time() . '.' . $request->image->extension();
+            $imageName = time() . '.' . $request->image->extension();
 
-        if (!$request->image->move(public_path('images'), $imageName)) {
-            return redirect()->back()->with('error', 'Failed to upload the image.');
+            if (!$request->image->move(public_path('images'), $imageName)) {
+                return redirect()->back()->with('error', 'Failed to upload the image.');
+            }
         }
-    }
         // dd($request->all());
+        
         ShopRent::create([
             'shop_id' => $request->input('shop_id'),
             'latitude' => $request->input('latitude'),
@@ -42,6 +46,7 @@ class ShopRentController extends Controller
             'rent' => $request->input('rent'),
             'status' => $request->input('status'),
             'image' => $imageName ??"",
+            'user_id'=>$_SESSION['user_id'],
         ]);
         return redirect()->route('shops.index')->with('success', 'Shop created successfully.');
     }
@@ -88,8 +93,8 @@ class ShopRentController extends Controller
     }
 
 
-       public function destroy($shop_id)
-{
+    public function destroy($shop_id)
+    {
     $shop = ShopRent::findOrFail($shop_id);
 
     if (!empty($shop->image)) {
@@ -107,7 +112,7 @@ class ShopRentController extends Controller
     $shop->delete();
 
     return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
-}
+    }
     protected function validateShop(Request $request)
     {
         return $request->validate([
@@ -136,7 +141,6 @@ class ShopRentController extends Controller
             $shop->image = $imageName;
         }
     }
-
 
     public function showAllocateShopForm()
     {
@@ -190,6 +194,7 @@ class ShopRentController extends Controller
                 'rent' => $request->input('rent'),
                 'status' => $request->input('status'),
                 'remark' => $request->input('remark'),
+                'user_id'=> $_SESSION['user_id'],
             ]);
 
             $this->handleDocument($request, $agreement);
@@ -216,8 +221,6 @@ class ShopRentController extends Controller
         $allocations = ShopRent::with('agreements')->where('status', 'active')->get();
         return redirect()->route('agreements.index')->with('allocations', $allocations);
     }
-
-
 
     public function autocompleteSearch(Request $request)
     {

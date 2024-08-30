@@ -24,6 +24,7 @@ class Tenant extends Model
         'gst_number',
         'gender',
         'contact',
+        'user_id',
         'password',
     ];
 

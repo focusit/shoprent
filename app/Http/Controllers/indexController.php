@@ -12,7 +12,38 @@ class indexController extends Controller
 {
     public function dashboard()
     {
+        session_start();
+        //agreements
+        $totalAgreements = Agreement::all()->count();
+        $agreement=Agreement::all();
+        foreach($agreement as $agree){
+            if($agree->valid_till < date('Y-m-d') && $agree->status=="active"){
+                $data =[
+                    'status'=>"inactive",
+                    'user_id'=>$_SESSION['user_id'],
+                ];
+                Agreement::where('id',$agree->id)->update($data);
+            }
+        }
+        $activeAgreements = Agreement::where('status', '=', 'active')->count();
+        $inactiveAgreements = Agreement::where('status', '=', 'inactive')->count();
+
+        //Shops
         $totalShops = ShopRent::all()->count();
+        $shops=ShopRent::all();
+        foreach($agreement as $agree){
+            foreach($shops as $shop){
+                if($shop->shop_id ==$agree->shop_id && $agree->status=="inactive"){
+                    if($shop->status =="Occupied"){
+                        $data =[
+                            'status'=>"vacant",
+                            'user_id'=>$_SESSION['user_id'],
+                        ];
+                        ShopRent::where('id',$shop->id)->update($data);
+                    }
+                }
+            }           
+        }
         $allocatedShops = ShopRent::where('status', '=', 'occupied')->count();;
         $vacantShops = ShopRent::where('status', '=', 'vacant')->count();
 
@@ -20,11 +51,6 @@ class indexController extends Controller
         $totalTenants = Tenant::all()->count();
         // $activeTenants = Tenant::where('status', '=', 'active')->count();
         // $inactiveTenants = Tenant::where('status', '=', 'inactive')->count();
-
-        //agreements
-        $totalAgreements = Agreement::all()->count();
-        $activeAgreements = Agreement::where('status', '=', 'active')->count();
-        $inactiveAgreements = Agreement::where('status', '=', 'inactive')->count();
 
         //biills
         $totalBills = Bill::all()->count();
@@ -71,9 +97,9 @@ class indexController extends Controller
                     'Active Agreements' => $activeAgreements,
                     'Inactive Agreements' => $inactiveAgreements,
                 ]),
-                'linkCreate' => '',
+                'linkCreate' => '/allocate-shop',
                 'linkTextCreate' => 'Allocate Shops',
-                'linkView' => '',
+                'linkView' => '/agreements',
                 'linkTextView' => 'View Agreements',
             ],
             [
@@ -84,9 +110,9 @@ class indexController extends Controller
                     'Unpaid Bills' => $unpaidBills,
                     'Paid Bills' => $paidBills,
                 ]),
-                'linkCreate' => '',
+                'linkCreate' => '/bills',
                 'linkTextCreate' => 'Genrate Bills',
-                'linkView' => '',
+                'linkView' => 'bills/bills_list',
                 'linkTextView' => 'View Bills',
             ],
             [
@@ -103,6 +129,17 @@ class indexController extends Controller
                 'linkTextView' => 'Check Payments',
             ],
         ];
+        $billingSettings=Bill::getBillingSettings();
+        //print_r($billingSettings);
+        if($billingSettings['month']>date('m') && $billingSettings['year']>=date('Y')){
+
+        } if($billingSettings['month']<date('m') && $billingSettings['year']>date('Y')){
+            //echo '<script>alert("Generated bills")</script>';
+        }elseif($billingSettings['month'] <= date('m')-1 && $billingSettings['year']==date('Y')){
+            if(date('d')>=$billingSettings['billing_date'] ){
+                echo '<script>alert("Please Generate bills for this month")</script>';
+            }
+        }
         return view('dashboard', compact('cards'));
     }
 

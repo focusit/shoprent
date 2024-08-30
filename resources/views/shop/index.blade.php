@@ -54,8 +54,7 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>owner_name</th>
-                                                    <th>construction_year</th>
+                                                    <th>Construction year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     <th>Status</th>
@@ -72,7 +71,6 @@
                                                         <td>{{ $shop->address }}</td>
                                                         <td>{{ $shop->latitude }}</td>
                                                         <td>{{ $shop->longitude }}</td>
-                                                        <td>{{ $shop->owner_name }}</td>
                                                         <td>{{ $shop->construction_year}}</td>
                                                         <td>{{ $shop->pincode }}</td>
                                                         <td>{{ $shop->rent }}</td>
@@ -89,15 +87,15 @@
                                                             
                                                         </td>
                                                         <td class="p-2">
-                                                            <a href="{{ route('shops.edit', $shop->shop_id) }}"
+                                                            <a title="Edit Shop" href="{{ route('shops.edit', $shop->shop_id) }}"
                                                                 class="btn  btn-info btn-sm">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            <a href="{{ route('shops.show', $shop->shop_id) }}"
+                                                            <a title="Show Details" href="{{ route('shops.show', $shop->shop_id) }}"
                                                                 class="btn  btn-success btn-sm">
                                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                                             </a>
-                                                            <form action="{{ route('shops.destroy', $shop->shop_id) }}"
+                                                            <form title="Delete Shop" action="{{ route('shops.destroy', $shop->shop_id) }}"
                                                                 method="post" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -128,8 +126,8 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>owner_name</th>
-                                                    <th>construction_year</th>
+                                                    <th>Tenant Name</th>
+                                                    <th>Construction year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     {{-- <th>Tenant ID</th> --}}
@@ -146,7 +144,22 @@
                                                             <td>{{ $shop->address }}</td>
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
-                                                            <td>{{ $shop->owner_name }}</td>
+                                                            <!-- tenant name from shop_id -->
+                                                            @forelse($agreements as $agreement)
+                                                                @if($agreement->shop_id === $shop->shop_id)
+                                                                    @forelse($tenants as $tenant)
+                                                                        @if($agreement->status =="active")
+                                                                            @if($tenant->tenant_id === $agreement->tenant_id)
+                                                                                <td>{{ $tenant->full_name }}</td>
+                                                                            @endif
+                                                                        @endif
+                                                                    @empty
+                                                                        <td> </td>
+                                                                    @endforelse
+                                                                @endif
+                                                            @empty
+                                                                <td> </td>
+                                                            @endforelse
                                                             <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
@@ -160,15 +173,15 @@
                                                                 @endif
                                                             </td>
                                                             <td class="p-2">
-                                                                <a href="{{ route('shops.edit', $shop->shop_id) }}"
+                                                                <a title=" Edit Shop" href="{{ route('shops.edit', $shop->shop_id) }}"
                                                                     class="btn  btn-info btn-sm">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
-                                                                <a href="{{ route('shops.show', $shop->shop_id) }}"
+                                                                <a title="Show Details" href="{{ route('shops.show', $shop->shop_id) }}"
                                                                     class="btn  btn-success btn-sm">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </a>
-                                                                <form action="{{ route('shops.destroy', $shop->shop_id) }}"
+                                                                <form title="Delete Shop" action="{{ route('shops.destroy', $shop->shop_id) }}"
                                                                     method="post" class="d-inline">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -199,8 +212,7 @@
                                                     <th>Address</th>
                                                     <th>Latitude</th>
                                                     <th>Longitude</th>
-                                                    <th>owner_name</th>
-                                                    <th>construction_year</th>
+                                                    <th>Construction Year</th>
                                                     <th>Pincode</th>
                                                     <th>Rent</th>
                                                     {{-- <th>Tenant ID</th> --}}
@@ -217,7 +229,6 @@
                                                             <td>{{ $shop->address }}</td>
                                                             <td>{{ $shop->latitude }}</td>
                                                             <td>{{ $shop->longitude }}</td>
-                                                            <td>{{ $shop->owner_name }}</td>
                                                             <td>{{ $shop->construction_year}}</td>
                                                             <td>{{ $shop->pincode }}</td>
                                                             <td>{{ $shop->rent }}</td>
@@ -231,15 +242,15 @@
                                                                 @endif
                                                             </td>
                                                             <td class="p-2">
-                                                                <a href="{{ route('shops.edit', $shop->shop_id) }}"
+                                                                <a title="Edit Shop" href="{{ route('shops.edit', $shop->shop_id) }}"
                                                                     class="btn  btn-info btn-sm">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
-                                                                <a href="{{ route('shops.show', $shop->shop_id) }}"
+                                                                <a title="Show Details" href="{{ route('shops.show', $shop->shop_id) }}"
                                                                     class="btn  btn-success btn-sm">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </a>
-                                                                <form action="{{ route('shops.destroy', $shop->shop_id) }}"
+                                                                <form title="Delete Shop" action="{{ route('shops.destroy', $shop->shop_id) }}"
                                                                     method="post" class="d-inline">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -248,6 +259,10 @@
                                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                                     </button>
                                                                 </form>
+                                                                <a title="Allocate Shop" href="{{ route('shop.index', $shop->shop_id) }}"
+                                                                    class="btn  btn-primary btn-sm">
+                                                                    <i class="fa fa-file" aria-hidden="true"></i>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     @endif

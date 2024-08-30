@@ -14,7 +14,8 @@ class AgreementController extends Controller
     public function index()
     {
         $agreements = Agreement::all();
-        return view('agreements.index', compact('agreements'));
+        $tenants = Tenant::all();
+        return view('agreements.index', ['agreements'=> $agreements, 'tenants' =>$tenants]);
     }
 
     public function showAllocateShopForm()
@@ -42,6 +43,7 @@ class AgreementController extends Controller
 
     public function allocateShop(Request $request)
     {
+        session_start();
         try {
             $request->validate([
                 'tenant_id' => 'required|exists:tenants,tenant_id',
@@ -82,6 +84,7 @@ class AgreementController extends Controller
                 'rent' => $request->input('rent'),
                 'status' => $request->input('status'),
                 'remark' => $request->input('remark'),
+                'user_id'=>$_SESSION['user_id'],
             ]);
 
             $this->handleDocument($request, $agreement);
@@ -130,12 +133,9 @@ class AgreementController extends Controller
 
         $agreement = new Agreement([
         ]);
-
         $documentPath = $request->file('document_field')->store('public/documents');
         $agreement->document_field = $documentPath;
-
         $agreement->save();
-
         return redirect()->route('agreements.index')->with('success', 'Agreement has been created successfully');
     }
     public function checkAgreementId(Request $request)
@@ -210,6 +210,13 @@ class AgreementController extends Controller
 
         return redirect()->route('agreements.index')->with('success', 'Agreement has been deleted successfully');
     }
+    public function allocatevacantShop($shop_id){
+        $shop = ShopRent::findOrFail($shop_id);
+        //echo $shop;
+        
+        return view('property-allocation.allocate_shop', compact('shop'));
+    }
+    
 }
 
 

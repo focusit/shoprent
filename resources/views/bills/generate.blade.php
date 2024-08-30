@@ -83,7 +83,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('currentMonthBtn').addEventListener('click', function() {
-                updateTable('example1', '{{ \Carbon\Carbon::now()->format('m') }}');
+                //updateTable('example1', '{{ \Carbon\Carbon::now()->format('m')}}');
             });
 
             var monthButtons = document.querySelectorAll('.monthBtn');
@@ -96,7 +96,7 @@
         });
 
         function updateTable(tableId, selectedMonth) {
-            var billsByMonth = {!! json_encode($billsByMonth, JSON_FORCE_OBJECT) !!};
+            var billsByMonth =  json_encode($billsByMonth, JSON_FORCE_OBJECT);
             var billsForSelectedMonth = billsByMonth[selectedMonth];
 
             var tableBody = document.getElementById('billTableBody');

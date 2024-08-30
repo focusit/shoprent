@@ -29,6 +29,9 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Unauthorized. Please login as an admin.'])->onlyInput('email');
             }
             // toastr()->addSuccess('Your account has been restored.');
+            session_start();
+            $user=User::where('email',$request->input('email'))->first();
+            $_SESSION['user_id']= $user->id;
             return redirect()->route('dashboard')->with('info', 'You have successfully logged in as an admin.');
         }
 
@@ -79,7 +82,9 @@ class AuthController extends Controller
             'password.confirmed' => 'The password confirmation does not match.',
             'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, and one number.',
         ];
+
         $request->validate($rules, $messages);
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -91,6 +96,7 @@ class AuthController extends Controller
     }
     public function updatePassword(Request $request)
     {
+        session_start();
         $request->validate([
             'current_password' => ['required', 'string'],
             'new_password' => [
@@ -101,7 +107,9 @@ class AuthController extends Controller
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             ],
         ]);
+
         $user = Auth::user();
+
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'The current password is incorrect.']);
         }
@@ -113,6 +121,7 @@ class AuthController extends Controller
         $user->password = bcrypt($request->new_password);
         User::where('id', $user->id)->update([
             'password' => bcrypt($request->new_password),
+            'user_id'=>$_SESSION['user_id'],
         ]);
         return redirect()->route('profile')->with('success', 'Password updated successfully.');
     }
