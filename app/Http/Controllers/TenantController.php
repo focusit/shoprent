@@ -154,8 +154,9 @@ class TenantController extends Controller
         $result = [];
         foreach ($tenants as $tenant) {
             $result[] = [
-                'label' => $tenant->tenant_id,
+                'label' => $tenant->tenant_id." - ".$tenant->full_name,
                 'value' => $tenant->tenant_id,
+                'full_name' =>$tenant->full_name,
             ];
         }
         return response()->json($result);

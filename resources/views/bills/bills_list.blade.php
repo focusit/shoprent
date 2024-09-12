@@ -70,7 +70,7 @@
                                 <td>{{ $bill->tenant_full_name }}</td>
                                 <td>{{ $bill->shop_address }}</td>
                                 <td>{{ $bill->total_bal >$bill->rent? $bill->total_bal:$bill->rent }}</td>
-                                <td>{{ $bill->bill_date }}</td>
+                                <td>{{ date('d-m-Y',strtotime($bill->bill_date)) }}</td>
                                 <td>
                                     <a title="Print Bill" href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
                                         target="_blank" class="btn btn-info btn-sm">

@@ -16,11 +16,10 @@
         }
         .box {
             float: left;
-            max-width: 33.33%;
+            max-width: 33%;
             padding:2px;
         }
         .box2{
-            margin:10px;
             padding:10px;
             float: left;
             border: 1px solid black;
@@ -61,18 +60,19 @@
                 <div class="box">
                     <strong>Name:</strong>{{ $d['tenant_full_name'] }}<br>
                     <strong>Address:</strong>{{$d['shop_address']}}<br>
+                    <strong>Shop Id: </strong>{{$d['shop_id']}}<br>
                     <strong>Phone No:</strong>{{$d['contact']}}<br>
                 </div>
                 <div class="box">
                     <strong>Bill Number : </strong>{{ $d['bill_id'] }}<br>
-                    <strong>Bill date : </strong>{{ $d['bill_date'] }}<br>
+                    <strong>Bill date : </strong>{{ date('d-m-Y',strtotime($d['bill_date'])) }}<br>
                     <strong>Bill Month : </strong> {{ date("F",strtotime($d['bill_date'] ))}}<br>
-                    <strong>Bill Validity : </strong>{{ $d['due_date'] }}<br>
+                    <strong>Bill Validity : </strong>{{ date('d-m-Y',strtotime($d['due_date'])) }}<br>
                     <strong>Agreement ID : </strong>{{ $d['agreement_id'] }}
                 </div>
-            </div><br>
+            </div>
             <div class="clearfix">
-                <div class="box2" style="width:62%;">
+                <div class="box2" style="width:62%;margin-right:10px;">
                     <h3><strong> Current Charges</strong><small> ( {{ $d['duration'] }} )</small> </h3><br>
                     <address>
                         <b class="f_left"> Description </b>
@@ -85,9 +85,9 @@
                         <span class="f_right">{{ $total_bal }}</span><br><br>
                         <span class="f_left"><strong>Total</strong></span>
                         <span class="f_right"><strong >{{ $total = round($total_bal,2) +round(($d['rent'] + $d['tax']),2)}}</strong></span><br><br>
-                        <span class="f_left">Payable by due date: {{ $d['due_date'] }}</span>
+                        <span class="f_left">Payable by due date: {{ date('d-m-Y',strtotime($d['due_date'])) }}</span>
                         <span class="f_right"><strong>{{$total}}</strong></span></br>
-                        <span class="f_left">Payable after dute date charges will be:  {{ $d['due_date'] }}</span>
+                        <span class="f_left">Payable after dute date charges will be:  {{ date('d-m-Y',strtotime($d['due_date'])) }}</span>
                         <span class="f_right"><strong>{{ round($total+$total*($d['penalty']/100))}}</strong></span><br>
                     </address>  
                 </div>
@@ -105,7 +105,8 @@
                         <span class="f_left">Penalty (late fee)-</span>
                         <span class="f_right">{{ (int)$penalty }}</span><br><br>
                         <span class="f_left"><strong>Total Balance</strong></span>
-                        <span class="f_right"><strong>{{ $total_bal }}</strong></span><br><br>
+                        <span class="f_right"><strong>{{ $total_bal }}</strong></span>
+                        <br><br><br><br>
                     </address>
                 </div>
             </div>

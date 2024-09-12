@@ -82,8 +82,8 @@
                                                             @empty
                                                                 <td> </td>
                                                             @endforelse
-                                                            <td>{{ $agreement->with_effect_from }}</td>
-                                                            <td>{{ $agreement->valid_till }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($agreement->valid_till ))}}</td>
                                                             <td>{{ $agreement->rent }}</td>
                                                             <td>
                                                                 @if ($agreement->document_field)
@@ -160,8 +160,8 @@
                                                                 @empty
                                                                     <td> </td>
                                                                 @endforelse
-                                                                <td>{{ $agreement->with_effect_from }}</td>
-                                                                <td>{{ $agreement->valid_till }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->valid_till)) }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
                                                                 <td>
                                                                     @if ($agreement->document_field)
@@ -207,7 +207,7 @@
                                                                 <td>
                                                                     <a title="Generate Bill for Next Month" href="{{ route('bills.billGenerate', $agreement->agreement_id) }}" 
                                                                     class="btn btn-warning btn-sm">Generate</a>
-                                                                    <a title="Show last Bill" href= "{{ route('bills.show', $agreement->agreement_id )}}"
+                                                                    <a title="Show last Bill" href= "{{ route('bills.lastbill', $agreement->agreement_id )}}"
                                                                     class="btn btn-primary btn-sm">Last Bill</a>
                                                                 </td>
                                                             </tr>
@@ -252,8 +252,8 @@
                                                                 @empty
                                                                     <td> </td>
                                                                 @endforelse
-                                                                <td>{{ $agreement->with_effect_from }}</td>
-                                                                <td>{{ $agreement->valid_till }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->valid_till)) }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
                                                                 <td>
                                                                     @if ($agreement->document_field)

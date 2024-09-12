@@ -39,18 +39,19 @@
                                 </div>
                                 <div class="col-4">
                                     <address class="float-center">
-                                        <strong>Name:</strong>{{ $bill->tenant_full_name }}<br>
-                                        <strong>Address:</strong>{{$bill->shop_address}}<br>
-                                        <strong>Phone No:</strong>{{$bill->tenant->contact}}<br>
+                                        <strong>Name: </strong>{{ $bill->tenant_full_name }}<br>
+                                        <strong>Address: </strong>{{$bill->shop_address}}<br>
+                                        <strong>Shop Id: </strong>{{$bill->shop_id}}<br>
+                                        <strong>Phone No: </strong>{{$bill->tenant->contact}}<br>
                                     </address>
                                </div>
                                <div class="col-4"> 
                                     <address class="float-left">
-                                        <strong>Bill Number:</strong>{{ $bill->id }}<br>
-                                        <strong>Bill date:</strong>{{ $bill->bill_date }}<br>
-                                        <strong>Bill Month:</strong>{{ date("F",strtotime($bill->bill_date ))}}<br>
-                                    <strong>Bill Validity:</strong>{{ $bill->due_date }}<br>
-                                    <strong>Agreement ID:</strong>{{ $bill->agreement_id }}
+                                        <strong>Bill Number: </strong>{{ $bill->id }}<br>
+                                        <strong>Bill date: </strong>{{ date('d-m-Y',strtotime($bill->bill_date)) }}<br>
+                                        <strong>Bill Month: </strong>{{ date("F",strtotime($bill->bill_date ))}}<br>
+                                        <strong>Bill Validity: </strong>{{ date('d-m-Y',strtotime($bill->due_date)) }}<br>
+                                        <strong>Agreement ID: </strong>{{ $bill->agreement_id }}
                                     </address>
                                </div>
                            </div>
@@ -95,8 +96,8 @@
                             &nbsp;
                             <div class="row">
                                 <div class="col-9">
-                                    Payable by due date: {{ $bill->due_date }}</br>
-                                    Payable after dute date charges will be:  {{ $bill->due_date }}</br>
+                                    Payable by due date: {{ date('d-m-Y',strtotime($bill->due_date)) }}</br>
+                                    Payable after dute date charges will be:  {{ date('d-m-Y',strtotime($bill->due_date)) }}</br>
                                 </div>
                                 <div class="col-2">
                                     <strong class="float-right">{{$total}}</strong></br>
@@ -150,12 +151,12 @@
                 </div>
                 <!-- Main content -->
                     <div class="row no-print">
-                        <a rel="noopener" target="_blank" class="btn btn-default" onclick="window.print();"
-                            class="noPrint"><i class="fas fa-print"></i> Print
+                        <a rel="noopener" target="_blank" class="btn btn-info" onclick="window.print();">
+                            <i class="fas fa-print"></i> Print
                         </a>&nbsp;&nbsp;
-                        <button type="button" class="btn btn-primary" id="downloadpdf" style="margin-right: 5px;">
+                        <a href="{{ route('bills.generatePdf',$bill->id ) }}" class="btn btn-info">
                             <i class="fas fa-download"></i>Generate PDF
-                        </button>
+                        </a>
                     </div>
             </div>
         </section>
@@ -167,16 +168,6 @@
 <!-- script file for print and pdf -->
 @section('scripts')
     <script>
-        document.getElementById('downloadpdf').addEventListener('click', function() {
-            var printWindow = window.open('', '_blank');
-            printWindow.document.write(
-                '<html><head><link rel="stylesheet" type="text/css" href="path/to/your/print.css"></head><body>'
-            );
-            printWindow.document.write(document.getElementById('pdf-content').innerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        });
 
     </script>
 @endsection

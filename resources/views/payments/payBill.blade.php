@@ -3,6 +3,40 @@
 @section('title', 'Bills')
 
 @section('body')
+<head>
+        <style>
+            .ui-autocomplete {
+                float: left;
+                max-height: 200px;
+                padding: 5px 0;
+                margin: 2px 0 0;
+                list-style: none;
+                font-size: 14px;
+                background-color: #ffffff;
+                overflow-x: hidden; 
+                overflow-y: scroll;
+            }
+
+            .ui-autocomplete li {
+                padding: 8px;
+                cursor: pointer;
+            }
+
+            .ui-autocomplete li:hover {
+                background-color: #f5f5f5;
+            }
+
+            .ui-autocomplete li.ui-no-results {
+                padding: 8px;
+                color: #9d3737;
+            }
+
+            .ui-autocomplete li.ui-state-focus {
+                background-color: #333;
+                color: #6a0808;
+            }
+        </style>
+    </head>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -10,7 +44,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Payments</h1>
+                        <h1>Pay Bill</h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -26,15 +60,14 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <form autocomplete="off" action="{{ isset($payment) ? (route('payments.update',$payment->id)) : (route('payments.store', $bill->id)) }}" method="post">
+                                <form action="{{ route('payment.billpaid') }}" method="post">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="payment_date">Payment Date:</label>
-                                                <input type="date" id="payment_date" name="payment_date"
-                                                    class="form-control"
-                                                    value="{{ old('payment_date', isset($payment)?$payment->transaction_date :(isset($agreement) ? $agreement->payment_date : now()->toDateString())) }}"
+                                                <label for="bill_no">Bill No:</label>
+                                                <input type="text" id="bill_no" name="bill_no" class="form-control"
+                                                    value="{{ old('bill_no', isset($bill) ? $bill->id :'') }}"
                                                     required>
                                             </div>
                                         </div>
@@ -42,29 +75,34 @@
                                             <div class="form-group">
                                                 <label for="agreement_id">Agreement ID:</label>
                                                 <input type="text" id="agreement_id" name="agreement_id"
-                                                    class="form-control" value="{{ isset($payment)?$payment->agreement_id :$bill->agreement_id }}" readonly>
-
+                                                    class="form-control">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="bill_no">Bill No:</label>
-                                                <input type="text" id="bill_no" name="bill_no" class="form-control"
-                                                    value="{{ isset($payment)?$payment->bill_no :$bill->id }}" readonly>
+                                                <label for="payment_date">Payment Date:</label>
+                                                <input type="date" id="payment_date" name="payment_date"
+                                                    value="{{ old('payment_date', isset($agreement) ? $agreement->payment_date : now()->toDateString()) }}"
+                                                    class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="amount">Balance:</label>
                                                 <input type="text" id="amount" name="amount" class="form-control"
-                                                value="{{ isset($payment)?$bill->total_bal :($bill->total_bal >= $amount ? $amount : $bill->total_bal) }}"  readonly>
+                                                    readonly>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="pay_amt">Amount:</label>
-                                                <input type="text" id="pay_amt" name="pay_amt" class="form-control" 
-                                                value ="{{isset($payment)?-1*$payment->amount :''}}" required>
+                                                <input type="text" id="pay_amt" name="pay_amt" class="form-control"
+                                                    required>
+
                                             </div>
                                         </div>                                            
                                         <div class="col-md-6">
@@ -80,20 +118,14 @@
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="remark">Remark:</label>
                                                 <textarea id="remark" name="remark" class="form-control"></textarea>
                                             </div>
                                         </div>
-                                        @if(isset($payment))
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="g8_number">G8 Number:</label>
-                                                    <input id="g8_number" name="g8_number" class="form-control" required>
-                                                </div>
-                                            </div>
-                                        @endif
                                     </div>
                                     <div id="cheque_fields" style="display: none;">
                                         <div class="row">
@@ -154,12 +186,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group justify-center">
-                                        @if(isset($payment))
-                                            <button id="update" type="submit" class="btn btn-success">Update</button>
-                                        @else
-                                            <button id="pay"type="button" class="btn btn-success">Pay Now</button>
-                                            <button id="payNow" type="submit" class="btn btn-success" hidden>Pay Now</button>
-                                        @endif
+                                        <button id="pay" type="button" class="btn btn-success">Pay Now</button>
+                                        <button id="payNow" type="submit" class="btn btn-success" hidden>Pay Now</button>
                                     </div>
                                 </form>
                             </div>
@@ -175,15 +203,10 @@
         </section>
         <!-- /.content -->
     </div>
+    
     <!-- /.content-wrapper -->
-    @if(isset($payment))
-        <script>
-            document.getElementById("payment_date").disabled = true;
-            document.getElementById("pay_amt").disabled = true;
-            document.getElementById("payment_method").disabled = true;
-            document.getElementById("remark").disabled = true;
-        </script>
-    @endif
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var paymentModeSelect = document.getElementById('payment_method');
@@ -200,11 +223,92 @@
                 card_fields.style.display = (paymentModeSelect.value === 'card') ? 'block' : 'none';
             });
         });
+        $('#bill_no').autocomplete({
+            source: function(request, response) {
+                $.post('{{ route("autocomplete.bills")}}', {
+                    query: request.term,
+                    _token: '{{ csrf_token() }}'
+                }, function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.id,
+                            value: item.id,
+                            agreement_id :item.agreement_id,
+                            total_bal :item.total_bal,
+                        };
+                    }));
+                });
+            },
+            minLength: 0,
+            select: function(event, ui) {
+                $('#bill_no').val(ui.item.value);
+                $('#bill_id').val(ui.item.value);
+                $('#agreement_id').val(ui.item.agreement_id);
+                //$('#amount').val(ui.item.total_bal);
+            }
+        });
+
+        $('#agreement_id').autocomplete({
+            source: function(request, response) {
+                $.post('{{ route("autocomplete.agreements")}}', {
+                    query: request.term,
+                    _token: '{{ csrf_token() }}'
+                }, function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.agreement_id,
+                            value: item.agreement_id,
+                            bill_no :item.id,
+                            total_bal :item.total_bal,
+                        };
+                    }));
+                });
+            },
+            minLength: 0,
+            select: function(event, ui) {
+                $('#agreement_id').val(ui.item.value);
+                $('#bill_no').val(ui.item.bill_no);
+                //$('#amount').val(ui.item.total_bal);
+            }
+        });
+
+        $('#agreement_id').on('change', function(){
+            $.ajax({
+                url:'{{ route("check.trans")}}',
+                type: "GET",
+                data: { 
+                  agreement_id: document.getElementById('agreement_id').value, 
+                },
+                success: function(response) {
+                    $('#amount').val(response['value']);
+                  //console.log(response['value']);
+                },
+                error: function(xhr) {
+                  //Do Something to handle error
+                }
+            });
+        });
+        $('#bill_no').on('change', function() {
+            $.ajax({
+                url:'{{ route("check.trans")}}',
+                type: "GET",
+                data: { 
+                  agreement_id: document.getElementById('agreement_id').value, 
+                },
+                success: function(response) {
+                    $('#amount').val(response['value']);
+                  //console.log(response['value']);
+                },
+                error: function(xhr) {
+                  //Do Something to handle error
+                }
+            });
+        });
         $('#pay').click(function(){
             pay_amt = document.getElementById('pay_amt').value;
             amount = document.getElementById('amount').value;
             if (pay_amt > 0){
-                if(pay_amt > amount){
+                if (pay_amt > amount){
                     alert('Are you sure you want to pay Extra?');
                 }else if(pay_amt < amount){
                     alert('Are you sure you want to partially pay Bill?');

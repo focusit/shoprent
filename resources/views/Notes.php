@@ -4,6 +4,9 @@ Transaction Table
     transaction_number can be null
     shop_id  (added)
     bill_no (added)
+    reconciled_by (added)
+    month, year (deleted)
+    G8 (added)
 
 Bills Table
     ADD  tax(float) , prevbal(float) ,total_bal(float)

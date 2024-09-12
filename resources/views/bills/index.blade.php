@@ -68,7 +68,7 @@
                                         </div>
                                         <div class="card-card-default mb-4 col-5 d-flex justify-content-end ">
                                             <button title="Export all Bills Pdf" type="button" class="btn btn-success " >
-                                                <a class="text-light" href="{{ route('bills.printBills') }}" target="_blank">
+                                                <a class="text-light" href="{{ route('bills.generatePdf') }}" >
                                                     Export Bills
                                                 </a>
                                             </button>
@@ -105,7 +105,7 @@
                                             <td>{{ $bill->shop_address }}</td>
                                             <td>{{ $bill->rent }}</td>
                                             <td>{{ $bill->status }}</td>
-                                            <td>{{ $bill->bill_date }}</td>
+                                            <td>{{ date('d-m-Y',strtotime($bill->bill_date)) }}</td>
                                             <td>
                                                 <form action="{{ route('bills.regenerate', $bill->id) }}"
                                                     method="post">

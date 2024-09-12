@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Agreement;
 use App\Models\Bill;
 use App\Models\Payment;
+use Carbon\Carbon;
+use App\Models\Transaction;
 use App\Models\ShopRent;
 use App\Models\Tenant;
 
@@ -16,8 +18,12 @@ class indexController extends Controller
         //agreements
         $totalAgreements = Agreement::all()->count();
         $agreement=Agreement::all();
+        $inactiveCount = 0;
+        $inactiveAgree = [];
         foreach($agreement as $agree){
             if($agree->valid_till < date('Y-m-d') && $agree->status=="active"){
+                $inactiveCount ++;
+                $inactiveAgree[]=$agree->agreement_id;
                 $data =[
                     'status'=>"inactive",
                     'user_id'=>$_SESSION['user_id'],
@@ -33,10 +39,10 @@ class indexController extends Controller
         $shops=ShopRent::all();
         foreach($agreement as $agree){
             foreach($shops as $shop){
-                if($shop->shop_id ==$agree->shop_id && $agree->status=="inactive"){
-                    if($shop->status =="Occupied"){
+                if($shop->shop_id ==$agree->shop_id && $agree->status=="active"){
+                    if($shop->status =="vacant" ){
                         $data =[
-                            'status'=>"vacant",
+                            'status'=>"occupied",
                             'user_id'=>$_SESSION['user_id'],
                         ];
                         ShopRent::where('id',$shop->id)->update($data);
@@ -130,17 +136,33 @@ class indexController extends Controller
             ],
         ];
         $billingSettings=Bill::getBillingSettings();
-        //print_r($billingSettings);
+        $datePrefix=$billingSettings['year'].'-'.$billingSettings['month'].'-';
+        $date = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['billing_date']);
+        $data=[
+            'allocatedShops'=>$allocatedShops,
+            'bills' => Bill::where('month', $billingSettings['month'])
+                        ->where('year',$billingSettings['year'])
+                        ->count(),
+            'payments' => Transaction::where('type','payment')
+                            ->where('transaction_date','>=',$date)
+                            ->count(),
+        ];
+        $message=null;
         if($billingSettings['month']>date('m') && $billingSettings['year']>=date('Y')){
-
+            
         } if($billingSettings['month']<date('m') && $billingSettings['year']>date('Y')){
-            //echo '<script>alert("Generated bills")</script>';
-        }elseif($billingSettings['month'] <= date('m')-1 && $billingSettings['year']==date('Y')){
+            
+        }elseif($billingSettings['month'] < date('m') && $billingSettings['year']==date('Y')){
             if(date('d')>=$billingSettings['billing_date'] ){
-                echo '<script>alert("Please Generate bills for this month")</script>';
+                $message = "Please Generate bills for this month.";
             }
         }
-        return view('dashboard', compact('cards'));
+        if($inactiveCount > 0){
+            foreach($inactiveAgree as $inAgree){
+                $message .="Agreement NO. ".$inAgree." is expired today";
+            }
+        }
+        return view('dashboard',['data'=>$data], compact('cards','message'));
     }
 
     // public function logout()

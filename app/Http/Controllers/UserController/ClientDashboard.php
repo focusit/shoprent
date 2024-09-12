@@ -131,6 +131,7 @@ class ClientDashboard extends Controller
             $user = Auth::user();
 
             if (!$user->is_admin) {
+                $message=" You have successfully logged in as a user.";
                 return redirect()->route('userDashboard')->with('info', 'You have successfully logged in as a user.');
             } else {
                 Auth::logout();

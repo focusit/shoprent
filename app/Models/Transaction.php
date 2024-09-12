@@ -20,11 +20,11 @@ class Transaction extends Model
         'amount',
         'tenant_id',
         'tenant_name',
-        'month',
-        'year',
         'type',
         'remarks',
         'user_id',
+        'G8',
+        'reconciled_by',
     ];
     public function bills()
     {

@@ -48,33 +48,38 @@ class reportController extends Controller
         $start = $start ?? date('Y-m-d');
         $end = $end ?? date('Y-m-d');
         $transaction=Transaction::where('type','payment')->get();
-        $b =Bill::where('status','paid')
-                    ->where('month',date("m",strtotime($end)))
-                    ->where('year',date("Y",strtotime($end)))
-                    ->get();
+        $b =Bill::where(function($query) {
+                $query->where('status', 'paid')
+                    ->orWhere('status', 'Partial Paid');
+                })->where('month',date("m",strtotime($end)))
+                ->where('year',date("Y",strtotime($end)))
+                ->orderby('id','desc')
+                ->get();
         if($start == $end){
             $duration="of ". date('d-m-Y', strtotime($start));
         }else{
             $duration="From ". date('d-m-Y', strtotime($start)) ." to " . date('d-m-Y', strtotime($end));
         }
-        $bills=[];
+        $a=$bills=[];
         $count=$payment=$tax=$rent=$penalty=$prevbal=0;
-        //echo $b;
         foreach($transaction as $trans){
             if($trans->transaction_date >= $start && $trans->transaction_date <= $end){
                 $count +=1;
                 $payment +=$trans->amount;
                 foreach($b as $bill){
-                    if($bill->agreement_id ==$trans->agreement_id){
-                        $tax +=$bill->tax;
-                        $rent +=$bill->rent;
-                        $penalty +=$bill->penalty;
-                        $prevbal +=$bill->prevbal;
+                    if($bill->agreement_id == $trans->agreement_id){
+                        $bill->amount =$trans->amount;//for view
                         $bills[]=json_decode($bill,true);
-                        //echo $bill."<br>";
+                        if (in_array($bill->agreement_id, $a)) {
+                        } else {
+                            $tax +=$bill->tax;
+                            $rent +=$bill->rent;
+                            $penalty +=$bill->penalty;
+                            $prevbal +=$bill->prevbal;
+                            $a[]=$bill->agreement_id;
+                        }
                     }
                 }
-                //echo $trans."<br>";
             }
         }
         $data= [
@@ -86,7 +91,6 @@ class reportController extends Controller
             'penalty' =>$penalty,
             'prevbal' =>$prevbal,
         ];
-        //print_r($bills);
         //$bills = Bill::where('year', $selectedYear)->where('month', $selectedMonth)->get();
         return view('reports.collection', compact( 'start','end','data','bills'));
     }

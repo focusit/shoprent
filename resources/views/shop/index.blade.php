@@ -95,12 +95,11 @@
                                                                 class="btn  btn-success btn-sm">
                                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                                             </a>
-                                                            <form title="Delete Shop" action="{{ route('shops.destroy', $shop->shop_id) }}"
+                                                            <form title="Inactive Shop" action="{{ route('shops.inactive', $shop->shop_id) }}"
                                                                 method="post" class="d-inline">
                                                                 @csrf
-                                                                @method('DELETE')
                                                                 <button type="submit" class="btn  btn-danger btn-sm"
-                                                                    onclick="return confirm('Are you sure?')">
+                                                                    onclick="return confirm('Are you sure you want to inactivate shop?')">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                                 </button>
                                                             </form>
@@ -181,12 +180,11 @@
                                                                     class="btn  btn-success btn-sm">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </a>
-                                                                <form title="Delete Shop" action="{{ route('shops.destroy', $shop->shop_id) }}"
+                                                                <form title="Inactive Shop" action="{{ route('shops.inactive', $shop->shop_id) }}"
                                                                     method="post" class="d-inline">
                                                                     @csrf
-                                                                    @method('DELETE')
                                                                     <button type="submit" class="btn  btn-danger btn-sm"
-                                                                        onclick="return confirm('Are you sure?')">
+                                                                        onclick="return confirm('Are you sure you want to inactivate shop?')">
                                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                                     </button>
                                                                 </form>
@@ -250,12 +248,11 @@
                                                                     class="btn  btn-success btn-sm">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </a>
-                                                                <form title="Delete Shop" action="{{ route('shops.destroy', $shop->shop_id) }}"
+                                                                <form title="Inactivate Shop" action="{{ route('shops.inactive', $shop->shop_id) }}"
                                                                     method="post" class="d-inline">
                                                                     @csrf
-                                                                    @method('DELETE')
                                                                     <button type="submit" class="btn  btn-danger btn-sm"
-                                                                        onclick="return confirm('Are you sure?')">
+                                                                        onclick="return confirm('Are you sure you want to inactivate shop?')">
                                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                                     </button>
                                                                 </form>

@@ -75,7 +75,7 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-0" style="background-color:#0f59871f">
+        <aside class="main-sidebar " style="background-color:#E8EEFF;display:block;">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 <span class="brand-text font-weight-light">@auth
@@ -166,7 +166,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item pl-4">
-                                    <a href="{{  route('tenants.search') }}" class="nav-link">
+                                    <a href="{{  url('tenants/search') }}" class="nav-link">
                                         <i class="fa fa-search"></i>
                                         <p class="pl-1"> Search Tenants</p>
                                     </a>
@@ -266,16 +266,22 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                {{--<li class="nav-item">
-                                    <a href="{{ route('payments.pay') }}" class="nav-link">
+                                <li class="nav-item">
+                                    <a href="{{ route('payments.payBill') }}" class="nav-link">
                                         <i class="fas fa-rupee-sign nav-icon"></i>
                                         <p>Pay Now</p>
                                     </a>
-                                </li>--}}
+                                </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('payments.search') }}" class="nav-link">
+                                    <a href="{{ url('payments/search') }}" class="nav-link">
                                         <i class="fa fa-search nav-icon"></i>
                                         <p>Payment Search</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('payments.updateG8') }}" class="nav-link">
+                                        <i class="fa fa-search nav-icon"></i>
+                                        <p>Update G8</p>
                                     </a>
                                 </li>
                             </ul>
@@ -291,13 +297,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('reports.monthwise') }}" class="nav-link">
+                                    <a href="{{ url('reports/monthwise') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Month wise Reports</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route('reports.collection') }}" class="nav-link">
+                                    <a href="{{url('reports/collection') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Collection Report</p>
                                     </a>

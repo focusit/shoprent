@@ -81,6 +81,7 @@
                             <th>Penalty</th>
                             <th>Previous Balance</th>
                             <th>Total Balance</th>
+                            <th>Paid Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,6 +101,7 @@
                                 <td>{{ $bill['penalty'] }}</td>
                                 <td>{{ $bill['prevbal'] }}</td>
                                 <td>{{ $bill['total_bal'] }}</td>
+                                <td>{{ -1*$bill['amount'] }}</td>
                             </tr>
                         @endforeach
                         @if ($bills==null)

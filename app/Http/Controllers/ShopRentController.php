@@ -93,8 +93,9 @@ class ShopRentController extends Controller
     }
 
 
-    public function destroy($shop_id)
+    public function inactive($shop_id)
     {
+    session_start();
     $shop = ShopRent::findOrFail($shop_id);
 
     if (!empty($shop->image)) {
@@ -108,11 +109,14 @@ class ShopRentController extends Controller
             return redirect()->route('shops.index')->withErrors('Image file does not exist.');
         }
     }
-
-    $shop->delete();
-
-    return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
+    $data= [
+        'status' => 'inactive',
+        'user_id'=>$_SESSION['user_id'],
+    ];
+    $shop=ShopRent::where('shop_id',$shop_id)->update($data);
+    return redirect()->route('shops.index')->with('success', 'Shop inactivated successfully.');
     }
+    
     protected function validateShop(Request $request)
     {
         return $request->validate([
@@ -225,11 +229,10 @@ class ShopRentController extends Controller
     public function autocompleteSearch(Request $request)
     {
         $query = $request->input('query');
-
         if (empty($query)) {
-            $results = ShopRent::where('status', 'vacant')->orderBy('shop_id', 'asc')->get();
+            $results = ShopRent::where('status','vacant')->orderBy('shop_id', 'asc')->limit(100)->get();
         } else {
-            $results = ShopRent::where('status', 'vacant')
+            $results = ShopRent::where('status','vacant')
                 ->where('shop_id', 'like', '%' . $query . '%')
                 ->orderBy('shop_id', 'asc')
                 ->limit(100)
