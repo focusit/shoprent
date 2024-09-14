@@ -136,7 +136,7 @@ class PaymentController extends Controller
         }elseif($searchby ==='tenant_id'){
             $b =Bill::where('tenant_id', $search)->get();
         }elseif($searchby ==='shop_id'){ 
-            $b =Bill::where('shop_id', $search)->get();
+            $b =Bill::where('id', $search)->get();
         }elseif($searchby ==='bill_id'){ 
             $b =Bill::where('id', $search)->get();
         }else{

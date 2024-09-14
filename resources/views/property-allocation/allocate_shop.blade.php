@@ -84,7 +84,7 @@
                                         @enderror
                                         <input type="hidden" id="shop_id" name="shop_id"
                                             value="{{ old('shop_id', 
-                                            isset($agreement) ? $agreement[0]->shop_id : ( isset($shop) ? $shop->shop_id :'') ) }}">
+                                            isset($agreement) ? $agreement[0]->shop_id : ( isset($shop) ? $shop->id :'') ) }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -328,6 +328,7 @@
                         return {
                             label: item.shop_id,
                             value: item.shop_id,
+                            id: item.id,
                             rent: item.rent,
                             address: item.address,
                         }; 
@@ -337,7 +338,7 @@
             },
             minLength: 0,
             select: function(event, ui) {
-                $('#shop_id').val(ui.item.value);
+                $('#shop_id').val(ui.item.id);
                 $('#rent').val(ui.item.rent);
                 $('#address').val(ui.item.address);
             }

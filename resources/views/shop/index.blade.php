@@ -45,8 +45,8 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <!-- All Shops Tab -->
-                                    <div class="tab-pane active" id="allShops">
-                                        <table id="example1" class="table table-bordered table-striped">
+                                    <div class="tab-pane active" id="allShops" style="height:500px;overflow: auto;">
+                                        <table class="table table-bordered table-striped">
                                             <thead>
                                                 <tr class="bg-info">
                                                     <th>ID</th>
@@ -87,15 +87,15 @@
                                                             
                                                         </td>
                                                         <td class="p-2">
-                                                            <a title="Edit Shop" href="{{ route('shops.edit', $shop->shop_id) }}"
+                                                            <a title="Edit Shop" href="{{ route('shops.edit', $shop->id) }}"
                                                                 class="btn  btn-info btn-sm">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            <a title="Show Details" href="{{ route('shops.show', $shop->shop_id) }}"
+                                                            <a title="Show Details" href="{{ route('shops.show', $shop->id) }}"
                                                                 class="btn  btn-success btn-sm">
                                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                                             </a>
-                                                            <form title="Inactive Shop" action="{{ route('shops.inactive', $shop->shop_id) }}"
+                                                            <form title="Inactive Shop" action="{{ route('shops.inactive', $shop->id) }}"
                                                                 method="post" class="d-inline">
                                                                 @csrf
                                                                 <button type="submit" class="btn  btn-danger btn-sm"
@@ -116,8 +116,8 @@
                                     </div>
 
                                     <!-- Occupied Shops Tab -->
-                                    <div class="tab-pane" id="occupiedShops">
-                                        <table id="occupiedShopsTable" class="table table-bordered table-striped">
+                                    <div class="tab-pane" id="occupiedShops" style="height:500px;overflow: auto;">
+                                        <table  class="table table-bordered table-striped">
                                             <thead>
                                                 <tr class="bg-info">
                                                     <th>ID</th>
@@ -145,7 +145,7 @@
                                                             <td>{{ $shop->longitude }}</td>
                                                             <!-- tenant name from shop_id -->
                                                             @forelse($agreements as $agreement)
-                                                                @if($agreement->shop_id === $shop->shop_id)
+                                                                @if($agreement->shop_id == $shop->id)
                                                                     @forelse($tenants as $tenant)
                                                                         @if($agreement->status =="active")
                                                                             @if($tenant->tenant_id === $agreement->tenant_id)
@@ -172,15 +172,15 @@
                                                                 @endif
                                                             </td>
                                                             <td class="p-2">
-                                                                <a title=" Edit Shop" href="{{ route('shops.edit', $shop->shop_id) }}"
+                                                                <a title=" Edit Shop" href="{{ route('shops.edit', $shop->id) }}"
                                                                     class="btn  btn-info btn-sm">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
-                                                                <a title="Show Details" href="{{ route('shops.show', $shop->shop_id) }}"
+                                                                <a title="Show Details" href="{{ route('shops.show', $shop->id) }}"
                                                                     class="btn  btn-success btn-sm">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </a>
-                                                                <form title="Inactive Shop" action="{{ route('shops.inactive', $shop->shop_id) }}"
+                                                                <form title="Inactive Shop" action="{{ route('shops.inactive', $shop->id) }}"
                                                                     method="post" class="d-inline">
                                                                     @csrf
                                                                     <button type="submit" class="btn  btn-danger btn-sm"
@@ -201,7 +201,7 @@
                                     </div>
 
                                     <!-- Vacant Shops Tab -->
-                                    <div class="tab-pane" id="vacantShops">
+                                    <div class="tab-pane" id="vacantShops" style="height:500px;overflow:auto;">
                                         <table id="vacantShopsTable" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr class="bg-info">
@@ -240,15 +240,15 @@
                                                                 @endif
                                                             </td>
                                                             <td class="p-2">
-                                                                <a title="Edit Shop" href="{{ route('shops.edit', $shop->shop_id) }}"
+                                                                <a title="Edit Shop" href="{{ route('shops.edit', $shop->id) }}"
                                                                     class="btn  btn-info btn-sm">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
-                                                                <a title="Show Details" href="{{ route('shops.show', $shop->shop_id) }}"
+                                                                <a title="Show Details" href="{{ route('shops.show', $shop->id) }}"
                                                                     class="btn  btn-success btn-sm">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </a>
-                                                                <form title="Inactivate Shop" action="{{ route('shops.inactive', $shop->shop_id) }}"
+                                                                <form title="Inactivate Shop" action="{{ route('shops.inactive', $shop->id) }}"
                                                                     method="post" class="d-inline">
                                                                     @csrf
                                                                     <button type="submit" class="btn  btn-danger btn-sm"
@@ -256,7 +256,7 @@
                                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                                     </button>
                                                                 </form>
-                                                                <a title="Allocate Shop" href="{{ route('shop.index', $shop->shop_id) }}"
+                                                                <a title="Allocate Shop" href="{{ route('shop.index', $shop->id) }}"
                                                                     class="btn  btn-primary btn-sm">
                                                                     <i class="fa fa-file" aria-hidden="true"></i>
                                                                 </a>

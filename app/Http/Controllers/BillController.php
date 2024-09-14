@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\Agreement;
 use App\Models\Bill;
+use App\Models\ShopRent;
 use App\Models\User;
 use App\Models\Tenant;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class BillController extends Controller
@@ -137,7 +139,7 @@ class BillController extends Controller
                 ->first();
             if (!$existingBills) {
                 $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month);
-                break;
+                //break;
             }
         }
         $billingSettings = Bill::getBillingSettings();
@@ -176,9 +178,18 @@ class BillController extends Controller
             if($m==$month && $y==$year){
                 $rent=0;//if agreement generated this month than do not generate Bill
             }
-        }elseif($month==date('m',strtotime($agreement->valid_till)) && $year==date('Y',strtotime($agreement->valid_till))){
-            $rent=$agreement->rent * (date('d',strtotime($agreement->valid_till))/date('t', strtotime(now())));
-            //checking from valid till
+        }else{
+            $m =date('m',strtotime($agreement->valid_till));
+            $y=date('Y',strtotime($agreement->valid_till));
+            if($month =="1"){
+                if($m=="12" && $y==$year-1){
+                    $rent=$agreement->rent * (date('d',strtotime($agreement->valid_till))/date('t', strtotime(now())));
+                }
+            }else{
+                if($m==$month-1 && $y==$year){
+                    $rent=$agreement->rent * (date('d',strtotime($agreement->valid_till))/date('t', strtotime(now())));
+                }
+            }//checking from valid till
         }
         try {
             $billingSettings = Bill::getBillingSettings();
@@ -213,6 +224,8 @@ class BillController extends Controller
         }
         $tax = $rent*($billingSettings['tax_rate']/100);//Tax on rent
         $total_bal=$rent +$tax +$prevbal+$penalty;//total 
+        //DB::transaction(function(Request $request) {
+        //});
         if($rent !== null){
             if($billingSettings['penalty']>0){
                 if($prevbal > 0){
@@ -246,7 +259,7 @@ class BillController extends Controller
             ]);
             $bill = Bill::create([
                 'agreement_id' => $agreement->agreement_id,
-                'shop_id' => $agreement->shop->shop_id,
+                'shop_id' => $agreement->shop->id,
                 'tenant_id' => $agreement->tenant->tenant_id,
                 'tenant_full_name' => $agreement->tenant->full_name,
                 'shop_address' => $agreement->shop->address,
@@ -382,7 +395,9 @@ class BillController extends Controller
     {
         $bill = Bill::where('id', $id)->first();
         $billingSettings=Bill::getBillingSettings();
+        $shop=ShopRent::where('id',$bill->shop_id)->first();
         $transactions =Transaction::where('agreement_id',$agreement_id)->where('type','payment')->get();
+        $tran =Transaction::where('agreement_id',$bill->agreement_id)->where('type','Opening balance')->first();
         $bill->duration="From ". date('01-m-Y', strtotime($bill->bill_date)) ." to " . date('t-m-Y', strtotime($bill->bill_date));
         $lastbill=[];
         if($bill->month =="1"){
@@ -415,17 +430,23 @@ class BillController extends Controller
                 }
             }
         }
-        if(isset($lastbill)){
+        if($lastbill!=null){
             $total_bal=$lastbill->total_bal;
+        }elseif($tran!=null){
+            $total_bal =$tran->amount;
         }else{
-            $total_bal ='0';
+            $total_bal =0;
         }
-        return view('bills.print',['bill'=>$bill ,'lastbill'=>$lastbill], compact('billingSettings','lastamt','transaction'));
+        return view('bills.print',['bill'=>$bill ,'lastbill'=>$lastbill,'lastbal'=>$total_bal], compact('billingSettings','lastamt','transaction','shop'));
     }
 
     public function showLastbill($agreement_id){
         $bills =Bill::where('agreement_id', $agreement_id)->orderBy('id','desc')->first();
-        return $this->print($bills->id, $agreement_id);
+        if(!$bills){
+            return redirect()->back()->with('error', 'There is no Bill against this agreement.');
+        }else{
+            return $this->print($bills->id, $agreement_id);
+        }
     }
     
     public function printBills($bill_no=null){
@@ -439,6 +460,7 @@ class BillController extends Controller
         foreach($bills as $bill){
             $bill->duration="From ". date('01-m-Y', strtotime($bill->bill_date)) ." to " . date('t-m-Y', strtotime($bill->bill_date));
             $transactions =Transaction::where('agreement_id',$bill->agreement_id)->where('type','payment')->get();
+            $tran =Transaction::where('agreement_id',$bill->agreement_id)->where('type','Opening balance')->first();
             $lastbill=null;
             if($bill->month =="1"){
                 $lastbill=Bill::where('agreement_id',$bill->agreement_id)
@@ -470,9 +492,12 @@ class BillController extends Controller
             }
             if(isset($lastbill)){
                 $total_bal=$lastbill->total_bal;
+            }elseif(isset($tran)){
+                $total_bal =$tran->amount;
             }else{
-                $total_bal ='0';
+                $total_bal =0;
             }
+            $shop=ShopRent::where('id',$bill->shop_id)->first();
             $printdata=[
                 'lastamt'=>$lastamt,
                 'mc_name'=>$billingSettings['mc_name'],
@@ -480,8 +505,10 @@ class BillController extends Controller
                 'mc_email'=>$billingSettings['mc_email'],
                 'mc_phone'=>$billingSettings['mc_phone'],
                 'penalty'=>$billingSettings['penalty'],
+                'tax_rate'=>$billingSettings['tax'],
+                'discount'=>$billingSettings['discount'],
                 'bill_id'=>$bill->id ,
-                'shop_id'=>$bill->shop_id,
+                'shop_id'=>$shop->shop_id,
                 'tenant_full_name'=>$bill->tenant_full_name,
                 'shop_address'=>$bill->shop_address,
                 'contact'=>$bill->tenant->contact,
@@ -494,6 +521,14 @@ class BillController extends Controller
                 'tax'=> $bill->tax, 
                 'bill_penalty'=>$bill->penalty,
                 'last_total_bal'=>$total_bal,
+                'bank_name'=>$billingSettings['bank']['bank_name'],
+                'IFSC'=>$billingSettings['bank']['ifsc_code'],
+                'account_no'=>$billingSettings['bank']['account_no'],
+                'sign'=>$billingSettings['sign'],
+                'logo'=>$billingSettings['logo'],
+                'authority'=>$billingSettings['authority'],
+                'auth'=>$billingSettings['auth'],
+                'rec'=>$billingSettings['rec'],
             ];
             $data[]=$printdata;
         }

@@ -13,7 +13,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('shops.update', $shop->shop_id) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('shops.update', $shop->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             @include('shop._form')

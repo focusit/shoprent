@@ -73,7 +73,7 @@
                                                     <a title="Show Tenant Details" href="{{ route('tenants.show', $tenant->tenant_id) }}"
                                                         class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i>
                                                     </a>
-                                                    <form title="Delete Tenant" action="{{ route('tenants.destroy', $tenant->tenant_id) }}"
+                                                    <!--<form title="Delete Tenant" action="{{ route('tenants.destroy', $tenant->tenant_id) }}"
                                                         method="post" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
@@ -81,7 +81,7 @@
                                                             onclick="return confirm('Are you sure?')"><i class="fa fa-trash"
                                                                 aria-hidden="true"></i>
                                                         </button>
-                                                    </form>
+                                                    </form>-->
                                                 </td>
                                             </tr>
                                             @endif

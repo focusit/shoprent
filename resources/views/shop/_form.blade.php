@@ -20,7 +20,7 @@
                         <div class="form-group">
                             <label>Shop ID <span class="astrikes"><span class="astrikes">*</span></span></label>
                             <input type="text" class="form-control" name="shop_id" id="shop_id"
-                                value="{{ isset($shop) ? $shop->shop_id : '' }}" oninput="checkShopId()">
+                                value="{{ isset($shop) ? $shop->shop_id : '' }}">
                             <span id="shopIdStatus"></span>
                         </div>
                     </div>

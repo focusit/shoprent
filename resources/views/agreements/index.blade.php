@@ -51,9 +51,9 @@
                                     <!-- Tab Content -->
                                     <div class="tab-content" id="myTabsContent">
                                         <!-- All Agreements Tab -->
-                                        <div class="tab-pane fade show " id="allAgreements">
+                                        <div class="tab-pane fade show " id="allAgreements" style="height:500px;overflow: scroll;">
                                             <!-- Table for All Shops -->
-                                            <table class="table table-bordered table-striped">
+                                            <table id="example1" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
                                                         <th>ID</th>
@@ -64,6 +64,7 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
+                                                        <th>Opening Balance</th>
                                                         <th>Document</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -73,7 +74,15 @@
                                                         <tr class="text-center">
                                                             <td>{{ $agreement->id }}</td>
                                                             <td>{{ $agreement->agreement_id }}</td>
-                                                            <td>{{ $agreement->shop_id }}</td>
+                                                            <td>
+                                                                @forelse($shops as $shop)
+                                                                    @if ($shop->id == $agreement->shop_id)
+                                                                        {{ $shop->shop_id }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Shop Id-->
+                                                                </td>
                                                             <td>{{ $agreement->tenant_id }}</td>
                                                             @forelse ($tenants as $tenant)
                                                                 @if ($tenant->tenant_id === $agreement->tenant_id)
@@ -85,6 +94,15 @@
                                                             <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
                                                             <td>{{ date('d-m-Y',strtotime($agreement->valid_till ))}}</td>
                                                             <td>{{ $agreement->rent }}</td>
+                                                            <td>
+                                                                @forelse($transaction as $trans)
+                                                                    @if ($trans->agreement_id == $agreement->agreement_id)
+                                                                        {{ $trans->amount }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Opening Balance-->
+                                                                </td>
                                                             <td>
                                                                 @if ($agreement->document_field)
                                                                     @php
@@ -128,8 +146,8 @@
                                         </div>
 
                                         {{-- <--------------------------------------Active Agreements--------------------------------------------> --}}
-                                        <div class="tab-pane fade show active" id="activeAgreements"> <!-- Table for Occupied Shops -->
-                                            <table id="active-tab" class="table table-bordered table-striped">
+                                        <div class="tab-pane fade show active" id="activeAgreements" style="height:500px;overflow: scroll;"> <!-- Table for Occupied Shops -->
+                                            <table id="active_agreement" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
                                                         <th>ID</th>
@@ -141,6 +159,7 @@
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
                                                         <th>Document</th>
+                                                        <th>Opening Balance</th>
                                                         <th>Action</th>
                                                         <th>Generate Bill</th>
                                                     </tr>
@@ -151,7 +170,15 @@
                                                             <tr class="text-center">
                                                                 <td>{{ $agreement->id }}</td>
                                                                 <td>{{ $agreement->agreement_id }}</td>
-                                                                <td>{{ $agreement->shop_id }}</td>
+                                                                <td>
+                                                                @forelse($shops as $shop)
+                                                                    @if ($shop->id == $agreement->shop_id)
+                                                                        {{ $shop->shop_id }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Shop Id-->
+                                                                </td>
                                                                 <td>{{ $agreement->tenant_id }}</td>
                                                                 @forelse ($tenants as $tenant)
                                                                     @if ($tenant->tenant_id === $agreement->tenant_id)
@@ -187,6 +214,15 @@
                                                                         No Data
                                                                     @endif
                                                                 </td>
+                                                                <td>
+                                                                @forelse($transaction as $trans)
+                                                                    @if ($trans->agreement_id == $agreement->agreement_id)
+                                                                        {{ $trans->amount }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Opening Balance-->
+                                                                </td>
                                                                 <td class="px-2">
                                                                     <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                         class="btn btn-info btn-sm"><i
@@ -221,7 +257,7 @@
                                             </table>
                                         </div>
                                         {{-- <--------------------------------------Inactive Agreements--------------------------------------------> --}}
-                                        <div class="tab-pane fade" id="inactiveAgreements">
+                                        <div class="tab-pane fade" id="inactiveAgreements" style="height:500px;overflow: scroll;">
                                             <table id="inactiveAgreementsTable" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">

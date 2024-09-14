@@ -17,7 +17,9 @@ class AgreementController extends Controller
     {
         $agreements = Agreement::all();
         $tenants = Tenant::all();
-        return view('agreements.index', ['agreements'=> $agreements, 'tenants' =>$tenants]);
+        $shops= ShopRent::all();
+        $transaction =Transaction::where('type','opening balance')->get();
+        return view('agreements.index', ['shops'=>$shops,'agreements'=>$agreements, 'tenants'=>$tenants, 'transaction'=>$transaction]);
     }
 
     public function showAllocateShopForm()
@@ -76,8 +78,7 @@ class AgreementController extends Controller
                 'agreement_id.required' => 'The Agreement ID field is required.',
                 'agreement_id.unique' => 'The Agreement ID has already been taken.',
             ]);
-
-            $shop = ShopRent::where('shop_id', $request->input('shop_id'))->first();
+            $shop = ShopRent::where('id', $request->input('shop_id'))->first();
             $tenant =Tenant::where('tenant_id', $request->input('tenant_id'))->first();
             if (!$shop) {
                 return redirect()->back()->with('error', 'Shop not found. Please select a valid shop.');
@@ -246,8 +247,8 @@ class AgreementController extends Controller
 
         return redirect()->route('agreements.index')->with('success', 'Agreement has been deleted successfully');
     }
-    public function allocatevacantShop($shop_id){
-        $shop = ShopRent::findOrFail($shop_id);
+    public function allocatevacantShop($id){
+        $shop = ShopRent::where('id',$id)->first();
         return view('property-allocation.allocate_shop', compact('shop'));
     }
     

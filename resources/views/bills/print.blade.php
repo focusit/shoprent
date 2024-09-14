@@ -13,7 +13,7 @@
                 <h1><strong> Invoice </strong></h1>
             </div>
             <?php
-                $prev_bal= $lastbill->total_bal ;
+                $prev_bal=isset($lastbill)? $lastbill->total_bal:$lastbal ;
                 $lpay=$transaction !=null?(
                     $lastamt < 0 ? -1*($lastamt):$lastamt) :'0';//last payment
                 $balance=$prev_bal-$lpay ;
@@ -27,7 +27,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="invoice p-3 mb-3">
-                            <h4 style="text-align:left"><i class="fas fa-globe"></i> <strong>Shop Rent Bill</strong> </h4><br>
+                            <h4 style="text-align:left"><img src="/images/mclogo.png" alt="logo" height="40px" width="40px">
+                            <strong>Shop Rent Bill</strong> </h4><br>
                             <div class="row">
                                 <div class="col-4"> 
                                     <address class="float-left">
@@ -41,7 +42,7 @@
                                     <address class="float-center">
                                         <strong>Name: </strong>{{ $bill->tenant_full_name }}<br>
                                         <strong>Address: </strong>{{$bill->shop_address}}<br>
-                                        <strong>Shop Id: </strong>{{$bill->shop_id}}<br>
+                                        <strong>Shop Id: </strong>{{$shop->shop_id}}<br>
                                         <strong>Phone No: </strong>{{$bill->tenant->contact}}<br>
                                     </address>
                                </div>
@@ -55,112 +56,85 @@
                                     </address>
                                </div>
                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">                    
-                    <div class="col-md-8">
-                        <div class="invoice p-3 mb-3">
-                           <h4>
-                               <strong> Current Charges</strong>
-                               <small> {{ $bill->duration }}</small>
-                            </h4>
-                            <div class="row">
-                                <div class="col-9"> 
-                                    <address>
-                                        <strong>  Description </strong> <br> 
-                                        Current Bill<br>
-                                        Tax<br>
-                                        Previous Balance<br>
-                                    </address>
-                                </div>
-                                <div class="col-2"> 
-                                    <strong class="float-right">  Amount </strong><br>
-                                    <address>                   
-                                        <span class="float-right">{{ (int)$bill->rent }}</span><br>
-                                        <span class="float-right">{{ (int)$bill->tax }}</span><br>
-                                        <span class="float-right">{{ $total_bal }}</span><br>
-                                    </address>
-                                </div>
-                                <div class="col-1"></div> 
-                            </div> &nbsp;
-                            <h4><div class="row">
-                                <div class="col-9"> 
-                                    <strong>Total</strong>
-                                </div>
-                                <div class="col-2">
-                                    <strong class="float-right">{{ $total = round($total_bal,2) +round(($bill->rent + $bill->tax),2)}}</strong>
-                                </div>
-                                <div class="col-1"></div>
-                            </div></h4>
-                            &nbsp;
-                            <div class="row">
-                                <div class="col-9">
-                                    Payable by due date: {{ date('d-m-Y',strtotime($bill->due_date)) }}</br>
-                                    Payable after dute date charges will be:  {{ date('d-m-Y',strtotime($bill->due_date)) }}</br>
-                                </div>
-                                <div class="col-2">
-                                    <strong class="float-right">{{$total}}</strong></br>
-                                    <strong class="float-right">{{ round($total+$total*($billingSettings['penalty']/100))}}</strong></br>
-                                </div>
-                                <div class="col-1"></div>
-                            </div>
-                        </div>
-                    </div>
-                                
-                    <div class="col-md-4">
-                        <div class="invoice p-2 mb-2">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h4><strong> Payment Details </strong></h4>
-                                    <div class="row">
-                                        <div class="col-8"> 
-                                            <strong>  Description </strong> <br>
-                                                Previous Bill Amount:<br>
-                                                Payment/s Received:<br>
-                                                Balance:<br>
-                                                Penalty (late fee)-<br>
-                                        </div>
-                                        <div class="col-4"> 
-                                            <strong class="float-right"> Amount </strong><br>
-                                            <address class="float-right">
-                                                <span class="float-right">{{ $prev_bal}}</span><br>
-                                                <span class="float-right">{{ $lpay}}</span><br>
-                                                <span class="float-right">{{ $bal }}</span><br>
-                                                <span class="float-right">{{ (int)$penalty }}</span><br>
-                                            </address>
-                                        </div>
+                           <div class="clearfix">
+                                <div style="width:62%;padding:10px;float:left;border:1px solid black;">
+                                    <h3><strong> Current Charges</strong><small> ( {{ $bill->duration }} )</small> </h3><br>
+                                    <div style="float:left;width: 70%">
+                                        <b class="f_left"> Description </b><br>
+                                        <span class="f_left">Current Bill</span><br>
+                                        <span class="f_left">Tax</span><br>
+                                        <span class="f_left">Previous Balance</span><br><br>
+                                        <span class="f_left"><strong>Total</strong></span><br><br>
+                                        <span class="f_left">Payable by due date: {{ date('d-m-Y',strtotime($bill->due_date)) }}</span><br>
+                                        <span class="f_left">Payable after dute date charges will be:  {{ date('d-m-Y',strtotime($bill->due_date)) }}</span>
                                     </div>
-                                </div> 
-                            </div>&nbsp;&nbsp;
-                            <h5>
-                                <strong>Total Balance</strong> 
-                                <strong class="float-right" id="total_prevbal">{{ $total_bal }}</strong><br>
-                            </h5>
-                        </div>
-                         
-                        <div class="row">
-                            <div class="col-12"> 
-                                qr code<br>
+                                    <div style="float:right;width: 29%;text-align:right;">
+                                        <b class="f_right">Amount</b><br>
+                                        <span class="f_right">{{ (int)$bill->rent }}</span><br>
+                                        <span class="f_right">{{ (int)$bill->tax }}</span><br>
+                                        <span class="f_right">{{ $total_bal }}</span><br><br>
+                                        <span class="f_right"><strong >{{ $total = round($total_bal,2) +round(($bill->rent + $bill->tax),2)}}</strong></span><br><br>
+                                        <span class="f_right"><strong>{{$total}}</strong></span></br>
+                                        <span class="f_right"><strong>{{ round($total+$total*($billingSettings['penalty']/100))}}</strong></span><br>
+                                    </div>
+                                </div>
+                                <div style="width:33%;float:right;padding:10px;border: 1px solid black;">
+                                    <h3><strong> Payment Details </strong></h3>
+                                    <div style="float:left;width: 50%">
+                                        <strong class="f_left">Description </strong></br>
+                                        <span class="f_left">Previous Bill Amount:</span></br>
+                                        <span class="f_left">Payment/s Received:</span></br>
+                                        <span class="f_left">Balance:</span></br>
+                                        <span class="f_left">Penalty (late fee)-</span></br><br>
+                                        <span class="f_left"><strong>Total Balance</strong></span></br>
+                                    </div>
+                                    <div style="float:right;width: 49%;text-align:right;">
+                                        <strong class="f_right"> Amount </strong><br>
+                                        <span class="f_right">{{ $prev_bal}}</span><br>  
+                                        <span class="f_right">{{ $lpay}}</span><br>
+                                        <span class="f_right">{{ $bal }}</span><br>
+                                        <span class="f_right">{{ (int)$penalty }}</span><br><br>
+                                        <span class="f_right"><strong>{{ $total_bal }}</strong></span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>&nbsp;
-                        <h5>
-                            <small class="float-right"><strong>..Signature</strong></small><br>
-                        </h5>
+                            <div>
+                                <b>GST = {{$billingSettings['tax_rate']}}% , Late Fee ={{$billingSettings['penalty']}}%, Rebate ={{$billingSettings['discount']}}%</b>
+                            </div><br>
+                            <div class="clearfix" style="width:100%">
+                                <div style="float:left;width: 50%">
+                                    <h3><strong> Our Bank Details for NEFT/RTGS/IMPS:</strong></h3>   
+                                    <strong>{{$billingSettings['bank']['bank_name']}}</strong><br>
+                                    <strong>Account No:{{$billingSettings['bank']['account_no']}}</strong><br>
+                                    <strong>IFSC : {{$billingSettings['bank']['ifsc_code']}} </strong><br>
+                                    <strong>email ID: {{ $billingSettings['mc_email'] }}</strong>
+                                </div>
+                                <div style="float:right;width: 49%;text-align:right;padding-top:50px;">
+                                    <span><img src="/images/eo_mc_bilaspur.png" height="50px" width="100px" alt="sign"></span><br>
+                                    <strong>{{$billingSettings['authority']}}</strong></br>
+                                    <strong> {{ $billingSettings['auth'] }} </strong></br>
+                                    <strong>Phone No.: {{$billingSettings['mc_phone']}}</strong></br>
+                                    <strong>{{$billingSettings['rec']}}</strong></br>
+                                </div>
+                            </div>
+                            <div >
+                                <strong>Note:<br>
+                                Please inform us by sending email along with Bill No, Shop ID (UID) and transaction ID/UTR No
+                                Payment of House Tax does not regularize unauthorized construction</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Main content -->
-                    <div class="row no-print">
-                        <a rel="noopener" target="_blank" class="btn btn-info" onclick="window.print();">
-                            <i class="fas fa-print"></i> Print
-                        </a>&nbsp;&nbsp;
-                        <a href="{{ route('bills.generatePdf',$bill->id ) }}" class="btn btn-info">
-                            <i class="fas fa-download"></i>Generate PDF
-                        </a>
-                    </div>
+            </div>
+            <div class="row no-print">
+                <a rel="noopener" target="_blank" class="btn btn-info" onclick="window.print();">
+                    <i class="fas fa-print"></i> Print
+                </a>&nbsp;&nbsp;
+                <a href="{{ route('bills.generatePdf',$bill->id ) }}" class="btn btn-info">
+                    <i class="fas fa-download"></i>Generate PDF
+                </a>
             </div>
         </section>
-
     </div>
 
 @endsection

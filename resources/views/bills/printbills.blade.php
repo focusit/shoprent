@@ -32,7 +32,7 @@
             max-width:25%;
             float:right;
         }
-        .clearfix::after {
+        .clearfix::after {  
             content: "";
             clear: both;
             display: table;
@@ -49,13 +49,13 @@
                 $total_bal=$penalty + $balance;
         ?>
         <div class="page">
-            <h1 style="text-align:left"><strong> Shop Rent Bill </strong></h1>
+            <h1 style="text-align:left"><img src="{{$d['logo']}}" alt=" " height="50px" weight="50px"><strong> Shop Rent Bill </strong></h1>
             <div  class="clearfix">
                 <div class="box">
                     <strong>MC Name : </strong> {{ $d['mc_name'] }} <br>
                     <strong>MC Address : </strong>{{ $d['mc_address'] }}<br>
                     <strong>MC Phone : </strong>{{ $d['mc_phone'] }}<br>
-                    <strong>MC Email : </strong>{{ $d['mc_email'] }} 
+                    <strong>MC Email : </strong>{{ $d['mc_email'] }}<br>
                 </div> 
                 <div class="box">
                     <strong>Name:</strong>{{ $d['tenant_full_name'] }}<br>
@@ -68,7 +68,7 @@
                     <strong>Bill date : </strong>{{ date('d-m-Y',strtotime($d['bill_date'])) }}<br>
                     <strong>Bill Month : </strong> {{ date("F",strtotime($d['bill_date'] ))}}<br>
                     <strong>Bill Validity : </strong>{{ date('d-m-Y',strtotime($d['due_date'])) }}<br>
-                    <strong>Agreement ID : </strong>{{ $d['agreement_id'] }}
+                    <strong>Agreement ID : </strong>{{ $d['agreement_id'] }}<br>
                 </div>
             </div>
             <div class="clearfix">
@@ -109,6 +109,30 @@
                         <br><br><br><br>
                     </address>
                 </div>
+                <div >
+                    <b>GST = {{$d['tax_rate']}}% , Late Fee ={{$d['penalty']}}%, Rebate ={{$d['discount']}}%</b>
+                </div>
+            </div>
+            <div class="clearfix" style="width:100%">
+                <div style="float:left;width: 50%">
+                    <h3><strong> Our Bank Details for NEFT/RTGS/IMPS:</strong></h3>   
+                    <strong>{{$d['bank_name']}}</strong><br>
+                    <strong>Account No:{{$d['account_no']}}</strong><br>
+                    <strong>IFSC : {{$d['IFSC']}} </strong><br>
+                    <strong>email ID: {{ $d['mc_email'] }}</strong>
+                </div>
+                <div style="float:right;width: 49%;text-align:right;padding-top:50px;">
+                    <span><img src="{{ $d['sign'] }}" height="50px" width="100px" alt="sign"></span><br>
+                    <strong>{{$d['authority']}}</strong></br>
+                    <strong> {{ $d['auth'] }} </strong></br>
+                    <strong>Phone No.: {{$d['mc_phone']}}</strong></br>
+                    <strong>{{$d['rec']}}</strong></br>
+                </div>
+            </div>
+            <div >
+                <strong>Note:<br>
+                Please inform us by sending email along with Bill No, Shop ID (UID) and transaction ID/UTR No
+                Payment of House Tax does not regularize unauthorized construction</strong>
             </div>
         </div>
     </body>

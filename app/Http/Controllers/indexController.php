@@ -39,7 +39,7 @@ class indexController extends Controller
         $shops=ShopRent::all();
         foreach($agreement as $agree){
             foreach($shops as $shop){
-                if($shop->shop_id ==$agree->shop_id && $agree->status=="active"){
+                if($shop->id ==$agree->shop_id && $agree->status=="active"){
                     if($shop->status =="vacant" ){
                         $data =[
                             'status'=>"occupied",

@@ -51,19 +51,19 @@ class ShopRentController extends Controller
         return redirect()->route('shops.index')->with('success', 'Shop created successfully.');
     }
 
-    public function show($shop_id)
+    public function show($id)
     {
-        $shop = ShopRent::findOrFail($shop_id);
+        $shop = ShopRent::where('id',$id)->first();
         return view('shop.show', compact('shop'));
     }
 
-    public function edit($shop_id)
+    public function edit($id)
     {
-        $shop = ShopRent::findOrFail($shop_id);
+        $shop = ShopRent::where('id',$id)->first();
         return view('shop.edit', compact('shop'));
     }
 
-    public function update(Request $request, $shop_id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'shop_id' => 'nullable|string',
@@ -78,7 +78,7 @@ class ShopRentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $shop = ShopRent::findOrFail($shop_id);
+        $shop = ShopRent::findOrFail($id);
 
         $this->handleImage($request, $shop);
 
@@ -93,10 +93,10 @@ class ShopRentController extends Controller
     }
 
 
-    public function inactive($shop_id)
+    public function inactive($id)
     {
     session_start();
-    $shop = ShopRent::findOrFail($shop_id);
+    $shop = ShopRent::where('id',$id)->first();
 
     if (!empty($shop->image)) {
         $filePath = public_path('images/' . $shop->image);
@@ -113,7 +113,7 @@ class ShopRentController extends Controller
         'status' => 'inactive',
         'user_id'=>$_SESSION['user_id'],
     ];
-    $shop=ShopRent::where('shop_id',$shop_id)->update($data);
+    $shop=ShopRent::where('id',$id)->update($data);
     return redirect()->route('shops.index')->with('success', 'Shop inactivated successfully.');
     }
     

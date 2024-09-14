@@ -94,7 +94,7 @@ Route::group(['middleware' => ['admin_auth']], function () {
     Route::get('/shops/create', [ShopRentController::class, 'create'])->name('shops.create');
     Route::post('/shops/store', [ShopRentController::class, 'store'])->name('shops.store');
     Route::get('/shops/{shop_id}', [ShopRentController::class, 'show'])->name('shops.show');
-    Route::get('/shops/{shop_id}/edit', [ShopRentController::class, 'edit'])->name('shops.edit');
+    Route::get('/shops/edit/{id}',[ShopRentController::class, 'edit'])->name('shops.edit');
     Route::put('/shops/{shop_id}', [ShopRentController::class, 'update'])->name('shops.update');
     Route::post('/shops/{shop_id}', [ShopRentController::class, 'inactive'])->name('shops.inactive');
     Route::post('/checkShopId', [ShopRentController::class, 'checkShopId'])->name('checkShopId');

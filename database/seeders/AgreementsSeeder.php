@@ -30,7 +30,7 @@ class AgreementsSeeder extends Seeder
       // Generate agreement data
       $agreementData = [
         'agreement_id' => $agreementId,
-        'shop_id' => $shop->shop_id,
+        'shop_id' => $shop->id,
         'tenant_id' => $tenant->tenant_id,
         'with_effect_from' => Carbon::now()->subMonths(rand(1, 12))->toDateString(),
         'valid_till' => Carbon::now()->addMonths(rand(1, 12))->toDateString(),

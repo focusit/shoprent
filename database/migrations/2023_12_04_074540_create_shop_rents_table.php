@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shop_rents', function (Blueprint $table) {
             $table->id();
-            $table->string('shop_id')->unique();
+            $table->string('shop_id');
             $table->string('address')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
