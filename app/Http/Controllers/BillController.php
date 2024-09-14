@@ -505,7 +505,7 @@ class BillController extends Controller
                 'mc_email'=>$billingSettings['mc_email'],
                 'mc_phone'=>$billingSettings['mc_phone'],
                 'penalty'=>$billingSettings['penalty'],
-                'tax_rate'=>$billingSettings['tax'],
+                'tax_rate'=>$billingSettings['tax_rate'],
                 'discount'=>$billingSettings['discount'],
                 'bill_id'=>$bill->id ,
                 'shop_id'=>$shop->shop_id,
