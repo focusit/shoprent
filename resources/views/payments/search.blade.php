@@ -46,13 +46,17 @@
                     <div class="col-md-6 ">
                         <label style="font-size:22px"> Search By</label><br>
                         <div class="row">
-                            <div class="col-md-6 ">
+                            <div class="col-md-4 ">
                                 <input type="checkbox" id="full_name" value="full_name"  checked>
                                 <label for="full_name"> Full Name</label>
                             </div>
-                            <div class="col-md-6 ">
+                            <div class="col-md-4 ">
                                 <input type="checkbox" id="email" value="email" >
                                 <label for="email"> Email</label>
+                            </div>
+                            <div class="col-md-4 ">
+                                <input type="checkbox" id="bill_id" value="bill_id" >
+                                <label for="bill_id"> Bill No</label>
                             </div>
                         </div>
                         <div class="row">
@@ -95,6 +99,7 @@
         <table id="" class="table table-bordered table-striped" >
             <thead>
                 <tr class="text-center bg-info">
+                    <th>Bill NO</th>
                     <th>Agreement ID</th>
                     <th>Shop ID</th>
                     <th>Tenant ID</th>
@@ -109,6 +114,7 @@
             <tbody>
                 @foreach ($bills as $bill)
                     <tr>
+                        <td>{{ $bill->id }}</td>
                         <td>
                             <a href="{{ route('agreements.show', $bill->agreement_id) }}">
                                 {{ $bill->agreement_id }}
@@ -119,7 +125,7 @@
                         <td>{{ $bill->tenant_full_name }}</td>
                         <td>{{ $bill->shop_address }}</td>
                         <td>{{ $bill->total_bal >$bill->rent? $bill->total_bal:$bill->rent }}</td>
-                        <td>{{ $bill->bill_date }}</td>
+                        <td>{{ date('d-m-Y',strtotime($bill->bill_date)) }}</td>
                         <td>
                             <a href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
                                 target="_blank" class="btn btn-info btn-sm">
@@ -139,7 +145,7 @@
                         </td>
                     </tr>
                 @endforeach
-                @if ($bills->isEmpty())
+                @if ($bills==null)
                     <tr>
                         <td colspan="12">No bills found.</td>
                     </tr>

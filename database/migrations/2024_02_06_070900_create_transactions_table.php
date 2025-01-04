@@ -13,18 +13,20 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->integer('bill_no');
             $table->string('transaction_number')->unique();
             $table->date('transaction_date');
             $table->string('agreemnet_id');
-            $table->string('tenant_name');
             $table->string('shop_id');
             $table->string('tenant_id');
-            $table->float('amount')->default(0.00);
+            $table->string('tenant_name');
+            $table->integer('amount')->default(0);
             $table->string('type');
-            $table->unsignedSmallInteger('month')->default(now()->month);
-            $table->unsignedSmallInteger('year')->default(now()->year);
             $table->string('payment_method')->nullable();
             $table->text('remarks')->nullable();
+            $table->integer('reconciled_by');
+            $table->string('G8');
+            $table->integer('user_id');
             $table->timestamps();
         });        
     }

@@ -20,6 +20,7 @@ class Agreement extends Model
         'rent',
         'status',
         'remark',
+        'user_id',
         'document_field',
     ];
 
@@ -38,6 +39,6 @@ class Agreement extends Model
 
     public function shop()
     {
-        return $this->belongsTo(ShopRent::class, 'shop_id');
+        return $this->belongsTo(ShopRent::class, 'id');
     }
 }

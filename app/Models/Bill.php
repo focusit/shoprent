@@ -33,6 +33,7 @@ class Bill extends Model
         'due_date',
         'penalty',
         'tax',
+        'user_id',
         'prevbal',
         'total_bal',
         'discount',
@@ -66,7 +67,7 @@ class Bill extends Model
 
     public function shop()
     {
-        return $this->belongsTo(ShopRent::class, 'shop_id');
+        return $this->belongsTo(ShopRent::class, 'id');
     }
     public function payments()
     {

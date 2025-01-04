@@ -25,11 +25,10 @@
                                 <h3 class="card-title">Recently Tenant list</h3>
                             </div>
                             <!-- /.card-header -->
-                            <div class=" card-body">
-                                <table id="example1" class="table table-bordered table-striped">
+                            <div class="card-body" style="height:500px;overflow: scroll;">
+                                <table id="" class="table table-bordered table-striped">
                                     <thead>
                                         <tr class="bg-info">
-                                            <th>ID</th>
                                             <th>Tenants ID</th>
                                             <th>Govt ID</th>
                                             <th>ID Number</th>
@@ -49,7 +48,6 @@
                                             @if ($tenant->tenant_id === $agreement->tenant_id)
                                             @if ($agreement->status == 'active')
                                             <tr>
-                                                <td>{{ $tenant->id}}</td>
                                                 <td>{{ $tenant->tenant_id }}</td>
                                                 <td>{{ $tenant->govt_id }}</td>
                                                 <td>{{ $tenant->govt_id_number }}</td>
@@ -70,12 +68,12 @@
                                                 <td>{{ $tenant->gender }}</td>
                                               
                                                 <td class="p-2">
-                                                    <a href="{{ route('tenants.edit', $tenant->tenant_id) }}"
+                                                    <a title="Edit Tenant Details" href="{{ route('tenants.edit', $tenant->tenant_id) }}"
                                                         class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                                    <a href="{{ route('tenants.show', $tenant->tenant_id) }}"
+                                                    <a title="Show Tenant Details" href="{{ route('tenants.show', $tenant->tenant_id) }}"
                                                         class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i>
                                                     </a>
-                                                    <form action="{{ route('tenants.destroy', $tenant->tenant_id) }}"
+                                                    <!--<form title="Delete Tenant" action="{{ route('tenants.destroy', $tenant->tenant_id) }}"
                                                         method="post" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
@@ -83,7 +81,7 @@
                                                             onclick="return confirm('Are you sure?')"><i class="fa fa-trash"
                                                                 aria-hidden="true"></i>
                                                         </button>
-                                                    </form>
+                                                    </form>-->
                                                 </td>
                                             </tr>
                                             @endif

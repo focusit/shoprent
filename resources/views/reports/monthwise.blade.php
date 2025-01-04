@@ -15,7 +15,7 @@
                         <label for="year" class="form-label">Select Year:</label>
                         <select id="year" name="year" class="form-select" >
                             @for ($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }} {{ $selectedYear == $year ? 'selected' : '' }}">
+                                <option value="{{ $year }}"{{ $selectedYear == $year ? 'selected' : '' }}>
                                     {{ $year }}
                                 </option>
                             @endfor
@@ -25,7 +25,7 @@
                         <label for="month" class="form-label">Select Month:</label>
                         <select id="month" name="month" class="form-select">
                             @for ($month = 1; $month <= 12; $month++)
-                                <option value="{{ $month }} {{ $selectedMonth == $month ? 'selected' : '' }}">
+                                <option value="{{ $month }}" {{ $selectedMonth == $month ? 'selected' : '' }}>
                                     {{ date('F', mktime(0, 0, 0, $month, 1)) }}
                                 </option>
                             @endfor
@@ -45,7 +45,7 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="text-center"><b> Monthly Report of {{ $selectedMonth !=0 ?$selectedMonth :date('M')}} ,
+                                <h4 class="text-center"><b> Monthly Report of {{ $selectedMonth !=0 ? $selectedMonth :date('M')}} ,
                                 {{ $selectedYear !=0 ?$selectedYear :date('Y')}} </b>(Summary)</h4>
                             </div>
                             <div class="card-body row">
@@ -103,7 +103,15 @@
                                         {{ $bill->agreement_id }}
                                     </a>
                                 </td>
-                                <td>{{ $bill->shop_id }}</td>
+                                <td>
+                                    @forelse($shops as $shop)
+                                        @if ($shop->id == $bill->shop_id)
+                                            {{ $shop->shop_id }}
+                                        @endif
+                                    @empty
+                                        
+                                    @endforelse<!--Shop Id-->
+                                </td>
                                 <td>{{ $bill->tenant_id }}</td>
                                 <td>{{ $bill->tenant_full_name }}</td>
                                 <td>{{ $bill->shop_address }}</td>

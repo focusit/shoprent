@@ -16,13 +16,15 @@ class Transaction extends Model
         'payment_method',
         'agreement_id',
         'shop_id',
+        'bill_no',
         'amount',
         'tenant_id',
         'tenant_name',
-        'month',
-        'year',
         'type',
         'remarks',
+        'user_id',
+        'G8',
+        'reconciled_by',
     ];
     public function bills()
     {

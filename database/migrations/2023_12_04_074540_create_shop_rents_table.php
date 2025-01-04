@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shop_rents', function (Blueprint $table) {
             $table->id();
-            $table->string('shop_id')->unique();
+            $table->string('shop_id');
             $table->string('address')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('construction_year')->nullable();
             $table->string('owner_name')->nullable();
             $table->string('status');
-            $table->decimal('rent', 8, 2);
+            $table->integer('rent');
+            $table->integer('user_id');
             // $table->string('tenant_id')->nullable(); // Add this line
             // $table->foreign('tenant_id')->references('tenant_id')->on('tenants')->onDelete('set null'); 
             $table->string('image')->nullable();

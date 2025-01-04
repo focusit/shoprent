@@ -7,7 +7,7 @@
     <div class="content-wrapper">
         <div class="card p-3">
             <div class="card-header">
-                <h3 class="card-title">Bills Month-wise</h3>
+                <h2 class="card-title">{{ isset($var) ? "Month-wise Bills" :"Paid Bills"}} </h2>
             </div>
             <div class="card-body">
                 <div class="row mb-3">
@@ -15,7 +15,7 @@
                         <label for="year" class="form-label">Select Year:</label>
                         <select id="year" name="year" class="form-select" >
                             @for ($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }} {{ $selectedYear == $year ? 'selected' : '' }}">
+                                <option value="{{$year}}"{{ $selectedYear == $year ? 'selected' : '' }}>
                                     {{ $year }}
                                 </option>
                             @endfor
@@ -25,7 +25,7 @@
                         <label for="month" class="form-label">Select Month:</label>
                         <select id="month" name="month" class="form-select">
                             @for ($month = 1; $month <= 12; $month++)
-                                <option value="{{ $month }} {{ $selectedMonth == $month ? 'selected' : '' }}">
+                                <option value="{{ $month }}" {{ $selectedMonth == $month ? 'selected' : '' }}>
                                     {{ date('F', mktime(0, 0, 0, $month, 1)) }}
                                 </option>
                             @endfor
@@ -49,7 +49,11 @@
                         <th>Amount</th>
                         <th>Bill Date</th>
                         <th>Print Bills</th>
-                        <th>Payment Status</th>
+                        @if(isset($var))
+                            @if($paybill=="enable")
+                                <th>Payment Status</th>
+                            @endif
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -61,29 +65,41 @@
                                         {{ $bill->agreement_id }}
                                     </a>
                                 </td>
-                                <td>{{ $bill->shop_id }}</td>
+                                <td>
+                                    @forelse($shops as $shop)
+                                        @if ($shop->id == $bill->shop_id)
+                                            {{ $shop->shop_id }}
+                                        @endif
+                                    @empty
+                                        
+                                    @endforelse<!--Shop Id-->
+                                </td>
                                 <td>{{ $bill->tenant_id }}</td>
                                 <td>{{ $bill->tenant_full_name }}</td>
                                 <td>{{ $bill->shop_address }}</td>
                                 <td>{{ $bill->total_bal >$bill->rent? $bill->total_bal:$bill->rent }}</td>
-                                <td>{{ $bill->bill_date }}</td>
+                                <td>{{ date('d-m-Y',strtotime($bill->bill_date)) }}</td>
                                 <td>
-                                    <a href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
+                                    <a title="Print Bill" href="{{ route('bills.print', ['id' => $bill->id, 'agreement_id' => $bill->agreement_id]) }}"
                                         target="_blank" class="btn btn-info btn-sm">
                                         <i class="fas fa-print"></i> Print Bill
                                     </a>
                                 </td>
-                                <td>
-                                    @if ($bill->status !== 'paid')
-                                        <button type="button" class="btn btn-warning btn-sm">
-                                            <a href="{{ route('payments.create', $bill->id) }}">Pay Now</a>
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn btn-info btn-danger" disabled>
-                                            Paid
-                                        </button>
+                                @if(isset($var))
+                                    @if($paybill=="enable")
+                                        <td>
+                                            @if ($bill->status !== 'paid')
+                                                <button title="Pay Bill" type="button" class="btn btn-warning btn-sm">
+                                                    <a href="{{ route('payments.create', $bill->id) }}">Pay Now</a>
+                                                </button>
+                                            @else
+                                                <button title="Bill Paid" type="button" class="btn btn-info btn-danger" disabled>
+                                                    Paid
+                                                </button>
+                                            @endif
+                                        </td>
                                     @endif
-                                </td>
+                                @endif
                             </tr>
                         @endforeach
                     @endforeach
@@ -100,9 +116,15 @@
     
     <script>
         $('#search').click(function(){
+            check ="<?php if(isset($var)){ echo $var;} else{ echo "paid";} ?>";
             var year = $('#year').val();
             var month = $('#month').val();
-            window.location.href = "{{ route('bills.billsList') }}/" + year + "/" + month;
+            if(check =='all'){
+                window.location.href = "{{ route('bills.billsList') }}/" + year + "/" + month;
+            }else{
+                window,location.href = "{{ route('bills.paid') }}/" + year + "/" +month; 
+            }
+            
         });
 
     </script>

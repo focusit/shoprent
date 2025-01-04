@@ -4,12 +4,16 @@
 
 @section('body')
 
-
+    
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
-               
+            @if($message!=null)
+            <marquee width="100%" direction="left" style="background:red;">
+                {{ $message}}
+            </marquee>
+            @endif
         </div>
         <!-- /.content-header -->
 
@@ -27,7 +31,7 @@
                             <span class="info-box-icon elevation-1 bg-success"><i class="fas fa-shopping-bag"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Shop</span>
-                                <span class="info-box-number">{{ DB::table('shop_rents')->count() }}</span>
+                                <span class="info-box-number">{{ $data['allocatedShops'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -53,7 +57,7 @@
                             <span class="info-box-icon bg-success  elevation-1"><i class="fas fa-coins"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Bills</span>
-                                <span class="info-box-number">{{ DB::table('bills')->count() }}</span>
+                                <span class="info-box-number">{{ $data['bills'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -64,7 +68,7 @@
                             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-credit-card"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Payments</span>
-                                <span class="info-box-number">{{ DB::table('payments')->count() }}</span>
+                                <span class="info-box-number">{{ $data['payments'] }}</span>
                             </div>
                         </div>
                     </div>

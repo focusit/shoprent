@@ -36,11 +36,11 @@
                     </tr>
                     <tr>
                         <th>With Effect From</th>
-                        <td>{{ $agreement->with_effect_from }}</td>
+                        <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
                     </tr>
                     <tr>
                         <th>Valid Till</th>
-                        <td>{{ $agreement->valid_till }}</td>
+                        <td>{{ date('d-m-Y',strtotime($agreement->valid_till)) }}</td>
                     </tr>
                     <tr>
                         <th>Rent</th>
@@ -87,8 +87,8 @@
                             <td>{{ $bill->tenant_full_name }}</td>
                             <td>{{ $bill->rent }}</td>
                             <td>{{ $bill->status }}</td>
-                            <td>{{ $bill->due_date }}</td>
-                            <td>{{ $bill->bill_date }}</td>
+                            <td>{{ date('d-m-Y',strtotime($bill->due_date)) }}</td>
+                            <td>{{ date('d-m-Y',strtotime($bill->bill_date)) }}</td>
                             <td>{{ $bill->month }}</td>
                             <td>{{ $bill->year }}</td>
                         </tr>

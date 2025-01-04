@@ -1,6 +1,5 @@
 @extends('masterlist')
 @section('title', 'tenant_list')
-
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
@@ -85,7 +84,6 @@
             document.getElementById('currentMonthBtn').addEventListener('click', function() {
                 //updateTable('example1', '{{ \Carbon\Carbon::now()->format('m')}}');
             });
-
             var monthButtons = document.querySelectorAll('.monthBtn');
             monthButtons.forEach(function(button) {
                 button.addEventListener('click', function() {
@@ -107,7 +105,6 @@
                     var agreementShowUrl = '/agreements/' + bill.agreement_id;
                     var regenerateUrl = '/bills/regenerate/' + bill.agreement_id;
                     var printUrl = '/bills/print/' + bill.agreement_id;
-
                     var row = '<tr>' +
                         '<td>' + bill.id + '</td>' +
                         '<td><a href="' + agreementShowUrl + '">' + bill.agreement_id + '</a></td>' +
@@ -132,7 +129,7 @@
                         '</tr>';
                     tableBody.innerHTML += row;
                 });
-            } else {
+            }else{
                 var noDataRow = '<tr><td colspan="11">No bills found.</td></tr>';
                 tableBody.innerHTML = noDataRow;
             }

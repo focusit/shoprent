@@ -11,18 +11,19 @@ use Illuminate\Support\Facades\Storage;
 class TenantController extends Controller
 {
     public function index( $type=null)
-    {
+    {//View Active Tenants
         echo $type;
-        $tenants = Tenant::paginate(200);
+        $tenants = Tenant::get();
         $agreements = Agreement::all();
         return view('tenants.index', ['tenants' => $tenants, 'agreements'=> $agreements]);
     }
     public function create()
-    {
+    {//Create Tenant View
         return view('tenants.create');
     }
     public function store(Request $request)
-    {
+    {//Save New Tenant In Tenant Table
+        session_start();
         $this->validateTenants($request);
         if($request->hasFile('image')){
             $imageName = time() . '.' . $request->image->extension();
@@ -44,37 +45,28 @@ class TenantController extends Controller
             'password' => $request->input('password'),
             'image' => $imageName ??"",
             'gender'=> $request->input('gender'),
+            'user_id'=>$_SESSION['user_id'],
         ]);
-        // dd($request);
-        // User::create([
-        //     'name' => $request->input('full_name'),
-        //     'email' => $request->input('email'),
-        //     'password' => bcrypt($request->input('password')),
-        //     'tenant_id' => $request->input('tenant_id'),
-        //     'is_admin' => 0,
-        // ]);
         return redirect()->route('tenants.index')->with('success', 'Tenant created successfully.');
     }
     public function show($tenant_id)
-    {
+    {//Show Tenant Details from All Tenants SHow Details Button
         $tenant = Tenant::findOrFail($tenant_id);
         return view('tenants.show', compact('tenant'));
     }
     public function checkTenantId(Request $request)
-    {
+    {//Return Tenant Detail if exist
         $TenantId = $request->input('tenant_id');
-
         $exists = Tenant::where('tenant_id', $TenantId)->exists();
-
         return response()->json(['exists' => $exists]);
     }
     public function edit($tenant_id)
-    {
+    {//Edit Tenant Details from All Tenant Edit Button (View)
         $tenant = Tenant::findOrFail($tenant_id);
         return view('tenants.edit', compact('tenant'));
     }
     public function update(Request $request, $tenant_id)
-    {
+    {//Update Tenant Details from All Tenant  Edit Button
         $validatedData = $request->validate([
             'tenant_id' => 'nullable|string',
             'full_name' => 'nullable|string',
@@ -89,28 +81,23 @@ class TenantController extends Controller
             'gender'=> 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
         $tenant = Tenant::findOrFail($tenant_id);
-
         if ($request->hasFile('image')) {
             $oldImagePath = public_path('tenant-images/' . $tenant->image);
-
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
-
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('tenant-images'), $imageName);
             $tenant->image = $imageName;
         }
-
         $tenant->update($request->except(['image', '_method', '_token']), $validatedData);
-
+        //update
         return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully.');
     }
-  
     public function destroy($tenant_id)
-    {
+    {//Delete Tenant detials 
+    //currently not showing 
         $tenant = Tenant::findOrFail($tenant_id);
     if (!empty($tenant->image)) {
         $filePath = public_path('images/' . $tenant->image);
@@ -127,7 +114,7 @@ class TenantController extends Controller
     }
 
     protected function validateTenants(Request $request, $tenant_id = null)
-    {
+    {//Validate Tenants Details
         return $request->validate([
             'tenant_id' => 'required|string|unique:tenants,tenant_id,' . $tenant_id,
             'full_name' => 'required|string',
@@ -145,7 +132,7 @@ class TenantController extends Controller
     }
 
     public function autocompleteSearch(Request $request)
-    {
+    {//Search Tenant id in allocated shop 
         $query = $request->input('query');
         $tenants = Tenant::where('tenant_id', 'like', '%' . $query . '%')->orderBy('tenant_id', 'asc')
             ->limit(100)
@@ -153,20 +140,21 @@ class TenantController extends Controller
         $result = [];
         foreach ($tenants as $tenant) {
             $result[] = [
-                'label' => $tenant->tenant_id,
+                'label' => $tenant->tenant_id." - ".$tenant->full_name,
                 'value' => $tenant->tenant_id,
+                'full_name' =>$tenant->full_name,
             ];
         }
         return response()->json($result);
     }
 
     public function search()
-    {
+    {//Search Tenants View
         return view('tenants.search');
     }
 
     public function searchTenant(Request $request)
-    {
+    {//Search Tenants Name, Govt Id, Email, COntact and than return value to same page 
         $search = $request->input('search');
         $searchby = $request->input('searchby');
         if($searchby =='full_name'){
@@ -179,10 +167,7 @@ class TenantController extends Controller
             $tenants =Tenant::where('contact', 'LIKE','%'.$search.'%')->get();
         }else{
             $tenants="";
-        }  
-        //echo $search."<br>";
-        //echo $searchby."<br>";
-        //echo $tenants;
+        }
         return view('tenants.search', compact('tenants'));
     }
 

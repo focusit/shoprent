@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Agreement;
 use App\Models\Bill;
 use App\Models\Payment;
+use Carbon\Carbon;
+use App\Models\Transaction;
 use App\Models\ShopRent;
 use App\Models\Tenant;
 
@@ -12,7 +14,42 @@ class indexController extends Controller
 {
     public function dashboard()
     {
+        session_start();
+        //agreements
+        $totalAgreements = Agreement::all()->count();
+        $agreement=Agreement::all();
+        $inactiveCount = 0;
+        $inactiveAgree = [];
+        foreach($agreement as $agree){
+            if($agree->valid_till < date('Y-m-d') && $agree->status=="active"){
+                $inactiveCount ++;
+                $inactiveAgree[]=$agree->agreement_id;
+                $data =[
+                    'status'=>"inactive",
+                    'user_id'=>$_SESSION['user_id'],
+                ];
+                Agreement::where('id',$agree->id)->update($data);
+            }
+        }
+        $activeAgreements = Agreement::where('status', '=', 'active')->count();
+        $inactiveAgreements = Agreement::where('status', '=', 'inactive')->count();
+
+        //Shops
         $totalShops = ShopRent::all()->count();
+        $shops=ShopRent::all();
+        foreach($agreement as $agree){
+            foreach($shops as $shop){
+                if($shop->id ==$agree->shop_id && $agree->status=="active"){
+                    if($shop->status =="vacant" ){
+                        $data =[
+                            'status'=>"occupied",
+                            'user_id'=>$_SESSION['user_id'],
+                        ];
+                        ShopRent::where('id',$shop->id)->update($data);
+                    }
+                }
+            }           
+        }
         $allocatedShops = ShopRent::where('status', '=', 'occupied')->count();;
         $vacantShops = ShopRent::where('status', '=', 'vacant')->count();
 
@@ -20,11 +57,6 @@ class indexController extends Controller
         $totalTenants = Tenant::all()->count();
         // $activeTenants = Tenant::where('status', '=', 'active')->count();
         // $inactiveTenants = Tenant::where('status', '=', 'inactive')->count();
-
-        //agreements
-        $totalAgreements = Agreement::all()->count();
-        $activeAgreements = Agreement::where('status', '=', 'active')->count();
-        $inactiveAgreements = Agreement::where('status', '=', 'inactive')->count();
 
         //biills
         $totalBills = Bill::all()->count();
@@ -71,9 +103,9 @@ class indexController extends Controller
                     'Active Agreements' => $activeAgreements,
                     'Inactive Agreements' => $inactiveAgreements,
                 ]),
-                'linkCreate' => '',
+                'linkCreate' => '/allocate-shop',
                 'linkTextCreate' => 'Allocate Shops',
-                'linkView' => '',
+                'linkView' => '/agreements',
                 'linkTextView' => 'View Agreements',
             ],
             [
@@ -84,9 +116,9 @@ class indexController extends Controller
                     'Unpaid Bills' => $unpaidBills,
                     'Paid Bills' => $paidBills,
                 ]),
-                'linkCreate' => '',
+                'linkCreate' => '/bills',
                 'linkTextCreate' => 'Genrate Bills',
-                'linkView' => '',
+                'linkView' => 'bills/bills_list',
                 'linkTextView' => 'View Bills',
             ],
             [
@@ -97,13 +129,44 @@ class indexController extends Controller
                     'Unpaid Payments' => $unpaidPayments,
                     'Paid Payments' => $paidPayments,
                 ]),
-                'linkCreate' => '',
+                'linkCreate' => '/payments/payBill',
                 'linkTextCreate' => 'Pay Now',
-                'linkView' => '',
+                'linkView' => '/billpay',
                 'linkTextView' => 'Check Payments',
             ],
         ];
-        return view('dashboard', compact('cards'));
+        $billingSettings=Bill::getBillingSettings();
+        $datePrefix=$billingSettings['year'].'-'.$billingSettings['month'].'-';
+        $date = Carbon::createFromFormat('Y-m-d', $datePrefix.$billingSettings['billing_date']);
+        $data=[
+            'allocatedShops'=>$allocatedShops,
+            'bills' => Bill::where('month', $billingSettings['month'])
+                        ->where('year',$billingSettings['year'])
+                        ->count(),
+            'payments' => Transaction::where('type','payment')
+                            ->where('transaction_date','>=',$date)
+                            ->count(),
+        ];
+        $message=null;
+        $y = $billingSettings['year'];
+        $m = $billingSettings['month'];
+        $date = date_create($y . "-" . $m . "-01");//last bill generated date
+        $dateAdded = date_add($date, date_interval_create_from_date_string($billingSettings['billcycle'] . " month"));//add billcycle in last bill month
+        $month = date_format($dateAdded, "m");
+        $year = date_format($dateAdded, "Y");
+        if(date('m') < $month && date('Y') <= $year){ 
+
+        }elseif(date('m') >= $month && date('m') >= $year){
+            if(date('d')>=$billingSettings['billing_date'] ){
+                $message = "Please Generate bills for this month.";
+            }
+        }
+        if($inactiveCount > 0){
+            foreach($inactiveAgree as $inAgree){
+                $message .="Agreement NO. ".$inAgree." is expired today";
+            }
+        }
+        return view('dashboard',['data'=>$data], compact('cards','message'));
     }
 
     // public function logout()

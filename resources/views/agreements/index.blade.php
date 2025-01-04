@@ -51,9 +51,9 @@
                                     <!-- Tab Content -->
                                     <div class="tab-content" id="myTabsContent">
                                         <!-- All Agreements Tab -->
-                                        <div class="tab-pane fade show " id="allAgreements">
+                                        <div class="tab-pane fade show " id="allAgreements" style="height:500px;overflow: scroll;">
                                             <!-- Table for All Shops -->
-                                            <table class="table table-bordered table-striped">
+                                            <table id="example1" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
                                                         <th>ID</th>
@@ -64,8 +64,7 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
-                                                        <th>Status</th>
-                                                        <th>Remarks</th>
+                                                        <th>Opening Balance</th>
                                                         <th>Document</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -75,7 +74,15 @@
                                                         <tr class="text-center">
                                                             <td>{{ $agreement->id }}</td>
                                                             <td>{{ $agreement->agreement_id }}</td>
-                                                            <td>{{ $agreement->shop_id }}</td>
+                                                            <td>
+                                                                @forelse($shops as $shop)
+                                                                    @if ($shop->id == $agreement->shop_id)
+                                                                        {{ $shop->shop_id }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Shop Id-->
+                                                            </td>
                                                             <td>{{ $agreement->tenant_id }}</td>
                                                             @forelse ($tenants as $tenant)
                                                                 @if ($tenant->tenant_id === $agreement->tenant_id)
@@ -84,11 +91,18 @@
                                                             @empty
                                                                 <td> </td>
                                                             @endforelse
-                                                            <td>{{ $agreement->with_effect_from }}</td>
-                                                            <td>{{ $agreement->valid_till }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($agreement->valid_till ))}}</td>
                                                             <td>{{ $agreement->rent }}</td>
-                                                            <td>{{ $agreement->status }}</td>
-                                                            <td>{{ $agreement->remark }}</td>
+                                                            <td>
+                                                                @forelse($transaction as $trans)
+                                                                    @if ($trans->agreement_id == $agreement->agreement_id)
+                                                                        {{ $trans->amount }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Opening Balance-->
+                                                                </td>
                                                             <td>
                                                                 @if ($agreement->document_field)
                                                                     @php
@@ -114,10 +128,10 @@
                                                                 @endif
                                                             </td>
                                                             <td class="px-2">
-                                                                <a href="{{ route('agreements.edit', $agreement->agreement_id) }}"
+                                                                <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                     class="btn btn-info btn-sm"><i
                                                                         class="fas fa-edit"></i></a>
-                                                                <a href="{{ route('agreements.show', $agreement->agreement_id) }}"
+                                                                <a title="Show Details" href="{{ route('agreements.show', $agreement->agreement_id) }}"
                                                                     class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                         aria-hidden="true"></i></a>
                                                             </td>
@@ -132,8 +146,8 @@
                                         </div>
 
                                         {{-- <--------------------------------------Active Agreements--------------------------------------------> --}}
-                                        <div class="tab-pane fade show active" id="activeAgreements"> <!-- Table for Occupied Shops -->
-                                            <table id="active-tab" class="table table-bordered table-striped">
+                                        <div class="tab-pane fade show active" id="activeAgreements" style="height:500px;overflow: scroll;"> <!-- Table for Occupied Shops -->
+                                            <table id="active_agreement" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
                                                         <th>ID</th>
@@ -144,19 +158,27 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
-                                                        <th>Status</th>
-                                                        <th>Remarks</th>
                                                         <th>Document</th>
+                                                        <th>Opening Balance</th>
                                                         <th>Action</th>
+                                                        <th>Generate Bill</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @forelse($agreements as $agreement)
-                                                        @if ($agreement->status == 'active')
+                                                        @if ($agreement->status === 'active')
                                                             <tr class="text-center">
                                                                 <td>{{ $agreement->id }}</td>
                                                                 <td>{{ $agreement->agreement_id }}</td>
-                                                                <td>{{ $agreement->shop_id }}</td>
+                                                                <td>
+                                                                @forelse($shops as $shop)
+                                                                    @if ($shop->id == $agreement->shop_id)
+                                                                        {{ $shop->shop_id }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Shop Id-->
+                                                                </td>
                                                                 <td>{{ $agreement->tenant_id }}</td>
                                                                 @forelse ($tenants as $tenant)
                                                                     @if ($tenant->tenant_id === $agreement->tenant_id)
@@ -165,11 +187,9 @@
                                                                 @empty
                                                                     <td> </td>
                                                                 @endforelse
-                                                                <td>{{ $agreement->with_effect_from }}</td>
-                                                                <td>{{ $agreement->valid_till }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->valid_till)) }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
-                                                                <td>{{ $agreement->status }}</td>
-                                                                <td>{{ $agreement->remark }}</td>
                                                                 <td>
                                                                     @if ($agreement->document_field)
                                                                         @php
@@ -194,22 +214,37 @@
                                                                         No Data
                                                                     @endif
                                                                 </td>
+                                                                <td>
+                                                                @forelse($transaction as $trans)
+                                                                    @if ($trans->agreement_id == $agreement->agreement_id)
+                                                                        {{ $trans->amount }}
+                                                                    @endif
+                                                                @empty
+                                                                    
+                                                                @endforelse<!--Opening Balance-->
+                                                                </td>
                                                                 <td class="px-2">
-                                                                    <a href="{{ route('agreements.edit', $agreement->agreement_id) }}"
+                                                                    <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                         class="btn btn-info btn-sm"><i
                                                                             class="fas fa-edit"></i></a>
-                                                                    <a href="{{ route('agreements.show', $agreement->agreement_id) }}"
+                                                                    <a title="Show Details" href="{{ route('agreements.show', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a>
                                                                     {{-- <form action="" method="post" class="d-inline">
                                                                         @csrf
                                                                         @method('DELETE')
-                                                                        <button type="submit" class="btn btn-app btn-danger btn-sm"
+                                                                        <button type="submit" title="Delete Agreement" class="btn btn-app btn-danger btn-sm"
                                                                             onclick="return confirm('Are you sure?')"><i class="fa fa-trash"
                                                                                 aria-hidden="true"></i>
                                                                         </button>
                                                                     </form> --}}
+                                                                </td>
+                                                                <td>
+                                                                    <a title="Generate Bill for Next Month" href="{{ route('bills.billGenerate', $agreement->agreement_id) }}" 
+                                                                    class="btn btn-warning btn-sm">Generate</a>
+                                                                    <a title="Show last Bill" href= "{{ route('bills.lastbill', $agreement->agreement_id )}}"
+                                                                    class="btn btn-primary btn-sm">Last Bill</a>
                                                                 </td>
                                                             </tr>
                                                         @endif
@@ -222,7 +257,7 @@
                                             </table>
                                         </div>
                                         {{-- <--------------------------------------Inactive Agreements--------------------------------------------> --}}
-                                        <div class="tab-pane fade" id="inactiveAgreements">
+                                        <div class="tab-pane fade" id="inactiveAgreements" style="height:500px;overflow: scroll;">
                                             <table id="inactiveAgreementsTable" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr class="text-center bg-info">
@@ -234,8 +269,6 @@
                                                         <th>With Effect From</th>
                                                         <th>Valid Till</th>
                                                         <th>Rent</th>
-                                                        <th>Status</th>
-                                                        {{-- <th>Remarks</th> --}}
                                                         <th>Document</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -255,11 +288,9 @@
                                                                 @empty
                                                                     <td> </td>
                                                                 @endforelse
-                                                                <td>{{ $agreement->with_effect_from }}</td>
-                                                                <td>{{ $agreement->valid_till }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->with_effect_from)) }}</td>
+                                                                <td>{{ date('d-m-Y',strtotime($agreement->valid_till)) }}</td>
                                                                 <td>{{ $agreement->rent }}</td>
-                                                                <td>{{ $agreement->status }}</td>
-                                                                {{-- <td>{{ $agreement->remark }}</td> --}}
                                                                 <td>
                                                                     @if ($agreement->document_field)
                                                                         @php
@@ -285,14 +316,14 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="px-2">
-                                                                    <a href="{{ route('agreements.edit', $agreement->agreement_id) }}"
+                                                                    <a title="Edit Agreement" href="{{ route('agreements.edit', $agreement->agreement_id) }}"
                                                                         class="btn btn-info btn-sm"><i
                                                                             class="fas fa-edit"></i></a>
-                                                                    <a href="{{ route('agreements.show', $agreement->agreement_id) }}"
+                                                                    <a title="Show Details" href="{{ route('agreements.show', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a>
-                                                                    {{-- <a href="{{ route('agreements.destroy', $agreement->agreement_id) }}"
+                                                                    {{-- <a title="Delete Agreement" href="{{ route('agreements.destroy', $agreement->agreement_id) }}"
                                                                         class="btn btn-success btn-sm"><i class="fa fa-eye"
                                                                             aria-hidden="true"></i>
                                                                     </a> --}}

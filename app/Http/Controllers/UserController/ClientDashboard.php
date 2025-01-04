@@ -24,7 +24,6 @@ class ClientDashboard extends Controller
     public function userDashboard()
     {
         $tenantId = Auth::user()->tenant_id;
-
         $tenantId = Auth::user()->tenant_id;
         $totalShops = ShopRent::all()->where('tenant_id', $tenantId)->count();
         $allocatedShops = ShopRent::where('tenant_id', $tenantId)->where('status', '=', 'occupied')->count();
@@ -132,6 +131,7 @@ class ClientDashboard extends Controller
             $user = Auth::user();
 
             if (!$user->is_admin) {
+                $message=" You have successfully logged in as a user.";
                 return redirect()->route('userDashboard')->with('info', 'You have successfully logged in as a user.');
             } else {
                 Auth::logout();
