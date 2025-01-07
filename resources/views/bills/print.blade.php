@@ -26,7 +26,7 @@
 
         <?php
 
-$prev_bal = isset($lastbill) ? $lastbill->total_bal : $lastbal;
+$prev_bal = isset($lastbill) ? $lastbill->total_bal : $lastbal; 
 
 $lpay = $transaction != null ? (
 
@@ -146,7 +146,8 @@ $total_bal = $penalty + $balance;
 
                                     <?php    } ?>
 
-                                    <span class="f_left"><strong>Total Balance as on {{$totalBalDate}}</strong></span><br>
+                                    <span class="f_left"><strong>Total Balance as on
+                                            {{$totalBalDate}}</strong></span><br>
 
                                     <?php } else { ?>
 
@@ -188,9 +189,7 @@ $total_bal = $penalty + $balance;
 
                                     <span class="f_right">{{ $total_bal }}</span><br><br>
 
-                                    <span class="f_right">{{ (int) $bill->rent * $billingSettings['billcycle']
-
-                                            }}</span><br>
+                                    <span class="f_right">{{ $totalRent }}</span><br>
 
                                     <?php    if ($bill->tax > 0) { ?>
 
@@ -206,9 +205,7 @@ $total_bal = $penalty + $balance;
 
                                     <span class="f_right"><strong>{{ $total = round($total_bal, 2) +
 
-        round(($bill->rent * $billingSettings['billcycle']), 2) +
-
-        round(($bill->tax + $bill->penalty), 2)}}</strong></span><br>
+        round(($totalRent), 2) + round(($bill->tax + $bill->penalty), 2)}}</strong></span><br>
 
                                     <?php } else { ?>
 

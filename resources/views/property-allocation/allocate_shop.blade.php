@@ -214,7 +214,7 @@
                                     <div class="form-group">
                                         <label for="document_field">Document Field (PDF-JPEG):</label>
                                         <input type="file" id="document_field" name="document_field" class="form-control"
-                                            value="{{ old('rent', isset($agreement) ? $agreement[0]->document_field : '') }}"
+                                            value="{{ old('document_field', isset($agreement) ? $agreement[0]->document_field : '') }}"
                                             accept=".pdf, .jpeg, .jpg">
                                         @error('document_field')
                                             <div class="text-danger">{{ $message }}</div>
@@ -278,7 +278,7 @@
         document.getElementById("tenant_search").disabled = true;
         document.getElementById("agreement_id").disabled = true;
         document.getElementById("with_effect_from").disabled = true;
-        document.getElementById("rent").disabled = true;
+        //document.getElementById("rent").disabled = true;
         //document.getElementById("status").disabled = true;
     </script>
 @endif

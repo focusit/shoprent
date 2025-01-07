@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\ShopRent;
 use App\Models\Tenant;
 use App\Models\Bill;
+use App\Models\AgreementRentVariation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,9 +18,9 @@ class AgreementController extends Controller
     {//All Agreements in navBar
         $agreements = Agreement::all();
         $tenants = Tenant::all();
-        $shops= ShopRent::all();
-        $transaction =Transaction::where('type','opening balance')->get();
-        return view('agreements.index', ['shops'=>$shops,'agreements'=>$agreements, 'tenants'=>$tenants, 'transaction'=>$transaction]);
+        $shops = ShopRent::all();
+        $transaction = Transaction::where('type', 'opening balance')->get();
+        return view('agreements.index', ['shops' => $shops, 'agreements' => $agreements, 'tenants' => $tenants, 'transaction' => $transaction]);
     }
 
     public function showAllocateShopForm()
@@ -79,18 +80,18 @@ class AgreementController extends Controller
                 'agreement_id.unique' => 'The Agreement ID has already been taken.',
             ]);
             $shop = ShopRent::where('id', $request->input('shop_id'))->first();
-            $tenant =Tenant::where('tenant_id', $request->input('tenant_id'))->first();
+            $tenant = Tenant::where('tenant_id', $request->input('tenant_id'))->first();
             if (!$shop) {
                 return redirect()->back()->with('error', 'Shop not found. Please select a valid shop.');
-            }elseif($shop->status=='occupied'){
+            } elseif ($shop->status == 'occupied') {
                 return redirect()->back()->with('error', 'Shop is already Occupied. Please select a vacant shop.');
             }//if there is no shop id or shop is occupied than error 
-            $openBal=$request->input('openBal');
-            $data=[
-                'status'=>'occupied',
-                'user_id'=>$_SESSION['user_id'],
+            $openBal = $request->input('openBal');
+            $data = [
+                'status' => 'occupied',
+                'user_id' => $_SESSION['user_id'],
             ];
-            ShopRent::where('id',$shop->id)->update($data);
+            ShopRent::where('id', $shop->id)->update($data);
             //Updating satues of shop in shopRent Table
             $agreement = Agreement::create([
                 'agreement_id' => $request->input('agreement_id'),
@@ -101,18 +102,18 @@ class AgreementController extends Controller
                 'rent' => $request->input('rent'),
                 'status' => $request->input('status'),
                 'remark' => $request->input('remark'),
-                'user_id'=>$_SESSION['user_id'],
+                'user_id' => $_SESSION['user_id'],
             ]);//Saving Agreement Details in Agreement Tables
-            if($openBal!=''){
-                $trans=Transaction::create([
+            if ($openBal != '') {
+                $trans = Transaction::create([
                     'transaction_date' => $request->input('with_effect_from'),
-                    'agreement_id' => $agreement->agreement_id,
-                    'tenant_id' =>  $agreement->tenant_id,
+                    'agreement_id' => $agreement->agreement_id,//id?
+                    'tenant_id' => $agreement->tenant_id,
                     'tenant_name' => $tenant->full_name,
                     'amount' => $openBal,
-                    'shop_id' =>  $agreement->shop_id,
+                    'shop_id' => $agreement->shop_id,
                     'type' => 'Opening Balance',
-                    'user_id'=>$_SESSION['user_id'],
+                    'user_id' => $_SESSION['user_id'],
                 ]);
             }//If Opening Balance is not zero than entry of Opening Balance in Transaction Table
             return redirect()->route('allocation.list')->with('success', 'Shop allocated successfully!');
@@ -123,11 +124,12 @@ class AgreementController extends Controller
         }
     }
     public function showAgreementDetails($agreement_id)
-    {//Not Working 
-        $agreement = Agreement::with('bills')->where('agreement_id', $agreement_id)->first();
+    {
+        $agreement = Agreement::with('bills', 'AgreementRentVariation')->where('agreement_id', $agreement_id)->first();
         if (!$agreement) {
-            abort(404); 
+            abort(404);
         }
+        //print_r($agreement);
         return view('agreements.show', compact('agreement'));
     }
     public function allocationList()
@@ -137,7 +139,7 @@ class AgreementController extends Controller
     }
 
     public function create()
-    {//not working
+    {
         return view('agreements.create');
     }
 
@@ -150,35 +152,36 @@ class AgreementController extends Controller
     public function show($agreement_id)
     {//Show Agreement details on Show Detail Button
         $agreement = Agreement::findOrFail($agreement_id);
+        //$AgreementRentVariation = AgreementRentVariation::findOrFail($agreement_id);
         return view('agreements.show', compact('agreement'));
     }
 
     public function edit($agreement_id)
     {//Edit Agreement View on Edit Button
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->get();
-        $trans= Transaction::where('agreement_id',$agreement_id)
-                            ->where('type','Opening Balance')
-                            ->first();
-        if($trans != null){
+        $trans = Transaction::where('agreement_id', $agreement_id)
+            ->where('type', 'Opening Balance')
+            ->first();
+        if ($trans != null) {
             $agreement[0]->openBal = $trans->amount;
         }
-        $bill=Bill::where('agreement_id',$agreement_id)->count();
+        $bill = Bill::where('agreement_id', $agreement_id)->count();
         //if agreement->valid_till <= now - 2 month than disable valid_till 
-        $valid_till =$agreement[0]->valid_till;
-        if(date('m')== 1 ){
-            if(date('m',strtotime($valid_till))<='11' && date('Y',strtotime($valid_till))==(date('Y')-1)){
+        $valid_till = $agreement[0]->valid_till;
+        if (date('m') == 1) {
+            if (date('m', strtotime($valid_till)) <= '11' && date('Y', strtotime($valid_till)) == (date('Y') - 1)) {
                 return redirect()->back()->with('error', 'You can/t edit this Agreement. This Agreement is expired!');
             }
-        }elseif(date('m')== 2){
-            if(date('m',strtotime($valid_till))<='12' && date('Y',strtotime($valid_till))==(date('Y')-1)){
+        } elseif (date('m') == 2) {
+            if (date('m', strtotime($valid_till)) <= '12' && date('Y', strtotime($valid_till)) == (date('Y') - 1)) {
                 return redirect()->back()->with('error', 'You can/t edit this Agreement. This Agreement is expired!');
             }
-        }else{
-            if(date('m',strtotime($valid_till))==(date('m')-2) && date('Y',strtotime($valid_till))==date('Y')){
+        } else {
+            if (date('m', strtotime($valid_till)) == (date('m') - 2) && date('Y', strtotime($valid_till)) == date('Y')) {
                 return redirect()->back()->with('error', 'You can/t edit this Agreement. This Agreement is expired!');
             }
         }//if agreement is expired for more than 2 month than can't edit Agreement else agreement can be edited
-        return view('property-allocation.allocate_shop', compact('agreement','bill'));
+        return view('property-allocation.allocate_shop', compact('agreement', 'bill'));
     }
 
     public function update(Request $request, $agreement_id)
@@ -189,50 +192,75 @@ class AgreementController extends Controller
                 'status' => 'required|in:active,inactive',
                 'remark' => 'nullable|string',
                 'document_field' => 'nullable|filagreementse|mimes:pdf,jpeg,jpg',
+                'rent' => 'required|numeric',
             ]);
             session_start();
-            $message='';
-            $tenant =Tenant::where('tenant_id', $request->input('tenant_id'))->first();
-            $openBal=$request->input('openBal');
+            $message = '';
+            $tenant = Tenant::where('tenant_id', $request->input('tenant_id'))->first();
+            $openBal = $request->input('openBal');
             $agreement = Agreement::findOrFail($agreement_id);
-            $transaction =Transaction::where('agreement_id',$agreement_id)
-                                    ->where('type','Opening Balance')
-                                    ->first();
-            $agreeData =[
-                'valid_till' => $request->input('valid_till'),
-                'status' => $request->input('status'),
-                'remark' => $request->input('remark'),
-                'user_id'=>$_SESSION['user_id'],
-            ];
-            Agreement::where('agreement_id',$agreement_id)->update($agreeData);
-            if($openBal!=null){
-                if(!$transaction){
-                    $trans=Transaction::create([
+            $transaction = Transaction::where('agreement_id', $agreement_id)
+                ->where('type', 'Opening Balance')
+                ->first();
+            if ($agreement->rent == $request->input('rent')) {
+                $agreeData = [
+                    'valid_till' => $request->input('valid_till'),
+                    'status' => $request->input('status'),
+                    'remark' => $request->input('remark'),
+                    'user_id' => $_SESSION['user_id'],
+                ];
+                Agreement::where('agreement_id', $agreement_id)->update($agreeData);
+            } else {
+                $rent_var = [
+                    'agreement_id' => $agreement_id,
+                    'shop_id' => $agreement->shop_id,
+                    'tenant_id' => $agreement->tenant_id,
+                    'with_effect_from' => $agreement->with_effect_from,
+                    'valid_till' => date('Y-m-d'),
+                    'rent' => $agreement->rent,
+                    'status' => 'inactive',
+                    'remark' => $agreement->remark ,
+                    'user_id' => $agreement->user_id,
+                ];
+                AgreementRentVariation::create($rent_var);
+                $agreeData = [
+                    'with_effect_from' => date('Y-m-d'),
+                    'rent' => $request->input('rent'),
+                    'valid_till' => $request->input('valid_till'),
+                    'status' => $request->input('status'),
+                    'remark' => $request->input('remark'),
+                    'user_id' => $_SESSION['user_id'],
+                ];
+                Agreement::where('agreement_id', $agreement_id)->update($agreeData);
+            }
+            if ($openBal != null) {
+                if (!$transaction) {
+                    $trans = Transaction::create([
                         'transaction_date' => date('Y-m-d'),
                         'agreement_id' => $agreement->agreement_id,
-                        'tenant_id' =>  $agreement->tenant_id,
+                        'tenant_id' => $agreement->tenant_id,
                         'tenant_name' => $tenant->full_name,
                         'amount' => $openBal,
-                        'shop_id' =>  $agreement->shop_id,
+                        'shop_id' => $agreement->shop_id,
                         'type' => 'Opening Balance',
-                        'user_id'=>$_SESSION['user_id'],
+                        'user_id' => $_SESSION['user_id'],
                     ]);//if opening balance is not null and there is no transcation entry for opening balance than create transaction entry
-                    $message="create";
-                }else{
-                    $trans=[
+                    $message = "create";
+                } else {
+                    $trans = [
                         'amount' => $openBal,
-                        'user_id'=>$_SESSION['user_id'],
+                        'user_id' => $_SESSION['user_id'],
                     ];//if There is transaction for opeining balance than update opening balance
-                    $message="update";
-                    Transaction::where('id',$transaction->id)->update($trans);
+                    $message = "update";
+                    Transaction::where('id', $transaction->id)->update($trans);
                 }
             }
-            if($message ="create" or $message ="update"){
+            if ($message = "create" or $message = "update") {
                 return redirect()->route('allocation.list')->with('warning', 'You changed/added opening Balance. Please Regenerate Bill!!');
                 //if opening balance is changed or updated generate bill
-            }else{
+            } else {
                 return redirect()->route('allocation.list')->with('success', 'Shop allocation updated successfully!');
-            }   
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update shop allocation. ' . $e->getMessage());
         }
@@ -241,12 +269,13 @@ class AgreementController extends Controller
     public function destroy($agreement_id)
     {//Not Working
         $agreement = Agreement::findOrFail($agreement_id);
-        $agreement->delete();
+        //$agreement->delete();
         return redirect()->route('agreements.index')->with('success', 'Agreement has been deleted successfully');
     }
-    public function allocatevacantShop($id){
+    public function allocatevacantShop($id)
+    {
         //in shops->view All Shops->Vacant Shops->allocate shop button fill shop id and redirect that to Allocate property view
-        $shop = ShopRent::where('id',$id)->first();
+        $shop = ShopRent::where('id', $id)->first();
         return view('property-allocation.allocate_shop', compact('shop'));
-    }    
+    }
 }

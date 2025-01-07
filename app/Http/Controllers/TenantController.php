@@ -134,7 +134,7 @@ class TenantController extends Controller
     public function autocompleteSearch(Request $request)
     {//Search Tenant id in allocated shop 
         $query = $request->input('query');
-        $tenants = Tenant::where('tenant_id', 'like', '%' . $query . '%')->orderBy('tenant_id', 'asc')
+        $tenants = Tenant::where('full_name', 'like', '%' . $query . '%')->orderBy('tenant_id', 'asc')
             ->limit(100)
             ->get();
         $result = [];

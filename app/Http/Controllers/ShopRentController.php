@@ -211,11 +211,11 @@ class ShopRentController extends Controller
     {
         $query = $request->input('query');
         if (empty($query)) {
-            $results = ShopRent::where('status','vacant')->orderBy('shop_id', 'asc')->limit(100)->get();
+            $results = ShopRent::where('status','vacant')->orderBy('id', 'asc')->limit(100)->get();
         } else {
             $results = ShopRent::where('status','vacant')
                 ->where('shop_id', 'like', '%' . $query . '%')
-                ->orderBy('shop_id', 'asc')
+                ->orderBy('id', 'asc')
                 ->limit(100)
                 ->get();
         }

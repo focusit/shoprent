@@ -184,7 +184,7 @@
 
                         <span class="f_left">Shoprent w.e.f {{ $d['durationM'] }} </span>
 
-                        <span class="f_right">{{ (int) $d['rent'] * $d['billcycle'] }}</span><br>
+                        <span class="f_right">{{ (int) $d['totalRent']  }}</span><br>
 
                         <?php        if ($d['tax'] > 0) { ?>
 
@@ -206,7 +206,7 @@
 
                         <span class="f_right"><strong>{{ $total = round($total_bal, 2) +
 
-                round(($d['rent'] * $d['billcycle']), 2) +
+                round(($d['totalRent']), 2) +
 
                 round(($d['tax'] + $d['penalty']), 2)}}</strong></span><br>
 

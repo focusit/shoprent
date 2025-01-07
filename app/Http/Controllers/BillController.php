@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgreementRentVariation;
 use Illuminate\Support\Str;
 use App\Models\Agreement;
 use App\Models\Bill;
@@ -73,7 +74,7 @@ class BillController extends Controller
             ->groupBy(function ($bill) {
                 return Carbon::createFromDate($bill->year, $bill->month, 1)->format('F Y');
             });
-            //get all bills from selected year and month
+        //get all bills from selected year and month
         $billingSettings = Bill::getBillingSettings();
         $y = $billingSettings['year'];
         $m = $billingSettings['month'];
@@ -146,7 +147,7 @@ class BillController extends Controller
             ->where('year', $year)
             ->where('month', $month)
             ->first();
-            //to check if bill for this month is already generated or not
+        //to check if bill for this month is already generated or not
         if (!$existingBills) {
             //if not generated
             $data = $this->generateBillData($agreement_id, $year, $month);
@@ -175,88 +176,46 @@ class BillController extends Controller
         $Tyear = date_format($dateAdded, "Y");
         $activeAgreements = Agreement::all();
         if ($year == $Tyear && $month == $Tmonth) {
-            //if selected month is = month in which bills can be generated
-            foreach ($activeAgreements as $agreement) {
-                $existingBills = Bill::where('agreement_id', $agreement->agreement_id)
-                    ->where('year', $year)
-                    ->where('month', $month)
-                    ->first();
-                    //check if bill for this month is already generated or not
-                if (!$existingBills) {
-                    //if bill not generated
-                    $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month);
-                    
-                }
+        //if selected month is = month in which bills can be generated
+        foreach ($activeAgreements as $agreement) {
+            $existingBills = Bill::where('agreement_id', $agreement->agreement_id)
+                ->where('year', $year)
+                ->where('month', $month)
+                ->first();
+            //check if bill for this month is already generated or not
+            if (!$existingBills) {
+                //if bill not generated
+                $billAndTransactionData = $this->generateBillData($agreement->agreement_id, $year, $month);
             }
-            $billingSettings = Bill::getBillingSettings();
-            $billingSettings['month'] = $Tmonth;
-            $billingSettings['year'] =$Tyear;
-            $newJsonString = json_encode($billingSettings);
-            //after bill is generated billing json month and year get update
-            file_put_contents(public_path('billing_settings.json'), $newJsonString);
+        }
+        $billingSettings = Bill::getBillingSettings();
+        $billingSettings['month'] = $Tmonth;
+        $billingSettings['year'] = $Tyear;
+        $newJsonString = json_encode($billingSettings);
+        //after bill is generated billing json month and year get update
+        file_put_contents(public_path('billing_settings.json'), $newJsonString);
         }
         return redirect()->route('bills.billsList', ['year' => $year, 'month' => $month])->with('success', 'Bills generated successfully.');
+
     }
     private function generateBillData($agreement_id, $year, $month)
     {
         //Generate bill Data single and overall
+        $agreement_variation = AgreementRentVariation::where('agreement_id', $agreement_id)->first();
         $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
+        $billingSettings = Bill::getBillingSettings();
         $transactions = Transaction::where('agreement_id', $agreement_id)->get();
         $lastBill = Bill::where('agreement_id', $agreement_id)
             ->orderby('id', 'desc')
             ->first();
-            //last bill of an agreement_id
+            
+        //last bill of an agreement_id
         if (!$lastBill) {
             $bill_id = null;
         } else {
             $bill_id = $lastBill->id;
         }// if last bill get id from last bill 
-        $rentPM = $agreement->rent;//rent per month
-        $billingSettings = Bill::getBillingSettings();
-        $rent=0;
-        for ($x = 1; $x <= $billingSettings['billcycle']; $x++) {
-            //if billcycle is greater than 1 
-            if ($agreement->status == 'active') {
-                $B_month = $billingSettings['month'];
-                $B_year = $billingSettings['year'];
-                $m = date('m', strtotime($agreement->with_effect_from));
-                $y = date('Y', strtotime($agreement->with_effect_from));
-                if ($B_month == "1") {
-                    if ($m == "12" && $y == $B_year - 1) {
-                        $rentPM = $agreement->rentPM * (date('t', strtotime(now())) - date('d', strtotime($agreement->with_effect_from))) / date('t', strtotime(now()));
-                    }
-                } else {
-                    if ($m == $B_month - 1 && $y == $B_year) {
-                        $rentPM = $agreement->rentPM * (date('t', strtotime(now())) - date('d', strtotime($agreement->with_effect_from))) / date('t', strtotime(now()));
-                    }
-                }//checking which is start month from starting month 
-                if ($m == $B_month && $y == $B_year) {
-                    $rentPM = 0;
-                    //if agreement generated this month than do not generate Bill
-                }
-            } else {
-                $m = date('m', strtotime($agreement->valid_till));
-                $y = date('Y', strtotime($agreement->valid_till));
-                if ($B_month == "1") {
-                    if ($m == "12" && $y == $B_year - 1) {
-                        $rentPM = $agreement->rentPM * (date('d', strtotime($agreement->valid_till)) / date('t', strtotime(now())));
-                    }
-                } else {
-                    if ($m == $B_month - 1 && $y == $B_year) {
-                        $rentPM = $agreement->rentPM * (date('d', strtotime($agreement->valid_till)) / date('t', strtotime(now())));
-                    }
-                }//checking last month of valid month for last bill 
-            }
-
-            if ($B_month == 12) {
-                $B_month = 1;
-                $B_year = $B_year + 1;
-            } else {
-                $B_month++;
-            }
-            $rent += $rentPM;
-            //set month = +1 month and year if month is 12 than year +1 
-        }
+        
         try {
             $datePrefix = $year . '-' . $month . '-';
             $dueDate = Carbon::createFromFormat('Y-m-d', $datePrefix . $billingSettings['due_date']); //echo "Due date =" .$dueDate;
@@ -270,7 +229,7 @@ class BillController extends Controller
         }
         $uniqueTransactionNumber = $this->generateUniqueTransactionNumber();
         Log::info('Generated Transaction Number:', ['transaction_number' => $uniqueTransactionNumber]);
-
+        $rent=$this->totalRentGenerate($agreement_id);
         $prevbal = 0;
         foreach ($transactions as $tranx) {
             $t_Month = date('m', strtotime($tranx->transaction_date));
@@ -366,6 +325,65 @@ class BillController extends Controller
             return ['billData' => null, 'transactionData' => null];//->toArray()
         }//return array 
     }
+    private function totalRentGenerate($agreement_id){
+        $agreement_variation = AgreementRentVariation::where('agreement_id', $agreement_id)->first();
+        $agreement = Agreement::with('tenant', 'shop')->where('agreement_id', $agreement_id)->first();
+        $billingSettings = Bill::getBillingSettings();
+        $B_month = $billingSettings['month'];
+        $B_year = $billingSettings['year'];
+        $rentPM = $agreement->rent;//rent per month
+        $rent = 0;
+        for ($x = 1; $x <= $billingSettings['billcycle']; $x++) {
+            //if billcycle is greater than 1 
+            $checkDate = $B_year . '-' . $B_month . '-01';
+            if ($agreement->status == 'active') {
+                if (isset($agreement_variation)) {
+                    if (strtotime($agreement->with_effect_from) > strtotime($checkDate)) {
+                        $rentPM = $agreement_variation->rent;
+                    } else {
+                        $rentPM = $agreement->rent;
+                        /*$m = date('m', strtotime($agreement->with_effect_from));
+                        $y = date('Y', strtotime($agreement->with_effect_from));
+                        if ($B_month == "1") {
+                            if ($m == "12" && $y == $B_year - 1) {
+                                $rentPM = $agreement->rent * (date('t', strtotime(now())) - date('d', strtotime($agreement->with_effect_from))) / date('t', strtotime(now()));
+                            }
+                        } else {
+                            if ($m == $B_month - 1 && $y == $B_year) {
+                                $rentPM = $agreement->rent * (date('t', strtotime(now())) - date('d', strtotime($agreement->with_effect_from))) / date('t', strtotime(now()));
+                            }
+                        }//checking which is start month from starting month 
+                        if ($m == $B_month && $y == $B_year) {
+                            $rentPM = 0;
+                            //if agreement generated this month than do not generate Bill
+                        }*/
+                    }
+                }
+            } else {
+                $m = date('m', strtotime($agreement->valid_till));
+                $y = date('Y', strtotime($agreement->valid_till));
+                if ($B_month == "1") {
+                    if ($m == "12" && $y == $B_year - 1) {
+                        $rentPM = $agreement->rent * (date('d', strtotime($agreement->valid_till)) / date('t', strtotime(now())));
+                    }
+                } else {
+                    if ($m == $B_month - 1 && $y == $B_year) {
+                        $rentPM = $agreement->rent * (date('d', strtotime($agreement->valid_till)) / date('t', strtotime(now())));
+                    }
+                }//checking last month of valid month for last bill 
+            }
+
+            if ($B_month == 12) {
+                $B_month = 1;
+                $B_year = $B_year + 1;
+            } else {
+                $B_month++;
+            }
+            $rent += $rentPM;
+            //set month = +1 month and year if month is 12 than year +1 
+        }
+        return $rent;
+    }
 
     private function generateUniqueTransactionNumber()
     {
@@ -460,19 +478,14 @@ class BillController extends Controller
     {
 
         //print single bill 
-
+        $agreement_variation = AgreementRentVariation::where('agreement_id', $agreement_id)->first();
+        $agreement = Agreement::where('agreement_id', $agreement_id)->first();
         $bill = Bill::where('id', $id)->first();
-
         $billingSettings = Bill::getBillingSettings();
-
         $shop = ShopRent::where('id', $bill->shop_id)->first();
-
         $transactions = Transaction::where('agreement_id', $agreement_id)->where('type', 'payment')->get();
-
         //from transaction where type is payment 
-
         $tran = Transaction::where('agreement_id', $bill->agreement_id)->where('type', 'Opening balance')->first();
-
         //from transaction where type is Opening Balance 
         $lastbill = [];
         //$y = $bill->year;
@@ -481,16 +494,16 @@ class BillController extends Controller
         $m = $billingSettings['month'];
         $lastDate = date("01-" . $m . "-" . $y);
         $date1 = date_create($y . "-" . $m . "-01");
-        date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle']-1 . " month"));
-        $duration = $lastDate. " to " . date_format($date1, "t-m-Y");//Duration of Bill to be on print Bill
-        $bill->duration = "From " .$lastDate . " to " . date_format($date1, "t-m-Y");
+        date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle'] - 1 . " month"));
+        $duration = $lastDate . " to " . date_format($date1, "t-m-Y");//Duration of Bill to be on print Bill
+        $bill->duration = "From " . $lastDate . " to " . date_format($date1, "t-m-Y");
         $dateAdd = date_sub($date1, date_interval_create_from_date_string($billingSettings['billcycle'] . " month"));
         $prevDate = date_format($date1, "t-m-Y");
-        date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle']+1 . " month"));
-        $totalBalDate =date_format($date1, "01-m-Y");
+        date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle'] + 1 . " month"));
+        $totalBalDate = date_format($date1, "01-m-Y");
 
         $date = date_create($y . "-" . $m . "-01");//last bill generated date
-        date_sub($date, date_interval_create_from_date_string($billingSettings['billcycle']-1 . " month"));
+        date_sub($date, date_interval_create_from_date_string($billingSettings['billcycle'] - 1 . " month"));
         $month = date_format($date, "m");
         $year = date_format($date, "Y");//For last generated Bills
         $lastbill = Bill::where('agreement_id', $agreement_id)
@@ -512,6 +525,7 @@ class BillController extends Controller
                 ->orderby('id', 'desc')
                 ->first();
         }*/
+        $totalRent=$this->totalRentGenerate($agreement_id);
         $transaction = [];
         $lastamt = 0;
         foreach ($transactions as $tranx) {
@@ -540,7 +554,7 @@ class BillController extends Controller
         return view(
             'bills.print',
             ['bill' => $bill, 'lastbill' => $lastbill, 'lastbal' => $total_bal],
-            compact('billingSettings', 'duration', 'lastamt', 'transaction', 'shop', 'prevDate', 'totalBalDate')
+            compact('billingSettings','totalRent', 'duration', 'lastamt', 'transaction', 'shop', 'prevDate', 'totalBalDate')
         );
     }
 
@@ -548,69 +562,48 @@ class BillController extends Controller
     {
 
         $bills = Bill::where('agreement_id', $agreement_id)->orderBy('id', 'desc')->first();
-
         if (!$bills) {
-
             return redirect()->back()->with('error', 'There is no Previous Bill against this agreement.');
-
         } else {
-
             return $this->print($bills->id, $agreement_id);
-
         }
-
     }
-
-
 
     public function printBills($bill_no = null)
     {
-
         $data = [];
-
         $billingSettings = Bill::getBillingSettings();
-
         if ($bill_no != null) {
-
             $bills = Bill::where('id', $bill_no)->get();
-
         } else {
-
             $bills = Bill::where('month', $billingSettings['month'])->where('year', date('Y'))->get();
-
             //if not bill number than month is billingSetting month
-
         }
-
         foreach ($bills as $bill) {
-
             $bill->duration = "From " . date('01-m-Y', strtotime($bill->bill_date)) . " to " . date('t-m-Y', strtotime($bill->bill_date));
-
             $transactions = Transaction::where('agreement_id', $bill->agreement_id)->where('type', 'payment')->get();
-
             $tran = Transaction::where('agreement_id', $bill->agreement_id)->where('type', 'Opening balance')->first();
-
+            $totalRent=$this->totalRentGenerate($bill->agreement_id);
             $lastbill = null;
-
             //$y = $bill->year;
             //$m = $bill->month;
             $y = $billingSettings['year'];
             $m = $billingSettings['month'];
             $lastDate = date("01-" . $m . "-" . $y);
             $date1 = date_create($y . "-" . $m . "-01");
-            date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle']-1 . " month"));
-            $duration = $lastDate. " to " . date_format($date1, "t-m-Y");//Duration of Bill to be on print Bill
-            $bill->duration = "From " .$lastDate . " to " . date_format($date1, "t-m-Y");
+            date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle'] - 1 . " month"));
+            $duration = $lastDate . " to " . date_format($date1, "t-m-Y");//Duration of Bill to be on print Bill
+            $bill->duration = "From " . $lastDate . " to " . date_format($date1, "t-m-Y");
             $dateAdd = date_sub($date1, date_interval_create_from_date_string($billingSettings['billcycle'] . " month"));
             $prevDate = date_format($date1, "t-m-Y");
-            date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle']+1 . " month"));
-            $totalBalDate =date_format($date1, "01-m-Y");
-    
+            date_add($date1, date_interval_create_from_date_string($billingSettings['billcycle'] + 1 . " month"));
+            $totalBalDate = date_format($date1, "01-m-Y");
+
             $date = date_create($y . "-" . $m . "-01");//last bill generated date
-            date_sub($date, date_interval_create_from_date_string($billingSettings['billcycle']-1 . " month"));
+            date_sub($date, date_interval_create_from_date_string($billingSettings['billcycle'] - 1 . " month"));
             $month = date_format($date, "m");
             $year = date_format($date, "Y");//For last generated Bills
-            
+
             $lastbill = Bill::where('agreement_id', $bill->agreement_id)
 
                 ->where('month', $month)
@@ -641,15 +634,15 @@ class BillController extends Controller
 
                 } /*elseif ($bill->month != '1' && $tranx->type == "payment") {
 
-             if ($t_Month == $bill->month - 1 && $t_Year == $bill->year) {
+         if ($t_Month == $bill->month - 1 && $t_Year == $bill->year) {
 
-                 $transaction = $tranx;
+             $transaction = $tranx;
 
-                 $lastamt += $tranx->amount;
+             $lastamt += $tranx->amount;
 
-             }
+         }
 
-         }*/
+     }*/
 
             }
 
@@ -738,6 +731,7 @@ class BillController extends Controller
                 'totalBalDate' => $totalBalDate,
 
                 'durationM' => $duration,
+                'totalRent' =>$totalRent,
 
             ];
 
